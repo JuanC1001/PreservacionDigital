@@ -1,0 +1,150 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package master.presentacion.beans;
+
+import java.util.ArrayList;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
+import master.logica.clases.Accion;
+import master.logica.clases.Grupo_Menus;
+import master.logica.funciones.*;
+import org.primefaces.context.DefaultRequestContext;
+import recursos.Util;
+
+/**
+ *
+ * @author cfviteris
+ */
+@ManagedBean
+@ViewScoped
+public class GrupoMenusControlador {
+
+    private ArrayList<Grupo_Menus> gruposMenus;
+    private Grupo_Menus grupoMenus;
+    private Grupo_Menus seleccionarGrupoMenus;
+    private boolean mostrarGrupomenus;
+    private int valorPadreSeleccionado;
+
+    public GrupoMenusControlador() {
+        try {
+            grupoMenus = new Grupo_Menus();
+            gruposMenus = new ArrayList<Grupo_Menus>();
+            seleccionarGrupoMenus = new Grupo_Menus();
+            cargarGrupoMenus();
+        } catch (Exception e) {
+            System.out.println("constructor" + e.getMessage());
+        }
+    }
+
+    public Grupo_Menus getGrupoMenus() {
+        return grupoMenus;
+    }
+
+    public void setGrupoMenus(Grupo_Menus grupoMenus) {
+        this.grupoMenus = grupoMenus;
+    }
+
+    public ArrayList<Grupo_Menus> getGruposMenus() {
+        return gruposMenus;
+    }
+
+    public void setGruposMenus(ArrayList<Grupo_Menus> gruposMenus) {
+        this.gruposMenus = gruposMenus;
+    }
+
+    public boolean isMostrarGrupomenus() {
+        return mostrarGrupomenus;
+    }
+
+    public void setMostrarGrupomenus(boolean mostrarGrupomenus) {
+        this.mostrarGrupomenus = mostrarGrupomenus;
+    }
+
+    public Grupo_Menus getSeleccionarGrupoMenus() {
+        return seleccionarGrupoMenus;
+    }
+
+    public void setSeleccionarGrupoMenus(Grupo_Menus seleccionarGrupoMenus) {
+        this.seleccionarGrupoMenus = seleccionarGrupoMenus;
+    }
+
+    public void cargarGrupoMenus() {
+        try {
+            gruposMenus = FGrupo_Menus.ObtenerGruposMenus();
+            System.out.println(gruposMenus.get(0).getCod_padre());
+            System.out.println(gruposMenus.get(0).getCodigo());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public int getValorPadreSeleccionado() {
+        return valorPadreSeleccionado;
+    }
+
+    public void setValorPadreSeleccionado(int valorPadreSeleccionado) {
+        this.valorPadreSeleccionado = valorPadreSeleccionado;
+    }
+
+    public void insertarGrupoMenus() {
+        try {
+            grupoMenus.setOrden(0);
+            grupoMenus.setCod_padre(valorPadreSeleccionado);
+            FGrupo_Menus.Insertar(grupoMenus);
+            cargarGrupoMenus();
+            grupoMenus = new Grupo_Menus();
+            DefaultRequestContext.getCurrentInstance().execute("wdlggrupoMenusAgregar.hide()");
+            Util.addSuccessMessage("Datos Insertados");
+        } catch (Exception e) {
+            Util.addErrorMessage(e.getMessage());
+        }
+    }
+
+    public void cambiarEstadomostrarGrupomenus() {
+        mostrarGrupomenus = true;
+    }
+
+    public void actualizargrupoMenus() {
+        try {
+            FGrupo_Menus.actualizar(seleccionarGrupoMenus);
+            seleccionarGrupoMenus = new Grupo_Menus();
+            DefaultRequestContext.getCurrentInstance().execute("wdlggrupoMenusActualizar.hide()");
+            Util.addSuccessMessage("Datos Actualizados");
+        } catch (Exception e) {
+            Util.addErrorMessage(e.getMessage());
+        }
+
+    }
+
+    public void eliminargrupoMenus() {
+        try {
+            FGrupo_Menus.eliminar(seleccionarGrupoMenus.getCodigo());
+            cargarGrupoMenus();
+            seleccionarGrupoMenus = new Grupo_Menus();
+            DefaultRequestContext.getCurrentInstance().execute("wdlggrupoMenusEliminar.hide()");
+            Util.addSuccessMessage("Datos Eliminados");
+        } catch (Exception e) {
+            Util.addErrorMessage(e.getMessage());
+        }
+
+    }
+    /*
+     * public void actualizarAccion() { try {
+     * FAccion.actualizar(seleccionarAccion); } catch (Exception e) { }
+     * seleccionarAccion = new Accion();
+     *
+     * DefaultRequestContext.getCurrentInstance().execute("dlgaccionActualizar.hide()");
+     * }
+     *
+     *
+     * public void eliminarAccion() { try {
+     * FAccion.eliminar(seleccionarAccion.getCodigo()); cargarAccion();
+     *
+     * } catch (Exception e) { } seleccionarAccion = new Accion();
+     * DefaultRequestContext.getCurrentInstance().execute("dlgaccionEliminar.hide()");
+     * }
+     */
+}

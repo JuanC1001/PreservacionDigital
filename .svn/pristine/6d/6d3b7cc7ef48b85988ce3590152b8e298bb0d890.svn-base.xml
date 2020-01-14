@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">
+                Gestión de Personas
+            </ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">
+                Gestión de Personas
+            </ui:define>
+            <ui:define name="contenido">
+                <h:form id="frmTablaPersonas">
+                    <p:growl autoUpdate="true" showDetail="true"/>
+                    <p:dataTable id="tblTablaPersonas" value="#{gestionPersonaC.lstPersonas}" var="persona" paginator="true" rows="10"
+                                 draggableColumns="false" rowKey="#{persona.codigo_persona}" selectionMode="single" 
+                                 selection="#{gestionPersonaC.personaSel}">
+                        <p:column headerText="Apellido">
+                            <h:outputText value="#{persona.apellido}"/>
+                        </p:column>
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{persona.nombre}"/>
+                        </p:column>
+                        <p:column headerText="Cédula">
+                            <h:outputText value="#{persona.cedula}"/>
+                        </p:column>
+                        <p:column headerText="Email">
+                            <h:outputText value="#{persona.mail}"/>
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <p:commandButton value="Nuevo" icon="ui-icon-newwin"
+                                             update=":frmAgregarPersona:pngAgregarPersona" oncomplete="wdlgAgregarPersona.show()"
+                                             title="Agregar Usuario"/> 
+                            <p:commandButton value="Editar" icon="ui-icon-pencil"
+                                             update=":frmEditarPersona:pngEditarPersona" oncomplete="wdlgEditarPersona.show()"
+                                             title="Editar Persona"/>
+                            <p:commandButton value="Eliminar" icon="ui-icon-trash"
+                                                 update=":frmEliminarPersona:pngEliminarPersona" oncomplete="wdlgEliminarPersona.show()"
+                                                 title="Eliminar Persona"/>
+
+                        </f:facet>
+                    </p:dataTable>
+                </h:form>
+            </ui:define>
+            <ui:define name="dialogos">
+                <p:dialog id="dlgAgregarPersona" header="Nueva Persona" widgetVar="wdlgAgregarPersona" modal="true" closable="false" 
+                          resizable="false"
+                          showEffect="clip" hideEffect="fold">  
+                    <h:form id="frmAgregarPersona">
+
+                        <p:panelGrid id="pngAgregarPersona" columns="2">
+                            <h:outputText value="Nombres"/>
+                            <p:inputText value="#{gestionPersonaC.objPersona.nombre}" />
+                            <h:outputText value="Apellidos"/>
+                            <p:inputText value="#{gestionPersonaC.objPersona.apellido}" />
+                            <h:outputText value="Cédula"/>
+                            <p:inputText value="#{gestionPersonaC.objPersona.cedula}" />
+                            <h:outputText value="Pasaporte"/>
+                            <p:inputText value="#{gestionPersonaC.objPersona.pasaporte}" />
+                            <h:outputText value="E-mail"/>
+                            <p:inputText value="#{gestionPersonaC.objPersona.mail}" />
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{gestionPersonaC.insertarPersona()}" 
+                                         update=":frmTablaPersonas:tblTablaPersonas" process="@form"/>
+                        <p:commandButton value="Cancelar" onclick="wdlgAgregarPersona.hide()" type="reset"/>
+                    </h:form> 
+                </p:dialog>
+
+
+                <p:dialog id="dlgEditarPersona" header="Edita Usuario" widgetVar="wdlgEditarPersona" modal="true" closable="false" 
+                          resizable="false"
+                          showEffect="clip" hideEffect="fold">  
+                    <h:form id="frmEditarPersona">
+                        <p:panelGrid id="pngEditarPersona" columns="2">
+                            <h:outputText value="Nombres"/>
+                            <p:inputText value="#{gestionPersonaC.personaSel.nombre}"/>
+                            <h:outputText value="Apellidos"/>
+                            <p:inputText value="#{gestionPersonaC.personaSel.apellido}"/>
+                            <h:outputText value="Cédula"/>
+                            <p:inputText value="#{gestionPersonaC.personaSel.cedula}"/>
+                            <h:outputText value="Pasaporte"/>
+                            <p:inputText value="#{gestionPersonaC.personaSel.pasaporte}"/>
+                            <h:outputText value="E-mail"/>
+                            <p:inputText id="txtMail" value="#{gestionPersonaC.personaSel.mail}">
+                                <f:validator validatorId="recursos.utilBeans.ValidatorBean" for="txtMail"/>
+                            </p:inputText>
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{gestionPersonaC.actualizarPersona}" 
+                                         update=":frmTablaPersonas:tblTablaPersonas" process="@form"/>
+                        <p:commandButton value="Cancelar" onclick="wdlgEditarPersona.hide()" type="reset"/>
+                    </h:form> 
+                </p:dialog>
+                <p:dialog id="dlgEliminarPersona" header="Elimina Persona" widgetVar="wdlgEliminarPersona" modal="true" closable="false" 
+                          resizable="false"
+                          showEffect="clip" hideEffect="fold">  
+                    <h:form id="frmEliminarPersona">
+                        
+                        <h:outputText value="¿Desea Eliminar la Persona?"/>
+                        <p:panelGrid id="pngEliminarPersona" columns="2">
+                            <h:outputText value="Nombres"/>
+                            <h:outputText value="#{gestionPersonaC.personaSel.nombre}"/>
+                            <h:outputText value="Apellidos"/>
+                            <h:outputText value="#{gestionPersonaC.personaSel.apellido}"/>
+                            <h:outputText value="Cedula"/>
+                            <h:outputText value="#{gestionPersonaC.personaSel.cedula}"/>
+                            <h:outputText value="Pasaporte"/>
+                            <h:outputText value="#{gestionPersonaC.personaSel.pasaporte}"/>
+                            <h:outputText value="E-mail"/>
+                            <h:outputText value="#{gestionPersonaC.personaSel.mail }"/>
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{gestionPersonaC.eliminarPersona()}" 
+                                         update=":frmTablaPersonas:tblTablaPersonas"/>
+                        <p:commandButton value="Cancelar" onclick="wdlgEliminarPersona.hide()" type="reset"/>
+                    </h:form> 
+                </p:dialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+>>>>>>> .r8
+   
+</html>

@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="../../../templates/plantillaInternaCenter.xhtml">
+    <h:head>
+        <title>
+            <ui:define name="Autor">Evidencias Registradas</ui:define>
+        </title>
+    </h:head>
+    <ui:define name="top">Evidencias Registradas</ui:define>
+    <ui:define name="contenido">
+        <p:growl id="mensajes" autoUpdate="true" showDetail="true"/>
+        <h:form id="frmVerDocumento" enctype="multipart/form-data" >
+            <p:growl showDetail="true" autoUpdate="true"/>
+            <p:dataTable  id="tblDocumento" value="#{incrmentoEvidencias_JuridicosControladores.lstEviJu}"
+                          var="evidenciajuridicos"  rows="10" rowKey="#{evidenciajuridicos.codigo}" selectionMode="single"
+                          paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} 
+                          {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                          rowsPerPageTemplate="5,10,15" emptyMessage="Datos no encontrados"
+                          selection="#{incrmentoEvidencias_JuridicosControladores.evidenciaSel}"
+                          filteredValue="#{incrmentoEvidencias_JuridicosControladores.filterevidencia}">
+
+                <p:column filterBy="#{evidenciajuridicos.codigo}" filterMatchMode="startsWith" 
+                          sortBy="#{evidenciajuridicos.codigo}" headerText="Tipo de Caso">
+                    <h:outputText value="#{evidenciajuridicos.codigo}"/>
+                </p:column>
+
+                <p:column filterBy="#{evidenciajuridicos.codigo_caso.codigo_tipo_caso.nombre_tipoCaso}" filterMatchMode="startsWith" 
+                          sortBy="#{evidenciajuridicos.codigo_caso.codigo_tipo_caso.nombre_tipoCaso}" headerText="Tipo de Caso">
+                    <h:outputText value="#{evidenciajuridicos.codigo_caso.codigo_tipo_caso.nombre_tipoCaso}"/>
+                </p:column>
+
+                <p:column filterBy="#{evidenciajuridicos.codigo_caso.codigo_institucional}" filterMatchMode="startsWith" 
+                          sortBy="#{evidenciajuridicos.codigo_caso.codigo_institucional}" headerText="Codigo Institucional">
+                    <h:outputText value="#{evidenciajuridicos.codigo_caso.codigo_institucional}"/>
+                </p:column>
+
+                <p:column filterBy="#{evidenciajuridicos.codigo_caso.codigo_dependencia.nombre_dependencia}" filterMatchMode="startsWith" 
+                          sortBy="#{evidenciajuridicos.codigo_caso.codigo_dependencia.nombre_dependencia}" headerText="Dependecia">
+                    <h:outputText value="#{evidenciajuridicos.codigo_caso.codigo_dependencia.nombre_dependencia}"/>
+                </p:column>
+
+
+                <p:column filterBy="#{evidenciajuridicos.codigo_autorizacion_juez.codigo_persona.nombres} #{evidenciajuridicos.codigo_autorizacion_juez.codigo_persona.apellidos}" filterMatchMode="startsWith" 
+                          sortBy="#{evidenciajuridicos.codigo_autorizacion_juez.codigo_persona.nombres} #{evidenciajuridicos.codigo_autorizacion_juez.codigo_persona.apellidos}" headerText="Juez">
+                    <h:outputText value="#{evidenciajuridicos.codigo_autorizacion_juez.codigo_persona.nombres} #{evidenciajuridicos.codigo_autorizacion_juez.codigo_persona.apellidos}"/>
+                </p:column>
+
+                <p:column filterBy="#{evidenciajuridicos.fecha_registro}" filterMatchMode="startsWith" 
+                          sortBy="#{evidenciajuridicos.fecha_registro}" headerText="Fecha de Ingreso">
+                    <h:outputText value="#{evidenciajuridicos.fecha_registro}"/>
+                </p:column>
+                <f:facet name="footer">
+                    <p:commandButton id="btnNuevoCaso" value="Incremento a la Evidencia" icon="ui-icon-newwin"                                                                             
+                                     onclick="PF('wdlgincrementoE').show()"
+                                     title="Incremento"
+                                     update=":frmInEvidencia"/>  
+
+                    <p:commandButton id="btnEvidencia" value="Ver Incremento" icon="ui-icon-newwin"                                       
+                                     onclick="PF('wdlgincrementoER').show()"
+                                     title="Nueva Evidencia"
+                                     update=" "/>                    
+                    <h:commandLink>
+                        <img src="../../resources/images/excel.png" alt=""/>
+                        <p:dataExporter type="xls" target="tblDocumento" fileName="Documentos Registrados" pageOnly="true" />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <img src="../../resources/images/pdf.png" alt=""/>
+                        <p:dataExporter type="pdf" target="tblDocumento" fileName="Evidencias  Registrados" pageOnly="true" />
+                    </h:commandLink>                                 
+                </f:facet>
+            </p:dataTable> 
+        </h:form>
+        <ui:include src="nuevoInEviJuridico.xhtml"/>
+        <ui:include src="verInEviJuridico.xhtml"/>
+        <p:dialog modal="true" widgetVar="dlgStatus" header="Procesando" draggable="false" closable="false" 
+                  resizable="false" appendTo="@(body)"> 
+            <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />  
+        </p:dialog>
+    </ui:define>
+</ui:composition>

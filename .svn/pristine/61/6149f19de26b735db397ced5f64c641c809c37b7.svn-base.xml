@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">
+                Adminstración de Imágenes
+            </ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">
+                ADMINISTRACIÓN DE IMÁGENES
+            </ui:define>
+            <ui:define name="contenido">
+                <p:growl autoUpdate="true" showDetail="true"/>
+                <h:form id="frmTablaImagen" enctype="multipart/form-data">
+                    <p:dataTable id="tblTablaImagen" value="#{imagenControlador.lstImagen}" var="imagen" 
+                                 rowKey="#{imagen.codigo}" selectionMode="single" selection="#{imagenControlador.imagenSel}">
+
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{imagen.titulo}"/>
+                        </p:column>
+
+                        <p:column headerText="Previsualización">
+                            <p:lightBox styleClass="imagebox" >  
+                                <h:outputLink value="../..#{imagen.path}" title="#{imagen.titulo} #{imagen.tipo}">  
+                                    <p:graphicImage value="#{imagen.path}" width="80" title="#{imagen.path}"/>
+                                </h:outputLink>
+                            </p:lightBox>
+                        </p:column>
+
+                        <p:column headerText="Tipo">
+                            <h:outputText value="#{imagen.tipo}"/>
+                        </p:column>
+
+                        <p:column headerText="Palabras Claves" >
+                            <h:outputText value="#{imagen.keywords}"/>
+                        </p:column>
+
+                        <p:column headerText="Estado" >
+                            <h:outputText value="#{imagen.estado==0 ? 'DESPUBLICADO':'PUBLICADO'}"/>
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <p:commandButton value="Insertar" onclick="dlgInsertarImagen.show();" 
+                                             update=":frmInsertarImagen:displayInsertarImagen"/>
+                            <p:commandButton value="Editar" onclick="dlgEditarImagen.show();" 
+                                             update=":frmEditarImagen:displayEditarImagen"/>
+                            <p:commandButton value="Eliminar" onclick="dlgEliminarImagen.show();" 
+                                             update=":frmEliminarImagen:displayEliminarImagen"/>
+                        </f:facet>
+                    </p:dataTable>
+                </h:form>
+            </ui:define>
+            <ui:define name="dialogos">
+
+                <h:form id="frmInsertarImagen" enctype="multipart/form-data">
+                    <p:dialog widgetVar="dlgInsertarImagen" header="Insertar Imagen" modal="true" height="300" width="600">
+                        <p:panel id="displayInsertarImagen" >
+                            <p:panelGrid columns="1" >
+
+                                <p:outputLabel value="Nombre"/>
+                                <p:inputText id="txtTituloImagen" value="#{imagenControlador.objImagen.titulo}"/>
+
+                                <p:outputLabel value="Previzualización"/>
+                                <p:graphicImage id="griPrevisualizar" value="#{imagenControlador.objImagen.path}" 
+                                                height="80"/>
+
+                                <p:outputLabel value="Tipo"/>
+                                <p:inputText id="txtTipoImagen" value="#{imagenControlador.objImagen.tipo}"/>
+
+                                <p:panelGrid id="pngSubirArchivo" columns="2" style="width: 510px;">
+                                    <p:fileUpload fileUploadListener="#{imagenControlador.cargarArchivoImagen}"
+                                                  allowTypes="/(\.|\/)(gif|jpe?g|png)$/" label="Abrir" mode="advanced"  
+                                                  update="displayInsertarImagen griPrevisualizar" uploadLabel="Subir" cancelLabel="Cancelar"   
+                                                  value="#{imagenControlador.archivoImagen}"
+                                                  required="true" requiredMessage="Cargar la imagen!!" />
+                                </p:panelGrid>
+
+                                <p:outputLabel value="Palabras Clave"/>
+                                <p:inputText id="txtPalabrasClaveImagen" value="#{imagenControlador.objImagen.keywords}"/>
+
+                                <p:outputLabel value="Estado"/>
+                                <p:selectOneMenu id="cmbEstadoImagen" value="#{imagenControlador.estadoSel}">
+                                    <f:selectItem itemLabel="Seleccione un Estado" itemValue="#{-1}"/>
+                                    <f:selectItem itemLabel="Publicado" itemValue="#{1}"/>
+                                    <f:selectItem itemLabel="Despublicado" itemValue="#{0}"/>
+                                </p:selectOneMenu>
+                                <p:panelGrid columns="2" style="text-align: center;">
+                                    <p:commandButton value="Aceptar" action="#{imagenControlador.insertarImagen}"
+                                                     update=":frmTablaImagen:tblTablaImagen" process="@this txtTituloImagen
+                                                     txtTipoImagen txtPalabrasClaveImagen cmbEstadoImagen"/>
+                                    <p:commandButton value="Cancelar" onclick="dlgInsertarImagen.hide();"/>
+                                </p:panelGrid>
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="frmEditarImagen" enctype="multipart/form-data">
+                    <p:dialog widgetVar="dlgEditarImagen" header="Editar Imagen" modal="true">
+                        <p:panel id="displayEditarImagen" >
+                            <p:panelGrid columns="2">
+
+                                <p:outputLabel value="Título"/>
+                                <p:inputText value="#{imagenControlador.imagenSel.titulo}"/>
+
+                                <p:outputLabel value="Ruta"/>
+                                <p:inputText value="#{imagenControlador.imagenSel.path}"/>
+
+                                <p:outputLabel value="Tipo"/>
+                                <p:inputText value="#{imagenControlador.imagenSel.tipo}"/>
+
+                                <p:outputLabel value="Palabras Clave"/>
+                                <p:inputText value="#{imagenControlador.imagenSel.keywords}"/>
+
+                                <p:outputLabel value="Estado"/>
+                                <p:selectOneMenu value="#{imagenControlador.imagenSel.estado}">
+                                    <f:selectItem itemLabel="Seleccione un Estado" itemValue="#{-1}"/>
+                                    <f:selectItem itemLabel="Publicado" itemValue="#{1}"/>
+                                    <f:selectItem itemLabel="Despublicado" itemValue="#{0}"/>
+                                </p:selectOneMenu>
+
+                                <p:commandButton value="Aceptar" action="#{imagenControlador.actualizarImagen()}"
+                                                 update=":frmTablaImagen:tblTablaImagen"/>
+                                <p:commandButton value="Cancelar" onclick="dlgEditarImagen.hide();"/>
+
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="frmEliminarImagen" enctype="multipart/form-data">
+                    <p:dialog widgetVar="dlgEliminarImagen" header="Desea Eliminar la Imagen Seleccionada" modal="true">
+                        <p:panel id="displayEliminarImagen" >
+                            <p:panelGrid columns="2">
+
+                                <p:outputLabel value="Título"/>
+                                <p:inputText value="#{imagenControlador.imagenSel.titulo}" disabled="true"/>
+
+                                <p:outputLabel value="Ruta"/>
+                                <p:inputText value="#{imagenControlador.imagenSel.path}" disabled="true"/>
+
+                                <p:outputLabel value="Tipo"/>
+                                <p:inputText value="#{imagenControlador.imagenSel.tipo}" disabled="true"/>
+
+                                <p:outputLabel value="Palabras Clave"/>
+                                <p:inputText value="#{imagenControlador.imagenSel.keywords}" disabled="true"/>
+
+                                <p:outputLabel value="Estado"/>
+                                <p:selectOneMenu value="#{imagenControlador.imagenSel.estado}">
+                                    <f:selectItem itemLabel="Seleccione un Estado" itemValue="#{-1}"/>
+                                    <f:selectItem itemLabel="Publicado" itemValue="#{1}"/>
+                                    <f:selectItem itemLabel="Despublicado" itemValue="#{0}"/>
+                                </p:selectOneMenu>
+
+                                <p:commandButton value="Aceptar" action="#{imagenControlador.eliminarImagen()}"
+                                                 update=":frmTablaImagen:tblTablaImagen"/>
+                                <p:commandButton value="Cancelar" onclick="dlgEliminarImagen.hide();"/>
+
+                            </p:panelGrid>
+
+                        </p:panel>
+
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

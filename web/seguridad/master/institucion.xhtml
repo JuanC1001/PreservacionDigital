@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">
+                Administración de Instituciones
+            </ui:define>
+        </title>
+    </h:head>
+    
+    <h:body>
+        
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">
+                ADMINISTRACIÓN DE INSTITUCIONES
+            </ui:define>
+        
+        
+        <ui:define name="contenido">
+            <p:growl autoUpdate="true" showDetail="true"/>
+            <h:form id="frmTablaInstitucion">
+                <p:dataTable id="tblTablaInstitucion" value="#{institucionC.lstInstitucion}" var="institucion"
+                             rowKey="#{institucion.codigo}" selectionMode="single" 
+                             selection="#{institucionC.institucionSel}">
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{institucion.nombre}"/>
+                    </p:column>
+
+                    <p:column headerText="Dirección">
+                        <h:outputText value="#{institucion.direccion}"/>
+                    </p:column>
+
+                    <p:column headerText="Ciudad">
+                        <h:outputText value="#{institucion.ciudad}"/>
+                    </p:column>
+
+                    <p:column headerText="Teléfono">
+                        <h:outputText value="#{institucion.telefono}"/>
+                    </p:column>
+
+                    <p:column headerText="Ruc">
+                        <h:outputText value="#{institucion.ruc}"/>
+                    </p:column>
+
+                    <p:column headerText="Gerente">
+                        <h:outputText value="#{institucion.gerente}"/>
+                    </p:column>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Insertar" onclick="dlgInsertarInstitucion.show();" 
+                                         update=":frmInsertarInstitucion:displayInsertarInstitucion"/>
+                        <p:commandButton value="Editar" onclick="dlgEditarInstitucion.show();" 
+                                         update=":frmEditarInstitucion:displayEditarInstitucion"/>
+                        <p:commandButton value="Eliminar" onclick="dlgEliminarInstitucion.show();" 
+                                         update=":frmEliminarInstitucion:displayEliminarInstitucion"/>
+                    </f:facet>
+                </p:dataTable>
+            </h:form>
+        </ui:define>
+        
+        <ui:define name="dialogos">
+            <h:form id="frmInsertarInstitucion">
+                <p:dialog widgetVar="dlgInsertarInstitucion" header="Insertar Institución" modal="true">
+                    <p:panel id="displayInsertarInstitucion" >
+                        <p:panelGrid columns="2">
+                            <p:outputLabel value="Nombre"/>
+                            <p:inputText value="#{institucionC.objInstitucion.nombre}"/>
+                            <p:outputLabel value="Dirección"/>
+                            <p:inputText value="#{institucionC.objInstitucion.direccion}"/>
+                            <p:outputLabel value="Ciudad"/>
+                            <p:inputText value="#{institucionC.objInstitucion.ciudad}"/>
+                            <p:outputLabel value="Teléfono"/>
+                            <p:inputText value="#{institucionC.objInstitucion.telefono}"/>
+                            <p:outputLabel value="Ruc"/>
+                            <p:inputText value="#{institucionC.objInstitucion.ruc}"/>
+                            <p:outputLabel value="Gerente"/>
+                            <p:inputText value="#{institucionC.objInstitucion.gerente}"/>
+
+                            <p:commandButton value="Aceptar" action="#{institucionC.insertarInstitucion()}"
+                                             update=":frmTablaInstitucion:tblTablaInstitucion"/>
+                            <p:commandButton value="Cancelar" onclick="dlgInsertarInstitucion.hide();"/>
+                        </p:panelGrid>
+                    </p:panel>
+                </p:dialog>
+            </h:form>
+            
+            <h:form id="frmEditarInstitucion">
+                <p:dialog widgetVar="dlgEditarInstitucion" header="Editar las Instituciones" modal="true">
+                    <p:panel id="displayEditarInstitucion" >
+                        <p:panelGrid columns="2">
+                            <p:outputLabel value="Nombre"/>
+                            <p:inputText value="#{institucionC.institucionSel.nombre}"/>
+                            <p:outputLabel value="Dirección"/>
+                            <p:inputText value="#{institucionC.institucionSel.direccion}"/>
+                            <p:outputLabel value="Ciudad"/>
+                            <p:inputText value="#{institucionC.institucionSel.ciudad}"/>
+                            <p:outputLabel value="Teléfono"/>
+                            <p:inputText value="#{institucionC.institucionSel.telefono}"/>
+                            <p:outputLabel value="Ruc"/>
+                            <p:inputText value="#{institucionC.institucionSel.ruc}"/>
+                            <p:outputLabel value="Gerente"/>
+                            <p:inputText value="#{institucionC.institucionSel.gerente}"/>
+
+                            <p:commandButton value="Aceptar" action="#{institucionC.actualizarInstitucion()}"
+                                             update=":frmTablaInstitucion:tblTablaInstitucion"/>
+                            <p:commandButton value="Cancelar" onclick="dlgEditarInstitucion.hide();"/>
+                        </p:panelGrid>
+                    </p:panel>
+                </p:dialog>
+            </h:form>
+            
+            <h:form id="frmEliminarInstitucion">
+                <p:dialog widgetVar="dlgEliminarInstitucion" header="Esta Seguro de Eliminar la Institución?" modal="true">
+                    <p:panel id="displayEliminarInstitucion" >
+                        <p:panelGrid columns="2">
+                            <p:outputLabel value="Nombre"/>
+                            <p:inputText value="#{institucionC.institucionSel.nombre}" disabled="true"/>
+                            <p:outputLabel value="Dirección"/>
+                            <p:inputText value="#{institucionC.institucionSel.direccion}" disabled="true"/>
+                            <p:outputLabel value="Ciudad"/>
+                            <p:inputText value="#{institucionC.institucionSel.ciudad}" disabled="true"/>
+                            <p:outputLabel value="Teléfono"/>
+                            <p:inputText value="#{institucionC.institucionSel.telefono}" disabled="true"/>
+                            <p:outputLabel value="Ruc"/>
+                            <p:inputText value="#{institucionC.institucionSel.ruc}" disabled="true"/>
+                            <p:outputLabel value="Gerente"/>
+                            <p:inputText value="#{institucionC.institucionSel.gerente}" disabled="true"/>
+
+                            <p:commandButton value="Aceptar" action="#{institucionC.eliminarInstitucion()}"
+                                             update=":frmTablaInstitucion:tblTablaInstitucion"/>
+                            <p:commandButton value="Cancelar" onclick="dlgEliminarInstitucion.hide();"/>
+                        </p:panelGrid>
+                    </p:panel>
+                </p:dialog>
+            </h:form>
+        </ui:define>
+        </ui:composition>
+    </h:body>
+    
+</html>

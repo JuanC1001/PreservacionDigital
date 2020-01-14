@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">Gestión de los Roles del Sistema</ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">Gestión de los Roles del Sistema</ui:define>
+            <ui:define name="contenido">
+                <p:growl id="mensajes" autoUpdate="true"/>
+                <h:form id="frmRol">
+                    <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                    <p:panel id="pnlRol">
+                        <p:dataTable id="tblRol" value="#{rolControlador.roles}" var="rol" paginator="true" rows="10" draggableColumns="false"
+                                     rowKey="#{rol.codigo}" selectionMode="single" selection="#{rolControlador.seleccionarRol}">
+                            <p:column filterBy="#{rol.nombre}" filterMatchMode="startsWith" sortBy="#{rol.nombre}">
+                                <f:facet name="header">
+                                    <h:outputText value="NOMBRE"/>
+                                </f:facet>
+                                <h:outputText value="#{rol.nombre}"/>
+                            </p:column>
+                            <p:column filterBy="#{rol.descripcion}" filterMatchMode="startsWith" sortBy="#{rol.descripcion}">
+                                <f:facet name="header">
+                                    <h:outputText value="DESCRIPCION"/>
+                                </f:facet>
+                                <h:outputText value="#{rol.descripcion}"/>
+                            </p:column>
+                            <p:column filterBy="#{rol.estado}" filterMatchMode="startsWith" sortBy="#{rol.estado}">
+                                <f:facet name="header">
+                                    <h:outputText value="ESTADO"/>
+                                </f:facet>
+                                <h:outputText value="#{rol.estado==0 ? 'INACTIVO':'ACTIVO'}"/>                                
+                            </p:column>
+                            <p:column filterBy="#{rol.codigo_modulo.codigo}" filterMatchMode="startsWith" sortBy="#{rol.codigo_modulo.codigo}">
+                                <f:facet name="header">
+                                    <h:outputText value="MODULO"/>
+                                </f:facet>
+                                <h:outputText value="#{rol.codigo_modulo.nombre}"/>
+                            </p:column>
+                            <f:facet name="footer">  
+                                <p:commandButton id="btnNuevoRol" value="Nuevo" icon="ui-icon-newwin"
+                                                 update=":frmRol:pnlRol" oncomplete="wdlgrolAgregar.show()"
+                                                 title="Agregar Rol"/>  
+                                <p:commandButton id="btnEditarRol" value="Editar" icon="ui-icon-pencil"
+                                                 update=":dlgrolActualizar" oncomplete="wdlgrolActualizar.show()"
+                                                 title="Editar Rol"/> 
+                                <p:commandButton id="btnEliminarRol" value="Eliminar" icon="ui-icon-trash"
+                                                 update=":dlgrolEliminar" oncomplete="wdlgrolEliminar.show()"
+                                                 title="Eliminar Rol"/> 
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+            <ui:define name="dialogos">
+                <p:dialog id="dlgrolAgregar" header="Nuevo Rol" widgetVar="wdlgrolAgregar" modal="true" closable="false" resizable="false"
+                          showEffect="clip" hideEffect="fold">  
+                    <h:form id="frmNuevoRol">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <p:panelGrid id="pngNuevoRol" columns="2">
+                            <h:outputText value="Nombre del Rol"/>
+                            <p:inputText value="#{rolControlador.rol.nombre}"/>
+                            <h:outputText value="Descripción del Rol"/>
+                            <p:inputTextarea value="#{rolControlador.rol.descripcion}"/>
+                            <h:outputText id="otxtRol" value="Estado"/>
+                            <p:selectOneRadio id="sorEstadoUrl" value="#{rolControlador.rol.estado}" required="true" 
+                                              requiredMessage="Seleccione un Estado" style="list-style: transparent;">  
+                                <f:selectItem itemLabel="Activo" itemValue="1" />
+                                <f:selectItem itemLabel="Inactivo" itemValue="0" />  
+                            </p:selectOneRadio>
+                            <h:outputText value="Seleccione el Modulo"/>
+                            <p:selectOneMenu id="cmbRol" value="#{rolControlador.valorRolSeleccionado}">
+                                <f:selectItem itemLabel="Elija una opción" itemValue="0"/>
+                                <f:selectItems value="#{rolControlador.modulos}" var="modulo" itemLabel="#{modulo.nombre}" itemValue="#{modulo.codigo}"/>
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{rolControlador.insertarRol}" update=":frmRol:pnlRol"/>
+                        <p:commandButton value="Cancelar" onclick="wdlgrolAgregar.hide()" type="reset"/>
+                    </h:form> 
+                </p:dialog>
+                <p:dialog id="dlgrolActualizar" header="Edita Rol" widgetVar="wdlgrolActualizar" modal="true" closable="false" resizable="false"
+                          showEffect="clip" hideEffect="fold">  
+                    <h:form id="frmactualizarrol">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <p:panelGrid id="pngrolActualizar" columns="2">
+                            <h:outputText value="Nombre del Rol"/>
+                            <p:inputText value="#{rolControlador.seleccionarRol.nombre}"/>
+                            <h:outputText value="Descripción del Rol"/>
+                            <p:inputText value="#{rolControlador.seleccionarRol.descripcion}"/>
+                            <h:outputText id="otxtRol" value="Estado"/>
+                            <p:selectOneRadio id="sorEstadoUrl" value="#{rolControlador.seleccionarRol.estado}" required="true" 
+                                              requiredMessage="Seleccione un Estado" style="list-style: transparent;">  
+                                <f:selectItem itemLabel="Activo" itemValue="1" />
+                                <f:selectItem itemLabel="Inactivo" itemValue="0" />  
+                            </p:selectOneRadio>
+                            <h:outputText value="Seleccione el Modulo"/>
+                            <p:selectOneMenu id="cmbRol" value="#{rolControlador.seleccionarRol.codigo_modulo.codigo}">
+                                <f:selectItem itemLabel="Elija una opción" itemValue="#{null}"/>
+                                <f:selectItems value="#{rolControlador.modulos}" var="modulo" itemLabel="#{modulo.nombre}" itemValue="#{modulo.codigo}"/>
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{rolControlador.actualizarrol()}" update=":frmRol:pnlRol"/>
+                        <p:commandButton value="Cancelar" onclick="wdlgrolActualizar.hide()" type="reset"/>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dlgrolEliminar" header="Elimina Rol" widgetVar="wdlgrolEliminar" modal="true" closable="false" resizable="false"
+                          showEffect="clip" hideEffect="fold">  
+                    <h:form id="frmEliminarrol">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <h:outputText value="¿Desea Eliminar el Rol?"/>
+                        <p:panelGrid id="pngRolEliminar" columns="2">
+                            <h:outputText value="Codigo del Rol"/>
+                            <h:outputText value="#{rolControlador.seleccionarRol.codigo}"/>
+                            <h:outputText value="Nombre del Rol"/>
+                            <h:outputText value="#{rolControlador.seleccionarRol.nombre}"/>
+                            <h:outputText value="Descripción del Rol"/>
+                            <h:outputText value="#{rolControlador.seleccionarRol.descripcion}"/>
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{rolControlador.eliminarrol()}" update=":frmRol:tblRol"/>
+                        <p:commandButton value="Cancelar" onclick="wdlgrolEliminar.hide()" type="reset"/>
+                    </h:form>
+                </p:dialog>
+                <p:dialog modal="true" widgetVar="dlgStatus" header="Procesando" draggable="false" closable="false" 
+                          resizable="false"> 
+                    <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />  
+                </p:dialog>
+            </ui:define> 
+        </ui:composition>
+    </h:body>
+</html>
+

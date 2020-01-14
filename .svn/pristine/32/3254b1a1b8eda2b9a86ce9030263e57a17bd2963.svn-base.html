@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">Gestión Grupos Menu</ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">Gestión Grupos Menu</ui:define>
+            <ui:define name="contenido">
+                <p:growl id="mensajes" autoUpdate="true"/>
+                <h:form id="frmGrupoMenus">
+                    <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                    <p:panel id="pnlGrupoMenus">
+                        <p:dataTable id="tblGrupoMenus" value="#{grupoMenusControlador.gruposMenus}" var="grupoMenus" paginator="true" rows="5" draggableColumns="false"
+                                     rowKey="#{grupoMenus.codigo}" selectionMode="single" selection="#{grupoMenusControlador.seleccionarGrupoMenus}">
+                            <p:column filterBy="#{grupoMenus.nombre}" filterMatchMode="startsWith" sortBy="#{grupoMenus.nombre}">
+                                <f:facet name="header">
+                                    <h:outputText value="NOMBRE"/>
+                                </f:facet>
+                                <h:outputText value="#{grupoMenus.nombre}"/>
+                            </p:column>
+                            <p:column filterBy="#{grupoMenus.titulo}" filterMatchMode="startsWith" sortBy="#{grupoMenus.titulo}">
+                                <f:facet name="header">
+                                    <h:outputText value="TITULO"/>
+                                </f:facet>
+                                <h:outputText value="#{grupoMenus.titulo}"/>
+                            </p:column>
+                            <p:column filterBy="#{grupoMenus.descripcion}" filterMatchMode="startsWith" sortBy="#{grupoMenus.descripcion}">
+                                <f:facet name="header">
+                                    <h:outputText value="DESCRIPCION"/>
+                                </f:facet>
+                                <h:outputText value="#{grupoMenus.descripcion}"/>
+                            </p:column>
+
+                            <p:column filterBy="#{grupoMenus.estado}" filterMatchMode="startsWith" sortBy="#{grupoMenus.estado}">
+                                <f:facet name="header">
+                                    <h:outputText value="ESTADO"/>
+                                </f:facet>
+                                <h:outputText value="#{grupoMenus.estado==0 ?'INACTIVO':'ACTIVO'}"/>
+
+                            </p:column>
+
+                            <f:facet name="footer">  
+                                <p:commandButton id="btnNuevoGrupoMenus" value="Nuevo" icon="ui-icon-newwin"
+                                                 oncomplete="wdlggrupoMenusAgregar.show()" title="Agregar Grupos Menu"
+                                                 update=":dlggrupoMenusAgregar"/>  
+                                <p:commandButton id="btnEditarGrupoMenus" value="Editar" icon="ui-icon-pencil"
+                                                 update=":dlggrupoMenusActualizar" oncomplete="wdlggrupoMenusActualizar.show()"
+                                                 title="Editar Grupos Menu"/> 
+                                <p:commandButton id="btnEliminarGrupoMenus" value="Eliminar" icon="ui-icon-trash"
+                                                 update=":dlggrupoMenusEliminar" oncomplete="wdlggrupoMenusEliminar.show()"
+                                                 title="Eliminar Grupos Menu"/>
+                            </f:facet>
+                        </p:dataTable>
+                        <!--<p:commandButton value="Nuevo" id="btnNuevoGrupo" onclick="dlggrupoAgregar.show()">
+                        </p:commandButton> -->
+                    </p:panel>
+                </h:form>
+
+            </ui:define>
+
+            <ui:define name="dialogos">
+                <p:dialog id="dlggrupoMenusAgregar" header="Nuevo Grupos Menu" widgetVar="wdlggrupoMenusAgregar" 
+                          modal="true" closable="false" resizable="false"
+                          showEffect="clip" hideEffect="fold">  
+                    <h:form id="frmNuevoGrupoMenus">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <p:panelGrid id="pnlNuevoGrupoMenus" columns="2">
+                            <h:outputText value="Nombre"/>
+                            <p:inputText value="#{grupoMenusControlador.grupoMenus.nombre}" />
+                            <h:outputText value="Título"/>
+                            <p:inputText value="#{grupoMenusControlador.grupoMenus.titulo}"/>
+                            <h:outputText value="Descripción"/>
+                            <p:inputTextarea value="#{grupoMenusControlador.grupoMenus.descripcion}"/>
+                            <h:outputText value="Procedencia"/>
+                            <p:selectOneMenu id="cmbPadre" value="#{grupoMenusControlador.valorPadreSeleccionado}">
+                                <f:selectItem itemLabel="Elija una opción" itemValue="-1"/>
+                                <f:selectItem itemLabel="Nivel Padre" itemValue="0"/>
+                                <f:selectItems value="#{grupoMenusControlador.gruposMenus}" var="grupomenus" itemLabel="#{grupomenus.nombre}" itemValue="#{grupomenus.codigo}"/>
+                            </p:selectOneMenu>
+                            <h:outputText id="otxtgrupomenus" value="Estado"/>
+                            <p:selectOneRadio id="sorEstadogrupoMenus" value="#{grupoMenusControlador.grupoMenus.estado}" required="true" 
+                                              requiredMessage="Seleccione un Estado" style="list-style: transparent;">  
+                                <f:selectItem itemLabel="Activo" itemValue="1" />
+                                <f:selectItem itemLabel="Inactivo" itemValue="0" />  
+                            </p:selectOneRadio>
+
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{grupoMenusControlador.insertarGrupoMenus()}" update=":frmGrupoMenus:pnlGrupoMenus"/>
+                        <p:commandButton value="Cancelar" onclick="wdlggrupoMenusAgregar.hide()" type="reset"/>
+                    </h:form> 
+                </p:dialog>
+
+                <p:dialog id="dlggrupoMenusActualizar" header="Edita Grupos Menu" widgetVar="wdlggrupoMenusActualizar" modal="true" closable="false" 
+                          resizable="false"
+                          showEffect="clip" hideEffect="fold">  
+                    <h:form id="frmactualizarGrupoMenus">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <p:messages id="messages" autoUpdate="true"/>  
+                        <p:panelGrid id="pngactualizarGrupoMenus" columns="2">
+                            <h:outputText value="Nombre"/>
+                            <p:inputText value="#{grupoMenusControlador.seleccionarGrupoMenus.nombre}" />
+                            <h:outputText value="Título"/>
+                            <p:inputText value="#{grupoMenusControlador.seleccionarGrupoMenus.titulo}"/>
+                            <h:outputText value="Descripción"/>
+                            <p:inputTextarea value="#{grupoMenusControlador.seleccionarGrupoMenus.descripcion}"/>
+                            <h:outputText id="otxtagrupomenus" value="Estado"/>
+                            <p:selectOneRadio id="sorEstadogrupoMenus" value="#{grupoMenusControlador.seleccionarGrupoMenus.estado}" required="true" 
+                                              requiredMessage="Seleccione un Estado" style="list-style: transparent;">  
+                                <f:selectItem itemLabel="Activo" itemValue="1" />
+                                <f:selectItem itemLabel="Inactivo" itemValue="0" />  
+                            </p:selectOneRadio>
+
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{grupoMenusControlador.actualizargrupoMenus()}" 
+                                         update=":frmGrupoMenus:pnlGrupoMenus"/>
+                        <p:commandButton value="Cancelar" onclick="wdlggrupoMenusActualizar.hide()" type="reset"/>
+                    </h:form> 
+                </p:dialog>
+
+                <p:dialog id="dlggrupoMenusEliminar" header="Elimina Grupos Menu" widgetVar="wdlggrupoMenusEliminar" modal="true" closable="false" 
+                          resizable="false"
+                          showEffect="clip" hideEffect="fold">  
+                    <h:form id="frmeliminarGrupoMenus">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <h:outputText value="¿Desea Eliminar el Grupo Menu?"/>
+                        <p:panelGrid id="pngeliminarAccion" columns="2">
+                            <h:outputText value="Nombre"/>
+                            <h:outputText value="#{grupoMenusControlador.seleccionarGrupoMenus.nombre}" />
+                            <h:outputText value="Título"/>
+                            <h:outputText value="#{grupoMenusControlador.seleccionarGrupoMenus.titulo}"/>
+                            <h:outputText value="Estado"/>
+                            <h:outputText value="#{grupoMenusControlador.seleccionarGrupoMenus.estado==0 ? 'INACTIVO':'ACTIVO'}"/>
+
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{grupoMenusControlador.eliminargrupoMenus()}" 
+                                         update=":frmGrupoMenus:pnlGrupoMenus"/>
+                        <p:commandButton value="Cancelar" onclick="wdlggrupoMenusEliminar.hide()" type="reset"/>
+                    </h:form> 
+                </p:dialog>
+
+                <p:dialog modal="true" widgetVar="dlgStatus" header="Procesando" draggable="false" closable="false" 
+                          resizable="false"> 
+                    <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />  
+                </p:dialog>
+            </ui:define>
+
+        </ui:composition>
+    </h:body>
+</html>
+

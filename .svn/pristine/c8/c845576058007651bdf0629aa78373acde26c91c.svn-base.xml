@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">
+                Adminstración de Documentos
+            </ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">
+                ADMINISTRACIÓN DE DOCUMENTOS
+            </ui:define>
+            <ui:define name="contenido">
+                <p:growl autoUpdate="true" showDetail="true"/>
+                <h:form id="frmTablaDocumento">
+                    <p:dataTable id="tblTablaDocumento" value="#{documentoControlador.lstDocumento}" var="documento" 
+                                 rowKey="#{documento.codigo}" selectionMode="single" selection="#{documentoControlador.documentoSel}">
+
+                        <p:column headerText="Título">
+                            <h:outputText value="#{documento.titulo}"/>
+                        </p:column>
+
+                        <p:column headerText="Previsualización">
+                            <p:lightBox >  
+                                <h:outputLink value="#" title="#{documento.titulo} #{documento.tipo}">  
+                                    <h:outputText value="#{documento.titulo}"/>
+                                </h:outputLink>
+                                <f:facet name="inline">
+                                    <p:media value="#{documento.path}" height="600" width="800" />                                    
+                                </f:facet>
+                            </p:lightBox>
+                        </p:column>
+
+                        <p:column headerText="Ruta">
+                            <h:outputText value="#{documento.path}"/>
+                        </p:column>
+
+                        <p:column headerText="Tipo">
+                            <h:outputText value="#{documento.tipo}"/>
+                        </p:column>
+
+                        <p:column headerText="Palabras Claves" >
+                            <h:outputText value="#{documento.keywords}"/>
+                        </p:column>
+
+                        <p:column headerText="Estado" >
+                            <h:outputText value="#{documento.estado==0 ? 'DESPUBLICADO':'PUBLICADO'}"/>
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <p:commandButton value="Insertar" onclick="dlgInsertarDocumento.show();" 
+                                             update=":frmInsertarDocumento:displayInsertarDocumento"/>
+                            <p:commandButton value="Editar" onclick="dlgEditarDocumento.show();" 
+                                             update=":frmEditarDocumento:displayEditarDocumento"/>
+                            <p:commandButton value="Eliminar" onclick="dlgEliminarDocumento.show();" 
+                                             update=":frmEliminarDocumento:displayEliminarDocumento"/>
+                        </f:facet>
+                    </p:dataTable>
+                </h:form>
+            </ui:define>
+            <ui:define name="dialogos">
+
+                <h:form id="frmInsertarDocumento" enctype="multipart/form-data" >
+                    <p:dialog widgetVar="dlgInsertarDocumento" header="Insertar Documento" modal="true" height="300" width="600">
+                        <p:panel id="displayInsertarDocumento" >
+                            <p:panelGrid columns="2" >
+
+                                <p:outputLabel value="Título"/>
+                                <p:inputText id="txtTituloDocumento" value="#{documentoControlador.objDocumento.titulo}"/>
+
+                                <p:outputLabel value="Ruta"/>
+                                <p:inputText id ="txtRutaDocumento" value="#{documentoControlador.objDocumento.path}"/>
+
+                                <p:outputLabel value="Tipo"/>
+                                <p:inputText id="txtTipoDocumento" value="#{documentoControlador.objDocumento.tipo}"/>
+
+                                <p:panelGrid id="pngSubirArchivo" columns="2" style="width: 510px;">
+
+                                    <p:fileUpload fileUploadListener="#{documentoControlador.cargarArchivoDocumento}"
+                                                  allowTypes="/(\.|\/)(pdf|doc?x|odt)$/" label="Abrir" mode="advanced"  
+                                                  update="displayInsertarDocumento" uploadLabel="Subir" cancelLabel="Cancelar"   
+                                                  value="#{documentoControlador.archivoDocumento}"
+                                                  required="true" requiredMessage="Cargar Documento!!" />
+                                </p:panelGrid>
+
+                                <p:outputLabel value="Palabras Clave"/>
+                                <p:inputText id="txtPalabrasClaveDocumento" value="#{documentoControlador.objDocumento.keywords}"/>
+
+                                <p:outputLabel value="Estado"/>
+                                <p:selectOneMenu id="cmbEstadoDocumento" value="#{documentoControlador.estadoSel}">
+                                    <f:selectItem itemLabel="Seleccione un Estado" itemValue="#{-1}"/>
+                                    <f:selectItem itemLabel="Publicado" itemValue="#{1}"/>
+                                    <f:selectItem itemLabel="Despublicado" itemValue="#{0}"/>
+                                </p:selectOneMenu>
+                                <p:panelGrid columns="2" style="text-align: center;">
+                                    <p:commandButton value="Aceptar" action="#{documentoControlador.insertarDocumento()}"
+                                                     update=":frmTablaDocumento:tblTablaDocumento" process="@this txtTituloDocumento
+                                                     txtTipoDocumento txtPalabrasClaveDocumento cmbEstadoDocumento"/>
+                                    <p:commandButton value="Cancelar" onclick="dlgInsertarDocumento.hide();"/>
+                                </p:panelGrid>
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="frmEditarDocumento" enctype="multipart/form-data">
+                    <p:dialog widgetVar="dlgEditarDocumento" header="Editar Documento" modal="true">
+                        <p:panel id="displayEditarDocumento" >
+                            <p:panelGrid columns="2">
+
+                                <p:outputLabel value="Título"/>
+                                <p:inputText value="#{documentoControlador.documentoSel.titulo}"/>
+
+                                <p:outputLabel value="Ruta"/>
+                                <p:inputText value="#{documentoControlador.documentoSel.path}"/>
+
+                                <p:outputLabel value="Tipo"/>
+                                <p:inputText value="#{documentoControlador.documentoSel.tipo}"/>
+
+                                <p:outputLabel value="Palabras Clave"/>
+                                <p:inputText value="#{documentoControlador.documentoSel.keywords}"/>
+
+                                <p:outputLabel value="Estado"/>
+                                <p:selectOneMenu value="#{documentoControlador.documentoSel.estado}">
+                                    <f:selectItem itemLabel="Seleccione un Estado" itemValue="#{-1}"/>
+                                    <f:selectItem itemLabel="Publicado" itemValue="#{1}"/>
+                                    <f:selectItem itemLabel="Despublicado" itemValue="#{0}"/>
+                                </p:selectOneMenu>
+
+                                <p:commandButton value="Aceptar" action="#{documentoControlador.actualizarDocumento()}"
+                                                 update=":frmTablaDocumento:tblTablaDocumento"/>
+                                <p:commandButton value="Cancelar" onclick="dlgEditarDocumento.hide();"/>
+
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="frmEliminarDocumento" enctype="multipart/form-data">
+                    <p:dialog widgetVar="dlgEliminarDocumento" header="Desea Eliminar el Documento Seleccionado" modal="true">
+                        <p:panel id="displayEliminarDocumento" >
+                            <p:panelGrid columns="2">
+
+                                <p:outputLabel value="Título"/>
+                                <p:inputText value="#{documentoControlador.documentoSel.titulo}" disabled="true"/>
+
+                                <p:outputLabel value="Ruta"/>
+                                <p:inputText value="#{documentoControlador.documentoSel.path}" disabled="true"/>
+
+                                <p:outputLabel value="Tipo"/>
+                                <p:inputText value="#{documentoControlador.documentoSel.tipo}" disabled="true"/>
+
+                                <p:outputLabel value="Palabras Clave"/>
+                                <p:inputText value="#{documentoControlador.documentoSel.keywords}" disabled="true"/>
+
+                                <p:outputLabel value="Estado"/>
+                                <p:selectOneMenu value="#{documentoControlador.documentoSel.estado}" disabled="true">
+                                    <f:selectItem itemLabel="Seleccione un Estado" itemValue="#{-1}"/>
+                                    <f:selectItem itemLabel="Publicado" itemValue="#{1}"/>
+                                    <f:selectItem itemLabel="Despublicado" itemValue="#{0}"/>
+                                </p:selectOneMenu>
+
+                                <p:commandButton value="Aceptar" action="#{documentoControlador.eliminarDocumento()}"
+                                                 update=":frmTablaDocumento:tblTablaDocumento"/>
+                                <p:commandButton value="Cancelar" onclick="dlgEliminarDocumento.hide();"/>
+
+                            </p:panelGrid>
+
+                        </p:panel>
+
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

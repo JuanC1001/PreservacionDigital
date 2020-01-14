@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">
+                Adminstración de Documentos
+            </ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">
+                ADMINISTRACIÓN DE DOCUMENTOS
+            </ui:define>
+            <ui:define name="contenido">
+                <p:growl autoUpdate="true" showDetail="true"/>
+                <h:form id="frmTablaDocumento">
+                    <p:dataTable id="tblTablaDocumento" value="#{documentoViabilidadControlador.lstDocumentoVia}" var="documento" 
+                                 rowKey="#{documento.codigo}" selectionMode="single" 
+                                 selection="#{documentoViabilidadControlador.documentoSel}"
+                                 rowsPerPageTemplate="5,10,15" emptyMessage="Datos no encontrados"
+                                 paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} 
+                                 {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+
+                        <p:column headerText="Título Documento">
+                            <h:outputText value="#{documento.titulo_ducumento}"/>
+                        </p:column>
+
+                        <p:column headerText="Título ">
+                            <h:outputText value="#{documento.detalles}"/>
+                        </p:column>
+
+                        <p:column headerText="Título del Archivo">
+                            <h:outputText value="#{documento.titulo}"/>
+                        </p:column>
+                        <p:column headerText="Tipo">
+                            <h:outputText value="#{documento.tipo}"/>
+                        </p:column>
+
+                        <p:column headerText="Palabras Claves" >
+                            <h:outputText value="#{documento.keywords}"/>
+                        </p:column>
+
+
+                        <p:column headerText="Previsualización">
+                            <p:lightBox >  
+                                <h:outputLink value="#" title="#{documento.titulo} #{documento.tipo}">  
+                                    <h:outputText value="#{documento.titulo}"/>
+                                </h:outputLink>
+                                <f:facet name="inline">
+                                    <p:media value="#{documento.path}" height="600" width="800" />                                    
+                                </f:facet>
+                            </p:lightBox>
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <p:commandButton value="Insertar" onclick="dlgInsertarDocumentoVia.show();" 
+                                             update=":frmInsertarDocumento:displayInsertarDocumento"
+                                             icon="ui-icon-plus"/>
+                            <p:commandButton value="Editar" onclick="dlgEditarDocumentoVia.show();" 
+                                             update=":frmEditarDocumento:displayEditarDocumento"
+                                             icon="ui-icon-pencil" />
+                            <p:commandButton value="Eliminar" onclick="dlgEliminarDocumentoVia.show();" 
+                                             update=":frmEliminarDocumento:displayEliminarDocumento"
+                                             icon="ui-icon-power-settings-new" />
+                        </f:facet>
+                    </p:dataTable>
+                </h:form>
+            </ui:define>
+            <ui:define name="dialogos">
+
+                <h:form id="frmInsertarDocumento" enctype="multipart/form-data" >
+                    <p:dialog widgetVar="dlgInsertarDocumentoVia" header="Insertar Documento" modal="true" height="420"
+                              width="560" showEffect="explode" hideEffect="fold" >
+                        <p:panel id="displayInsertarDocumento" >
+                            <p:panelGrid columns="2" >
+
+                                <p:outputLabel value="Título del Documeto"/>
+                                <p:inputText id="txtTitulo" value="#{documentoViabilidadControlador.objDocumentoVia.titulo_ducumento}"
+                                             requiredMessage="Ingrese el Título del Documeto" style="width:300px"/>
+
+                                <p:outputLabel value="Detalle del Documeto"/>
+                                <p:inputTextarea id="txtDetalle" rows="5" cols="40" 
+                                                 value="#{documentoViabilidadControlador.objDocumentoVia.detalles}" 
+                                                 queryDelay="500" minQueryLength="4"
+                                                 title="ej: Los análisis de ejemplos " required="true" 
+                                                 requiredMessage="Ingrese el Detalle del Documento"/> 
+
+                                <p:outputLabel value="Título Archivo"/>
+                                <p:inputText id="txtTituloDocumento" value="#{documentoViabilidadControlador.objDocumentoVia.titulo}" disabled="true"
+                                             requiredMessage="Título"/>
+
+                                <p:outputLabel value="Ruta"/>
+                                <p:inputText id ="txtRutaDocumento" value="#{documentoViabilidadControlador.objDocumentoVia.path}" disabled="true"
+                                             requiredMessage="Ingrese el Título del Documeto"/>
+
+                                <p:outputLabel value="Tipo"/>
+                                <p:inputText id="txtTipoDocumento" value="#{documentoViabilidadControlador.objDocumentoVia.tipo}" disabled="true"
+                                             requiredMessage="Tipo"/>
+
+                                <p:outputLabel value="Subir Archivo"/>
+                                <p:panelGrid id="pngSubirArchivo" columns="2" style="width: 310px;">
+                                    <p:fileUpload fileUploadListener="#{documentoViabilidadControlador.cargarArchivoDocumento}"
+                                                  allowTypes="/(\.|\/)(pdf|doc?x|odt)$/" label="Abrir" mode="advanced"  
+                                                  update="txtTituloDocumento, txtRutaDocumento, txtTipoDocumento" uploadLabel="Subir" cancelLabel="Cancelar"   
+                                                  value="#{documentoViabilidadControlador.archivoDocumentoVia}"
+                                                  required="true" requiredMessage="Cargar Documento!!" />
+                                </p:panelGrid>
+
+                                <p:outputLabel value="Palabras Clave"/>
+                                <p:inputText id="txtPalabrasClaveDocumento" value="#{documentoViabilidadControlador.objDocumentoVia.keywords}"
+                                             requiredMessage="Palabras Clave"/>                               
+                            </p:panelGrid>
+                            <center>
+                                <p:panelGrid columns="2" style="text-align: center;">
+                                    <p:commandButton value="Aceptar" action="#{documentoViabilidadControlador.insertarDocumentoVia()}"
+                                                     update=":frmTablaDocumento:tblTablaDocumento" process="@this txtTituloDocumento
+                                                     txtTitulo txtDetalle txtTipoDocumento txtPalabrasClaveDocumento"
+                                                     icon="ui-icon-check"/>
+                                    <p:commandButton value="Cancelar" onclick="dlgInsertarDocumentoVia.hide();" icon="ui-icon-closethick" />
+                                </p:panelGrid>
+                            </center>
+
+                        </p:panel>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="frmEditarDocumento" enctype="multipart/form-data">
+                    <p:dialog widgetVar="dlgEditarDocumentoVia" header="Editar Documento" modal="true"
+                              showEffect="explode" hideEffect="fold">
+                        <p:panel id="displayEditarDocumento" >
+                            <p:panelGrid columns="2">
+
+                                <p:outputLabel value="Título del Documeto"/>
+                                <p:inputText id="txtTitulo" value="#{documentoViabilidadControlador.documentoSel.titulo_ducumento}"
+                                             requiredMessage="Ingrese el Título del Documeto" style="width:300px"/>
+
+                                <p:outputLabel value="Detalle del Documeto"/>
+                                <p:inputTextarea id="txtDetalle" rows="5" cols="40" 
+                                                 value="#{documentoViabilidadControlador.documentoSel.detalles}" 
+                                                 queryDelay="500" minQueryLength="4"
+                                                 title="ej: Los análisis de ejemplos " required="true" 
+                                                 requiredMessage="Ingrese el Detalle del Documento"/> 
+
+
+                                <p:outputLabel value="Título"/>
+                                <p:inputText value="#{documentoViabilidadControlador.documentoSel.titulo}" disabled="true"/>
+
+                                <p:outputLabel value="Ruta"/>
+                                <p:inputText value="#{documentoViabilidadControlador.documentoSel.path}" disabled="true"/>
+
+                                <p:outputLabel value="Tipo"/>
+                                <p:inputText value="#{documentoViabilidadControlador.documentoSel.tipo}" disabled="true"/>
+
+                                <p:outputLabel value="Palabras Clave"/>
+                                <p:inputText value="#{documentoViabilidadControlador.documentoSel.keywords}"/>
+
+
+
+                                <p:commandButton value="Aceptar" action="#{documentoViabilidadControlador.actualizarDocumentoVia()}"
+                                                 update=":frmTablaDocumento:tblTablaDocumento"/>
+                                <p:commandButton value="Cancelar" onclick="dlgEditarDocumentoVia.hide();"/>
+
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="frmEliminarDocumento" enctype="multipart/form-data">
+                    <p:dialog widgetVar="dlgEliminarDocumentoVia" header="Desea Eliminar el Documento Seleccionado" modal="true"
+                              showEffect="explode" hideEffect="fold">
+                        <p:panel id="displayEliminarDocumento" >
+                            <p:panelGrid columns="2">
+                                <p:outputLabel value="Título del Documeto"/>
+                                <p:inputText id="txtTitulo" value="#{documentoViabilidadControlador.documentoSel.titulo_ducumento}" disabled="true"/>
+
+                                <p:outputLabel value="Detalles"/>
+                                <p:inputText id="txtDetalles" value="#{documentoViabilidadControlador.documentoSel.detalles}" disabled="true"/>
+
+                                <p:outputLabel value="Título"/>
+                                <p:inputText value="#{documentoViabilidadControlador.documentoSel.titulo}" disabled="true"/>
+
+                                <p:outputLabel value="Ruta"/>
+                                <p:inputText value="#{documentoViabilidadControlador.documentoSel.path}" disabled="true"/>
+
+                                <p:outputLabel value="Tipo"/>
+                                <p:inputText value="#{documentoViabilidadControlador.documentoSel.tipo}" disabled="true"/>
+
+                                <p:outputLabel value="Palabras Clave"/>
+                                <p:inputText value="#{documentoViabilidadControlador.documentoSel.keywords}" disabled="true"/>
+
+
+                                <p:commandButton value="Aceptar" action="#{documentoViabilidadControlador.eliminarDocumentoVia()}"
+                                                 update=":frmTablaDocumento:tblTablaDocumento"/>
+                                <p:commandButton value="Cancelar" onclick="dlgEliminarDocumentoVia.hide();"/>
+
+                            </p:panelGrid>
+
+                        </p:panel>
+
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

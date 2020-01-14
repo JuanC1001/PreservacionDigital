@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:composition template="/templates/plantillaBase.xhtml">
+        <ui:define name="content">
+            <h:form id="frmLogin">
+                <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                <p:messages id="msgLogin" showDetail="true" autoUpdate="true"/>
+                <h:outputText value="Inicio de sesi&oacute;n" style="text-align: center"/>
+                <p:layout fullPage="false" style="height: 250px">
+                    <p:layoutUnit position="west" style="height: 150px">
+                        <h:panelGrid columns="1" style="margin-left:75px; margin-top: 50px">
+                            <h:panelGrid id="pngLogin" columns="2">
+                                <h:outputText value="Usuario:"  />
+                                <p:inputText id="txtUsuario" value="#{loginUsuario.usuario.nick}" required="true" requiredMessage="#{msnSeguridad.oblUsuario}"/>
+                                <h:outputText value="Contraseña:" />
+                                <p:inputText id="txtContrasenia" type="password" value="#{loginUsuario.usuario.clave}" required="true" requiredMessage="#{msnSeguridad.oblPassword}"/>
+
+                            </h:panelGrid>
+
+                             </h:panelGrid>
+
+                    </p:layoutUnit>
+                    <p:layoutUnit position="center" id="catcha" style="padding-left: 150px; padding-top: 20px">
+                        <!--<p:captcha label="Captcha" language="es" theme="white"/>-->
+                        
+                    </p:layoutUnit>
+                    <p:layoutUnit position="south" >
+                        <h:panelGrid columns="2" style="text-align: center" cellpadding="2" cellspacing="0">
+                            <p:commandButton action="#{loginUsuario.login}" style="width: 70px; height: 25px; cursor: pointer" value="Ingresar" ajax="false"/>
+                            <p:commandButton action="index" value="Cancelar" style="width: 70px; height: 25px; cursor: pointer" ajax="false"/>
+                        </h:panelGrid>
+                    </p:layoutUnit>
+                </p:layout>
+            </h:form>
+            <p:dialog modal="true" widgetVar="dlgStatus" header="Procesando" draggable="false" closable="false" 
+                      resizable="false"> 
+                <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />  
+            </p:dialog>
+        </ui:define>
+    </ui:composition>
+</html>
+

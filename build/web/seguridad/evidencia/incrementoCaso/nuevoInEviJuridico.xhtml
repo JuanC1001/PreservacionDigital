@@ -1,0 +1,223 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                >
+
+    <p:dialog id="dlgNuevoIE" header="Incremento de Evidencia  " widgetVar="wdlgincrementoE" 
+              modal="true" closable="true" resizable="false" height="474" width="1050"
+              showEffect="explode" hideEffect="fold" appendTo="@(body)">  
+
+        <center> 
+            <h:form id="frmInEvidencia" enctype="multipart/form-data">
+                <p:panel id="caso" header="Evidencia" style=" width:600px;">
+                    <p:panelGrid id="pngcaso" columns="4" >
+                        <h:outputText value="Codigo de Caso:" style="width:400px "/>
+                        <p:inputText id="codIns" value="#{incrmentoEvidencias_JuridicosControladores.evidenciaSel.codigo_caso.codigo_institucional}" style="width:150px"/>
+                        <h:outputText value="Titulo de Evidecencia:" style="width:400px "/>
+                        <p:inputText id="tipoCaso" value="#{incrmentoEvidencias_JuridicosControladores.evidenciaSel.codigo_detalle_evidencia.titulo}" style="width:150px"/>
+                        <h:outputText value="Responsable de Recojida:" style="width:400px "/>
+                        <p:inputText id="dependencia" value="#{incrmentoEvidencias_JuridicosControladores.evidenciaSel.codigo_detalle_evidencia.nombre_responsable_reco}" style="width:150px"/>
+                        <h:outputText value="Fecha de Registro:" style="width:400px "/>
+                        <p:inputText id="provincia" value="#{incrmentoEvidencias_JuridicosControladores.evidenciaSel.fecha_registro}" style="width:150px"/>
+                    </p:panelGrid> 
+                </p:panel>
+            </h:form>
+        </center>
+        <p:separator>
+
+        </p:separator>
+       <h:form id="frmEvidencia1" enctype="multipart/form-data">
+        
+            <p:panel id="datosEvidencias" header="Detalles de Evidencias" style=" width:1090px;">
+                <p:panelGrid id="evidencia" columns="2" style=" width:800px; height:11px;">
+
+                    <p:panel id="buscarCasoAutor" style=" width:500px; height:220px;"> 
+                        <p:panel id="numIncremento" header="Número de Incremento" style=" width:460px;"  >
+                            <p:panelGrid columns="2">
+                                <p:outputLabel value="Número de Incremento"/> 
+                                <p:inputText id="txtnuIn" value="#{incrmentoEvidencias_JuridicosControladores.objInEvJu.numero_incremento}" style="width:220px"
+                                             title="ej: Parte III" required="true" requiredMessage="Número de Incremento"/>        
+                            </p:panelGrid>
+                        </p:panel>
+                        
+                        <p:panel id="entornoswreco" header="Entorno de Software Recojido" style=" width:460px;"  >
+                            <p:panelGrid columns="2">
+                                <p:outputLabel value="Nombre:"/> 
+                                <p:inputText id="txtnombreswre" value="#{incrmentoEvidencias_JuridicosControladores.objentornoswrecojidoin.nombre}" style="width:220px"
+                                             title="ej: Análisis de Ejemplos" required="true" requiredMessage="Ingrese Nombre"/>
+                                <p:outputLabel value="Versión:"/>
+                                <p:inputText id="txtversion" value="#{incrmentoEvidencias_JuridicosControladores.objentornoswrecojidoin.ver_sion}" style="width:220px"
+                                             title="ej: Análisis de Ejemplos" required="true" requiredMessage="Ingrese Versión"/>
+                                <p:outputLabel value="Software Base:"/>
+                                <p:inputText id="txtswbase" value="#{incrmentoEvidencias_JuridicosControladores.objentornoswrecojidoin.sw_base}" style="width:220px"
+                                             title="ej: Análisis de Ejemplos" required="true" requiredMessage="Ingrese software base"/>
+                                <p:outputLabel value="Software de Aplicación:"/>
+                                <p:inputText id="txtswaplicacion" value="#{incrmentoEvidencias_JuridicosControladores.objentornoswrecojidoin.sw_aplicacion}" style="width:220px"
+                                             title="ej: Análisis de Ejemplos" required="true" requiredMessage="Ingrese software de aplicación"/>
+                                <p:outputLabel value="Observación:"/>
+                                <p:inputText id="txtobservacion" value="#{incrmentoEvidencias_JuridicosControladores.objentornoswrecojidoin.observacion}" style="width:220px"
+                                             title="ej: Análisis de Ejemplos" required="true" requiredMessage="Ingrese Observación"/>
+                            </p:panelGrid>
+                        </p:panel>
+                        <p:panel id="entornohwreco" header="Entorno de Hardware Recojido" style=" width:460px;"  >
+                            <p:panelGrid columns="2">
+                                <p:outputLabel value="Tipo:"/>
+                                <p:inputText id="txttipo" value="#{incrmentoEvidencias_JuridicosControladores.objentornohwrecojidoin.tipo}"  style="width:220px"
+                                             title="ej: Análisis de Ejemplos" required="true" requiredMessage="Ingrese Tipo"/>
+                                <p:outputLabel value="Marca:"/>
+                                <p:inputText id="txtmarca" value="#{incrmentoEvidencias_JuridicosControladores.objentornohwrecojidoin.marca}" style="width:220px"
+                                             title="ej: Análisis de Ejemplos" required="true" requiredMessage="Ingrese la Marca"/>
+                                <p:outputLabel value="Modelo:"/>
+                                <p:inputText id="txtmodelo" value="#{incrmentoEvidencias_JuridicosControladores.objentornohwrecojidoin.modelo}" style="width:220px"
+                                             title="ej: Análisis de Ejemplos" required="true" requiredMessage="Ingrese el Modelo"/>
+                                <p:outputLabel value="Foto"/>
+                                <p:inputText id="txtfoto" value="#{incrmentoEvidencias_JuridicosControladores.objentornohwrecojidoin.foto}" style="width:250px"
+                                             title="ej: Análisis de Ejemplos" required="true" requiredMessage="Ingrese la Foto"/>
+                                <p:outputLabel value="Observaciones:"/>
+                                <p:inputText id="txtobservacioneshw" value="#{incrmentoEvidencias_JuridicosControladores.objentornohwrecojidoin.observacion}" style="width:220px"
+                                             title="ej: Análisis de Ejemplos" required="true" requiredMessage="Ingrese la Palabra Clave"/>
+                                <p:outputLabel value="Foto"/>                                           
+                                <p:fileUpload fileUploadListener="#{incrmentoEvidencias_JuridicosControladores.cargarimagen}"
+                                              allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
+                                              label="Abrir" mode="advanced"  
+                                              update="txtfoto" uploadLabel="Subir" cancelLabel="Cancelar"   
+                                              value="#{incrmentoEvidencias_JuridicosControladores.archivoImagenIn}"
+                                              required="true" requiredMessage="Cargar Archivo!!" />
+                            </p:panelGrid>
+                        </p:panel> 
+                        <p:panel id="procedimientoreco" header="Procedimineto Recojido" style=" width:460px;"  >
+                            <p:panelGrid columns="2">
+                                <p:outputLabel value="Hoja de Ruta:"/>
+                                <p:inputText id="txthojaruta" value="#{incrmentoEvidencias_JuridicosControladores.objprocedimientorecojidoin.hoja_ruta}" style="width:220px"
+                                             title="ej: Análisis de Ejemplos" required="true" requiredMessage="Ingrese la hoja de ruta"/>
+
+                                <p:outputLabel value="Cadena de Custodia:"/>
+                                <p:inputText id="txtcadenacustodia" value="#{incrmentoEvidencias_JuridicosControladores.objprocedimientorecojidoin.cadena_custudia}" style="width:220px"
+                                             title="ej: Análisis de Ejemplos" required="true" requiredMessage="Ingrese cadena custodia"/>
+                                <p:outputLabel value="Registro:"/>               
+                                <p:inputText id="txtregistro" value="#{incrmentoEvidencias_JuridicosControladores.objprocedimientorecojidoin.registros}" style="width:220px"
+                                             title="ej: Análisis de Ejemplos" required="true" requiredMessage="Ingrese la registro"/>
+                                <p:outputLabel value="Observacion:"/>
+                                <p:inputText id="txtobservacionesp" value="#{incrmentoEvidencias_JuridicosControladores.objprocedimientorecojidoin.observacion}" style="width:220px"
+                                             title="ej: Análisis de Ejemplos" required="true" requiredMessage="Ingrese  observaciones"/>
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:panel>
+
+                    <p:panel id="datosDocumento">
+                        <p:panelGrid columns="2" >
+                            <p:outputLabel  value="Tipo de Evidencia" />
+                            <p:selectOneMenu id="cmbtipo" value="#{incrmentoEvidencias_JuridicosControladores.objdetalleevidenciain.tipo_evidencia}" style="width:250px" required="true" requiredMessage="Seleccione Tipo de Evidencia">
+                                <f:selectItem itemLabel="Seleccione tipo de Archivo" itemValue="" />
+                                <f:selectItem itemLabel="Penal" itemValue="Penal" />
+                                <f:selectItem itemLabel="Maternidad" itemValue="Penal" />                                           
+                                <f:selectItem itemLabel="Criminal" itemValue="Maternidad" />
+                                <f:selectItem itemLabel="Etc" itemValue="Criminal" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Título:"/>
+                            <p:inputText id="txttitulo" value="#{incrmentoEvidencias_JuridicosControladores.objdetalleevidenciain.titulo}" style="width:330px"
+                                         title="ej: Análisis de Ejemplos" required="true" requiredMessage="Ingrese la Palabra observacion"/>
+
+                            <p:outputLabel value="Nombre Responsable Recojido:" style="width:220px"/>
+                            <p:inputText id="txtobservaciones" value="#{incrmentoEvidencias_JuridicosControladores.objdetalleevidenciain.nombre_responsable_reco}"
+                                         title="ej: Análisis de Ejemplos" required="true" requiredMessage="Ingrese la Palabra observacion"/>
+
+                            <p:outputLabel value="Fuente:"/>                                                           
+                            <p:inputTextarea id="txtfuente" rows="5" cols="60" 
+                                             value="#{incrmentoEvidencias_JuridicosControladores.objdetalleevidenciain.fuete}" queryDelay="700" minQueryLength="4"
+                                             title="ej: Los análisis de ejemplos " required="true" requiredMessage="Ingrese un fuente"/> 
+
+                            <p:outputLabel value="Resumen de Contexto Recojido"/>                                                           
+                            <p:inputTextarea id="txtrcontx" rows="5" cols="60" 
+                                             value="#{incrmentoEvidencias_JuridicosControladores.objdetalleevidenciain.resumen_contexto_recojido}" queryDelay="700" minQueryLength="4"
+                                             title="ej: Los análisis de ejemplos " required="true" requiredMessage="Ingrese el Resumen del Documento"/>  
+
+                            <p:outputLabel value="Resumen de Contexto Contenido"/>                                                           
+                            <p:inputTextarea id="txtojo" rows="5" cols="60" 
+                                             value="#{incrmentoEvidencias_JuridicosControladores.objdetalleevidenciain.resumen_contexto_contenido}" queryDelay="700" minQueryLength="4"
+                                             title="ej: Los análisis de ejemplos " required="true" requiredMessage="Ingrese el Resumen del Documento"/>  
+
+                            <p:outputLabel value="Subir Archivo"/>                                                                   
+                            <p:fileUpload fileUploadListener="#{incrmentoEvidencias_JuridicosControladores.cargarDocumentoDoc}"
+                                          allowTypes="/(\.|\/)(pdf|doc?x|odt|xlsx|pptx|rar|gif|jpe?g|png|zip|exe|mp3|wma|wav|mp4|avi|mov|3gp)$/" 
+                                          label="Abrir" mode="advanced"  
+                                          update="metadatosDocumento" uploadLabel="Subir" cancelLabel="Cancelar"                                  
+                                          value="#{incrmentoEvidencias_JuridicosControladores.archivoDocumentosIn}"
+                                          required="true" requiredMessage="Cargar Archivo!!" />
+                        </p:panelGrid> 
+                        <p:panel  id="metadatosDocumento" header="Metadatos de Evidencia">
+                            <p:panelGrid columns="2">
+                                <p:outputLabel value="Ruta"/>
+                                <p:inputText id="txtRutaArchivosOriginales" value="#{incrmentoEvidencias_JuridicosControladores.objdetalleevidenciain.path}" style="width:250px"
+                                             title="ej: /ejemplo/ejemplo.pdf" required="true" requiredMessage="Ingrese la ruta del archivo" disabled="true"/>
+                                <p:outputLabel value="Nombre de Archivo"/> 
+                                <p:inputText id="txtN" value="#{incrmentoEvidencias_JuridicosControladores.objmetadosin.nombre}" style="width:250px"
+                                             title="ej: ejemplo" required="true" requiredMessage="Nombre de archivo" disabled="true"/>
+
+                                <p:outputLabel value="Tipo de Archivo"/> 
+                                <p:inputText id="txtT" value="#{incrmentoEvidencias_JuridicosControladores.objmetadosin.tipo}" style="width:100px"
+                                             title="ej: ejemplo" required="true" requiredMessage="Tipo de Archivo" disabled="true"/>
+
+                                <p:outputLabel value="Tamaño de Archivo/Documento"/> 
+                                <p:inputText id="txtTm" value="#{incrmentoEvidencias_JuridicosControladores.objmetadosin.tamanio}" style="width:80px"
+                                             title="ej: ejemplo" required="true" requiredMessage="Tamaño de Archivo/Documen" disabled="true"/>
+                            </p:panelGrid>                                    
+                        </p:panel> 
+                        <p:panel  id="técnicas" header="Técnicas de Preservavión">
+                            <p:panelGrid columns="2">
+                                <p:outputLabel  value="Técnicas" />
+                                <p:selectOneMenu id="cmbtipotecnica" value="#{incrmentoEvidencias_JuridicosControladores.objtecnicasin.tecnica}" style="width:180px">
+                                    <f:selectItem itemLabel="Seleccione de Técnica" itemValue="#{null}" />
+                                    <f:selectItem itemLabel="Estándar" itemValue="Estándar" />
+                                    <f:selectItem itemLabel="Migración" itemValue="Migración" />
+                                    <f:selectItem itemLabel="Emulación" itemValue="Emulación" />
+                                    <f:selectItem itemLabel="Replicación" itemValue="Replicación" />
+                                    <f:selectItem itemLabel="Encapsulado" itemValue="Encapsulado" /> 
+                                    <f:selectItem itemLabel="Preservación de la tecnología" itemValue="Preservación de la tecnología" /> 
+
+                                </p:selectOneMenu>
+                                <p:outputLabel value="Detalle de Técnica"/>
+                                <p:inputText id="txtRutaDetalleTec" value="#{incrmentoEvidencias_JuridicosControladores.objtecnicasin.detalle}" style="width:250px"
+                                             title="ej: Se realizon con ejemplo" />
+
+                                <p:outputLabel value="Ruta"/>
+                                <p:inputText id="txtRutaTec" value="#{incrmentoEvidencias_JuridicosControladores.objtecnicasin.path}" style="width:250px"
+                                             title="ej: /ejemplo/ejemplo.pdf" disabled="true"/>
+
+                                <p:outputLabel value="Subir Archivo"/>                                           
+                                <p:fileUpload fileUploadListener="#{incrmentoEvidencias_JuridicosControladores.cargarDocumentoTecn}"
+                                              allowTypes="/(\.|\/)(pdf|doc?x|odt|xlsx|pptx|rar|gif|jpe?g|png|zip|exe|mp3|wma|wav|mp4|avi|mov|3gp)$/" 
+                                              label="Abrir" mode="advanced"  
+                                              update="txtRutaTec" uploadLabel="Subir" cancelLabel="Cancelar"   
+                                              value="#{incrmentoEvidencias_JuridicosControladores.archivoDocumentoTecnIn}"
+                                              required="true" requiredMessage="Cargar Archivo!!" /> 
+                            </p:panelGrid>   
+                        </p:panel>
+                    </p:panel>
+                </p:panelGrid>
+                <p:panelGrid columns="2" style="text-align: center;">
+                    <p:commandButton value="Guardar" action="#{incrmentoEvidencias_JuridicosControladores.insertarIncrementoEvidenciaCaso()}" 
+                                     update=":frmInEvidencia, :frmEvidencia1"
+                                     process="@this,  txtnuIn, cmbtipo, txttitulo, txtobservaciones, txtfuente, txtrcontx, txtojo
+                                     txtRutaArchivosOriginales,
+                                     txtN, txtT, txtTm, cmbtipotecnica, txtRutaDetalleTec, txtRutaTec,
+                                     txtnombreswre, txtversion, txtswbase, txtswaplicacion, txtobservacion,
+                                     txttipo, txtmarca, txtmodelo, txtfoto, txtobservacioneshw,
+                                     txthojaruta, txtcadenacustodia, txtregistro, txtobservacionesp,
+                                     txttitulo, txtobservaciones, txtfuente, txtojo, " icon="ui-icon-check"/>
+                    <p:commandButton value="Cancelar" icon="ui-icon-closethick"  onclick="wdlgNuevoEvidencia.hide();"/>
+                </p:panelGrid>
+            </p:panel>
+        </h:form>         
+
+    </p:dialog>
+
+    <p:dialog modal="true" widgetVar="dlgStatus" header="Procesando" draggable="false" closable="false" 
+              resizable="false"> 
+        <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />  
+    </p:dialog>
+
+</ui:composition>

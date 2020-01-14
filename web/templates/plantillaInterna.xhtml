@@ -1,0 +1,30 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="css/default.css" />
+        <h:outputStylesheet name = "css/cssLayout.css" />
+        <link rel="shortcut icon" href="/resources/images/favicon.gif" />
+        <title>
+            <ui:insert name="tituloNavegador">titulo navegador</ui:insert>
+        </title>
+    </h:head>
+    <h:body>
+        <p:layout fullPage="true">
+            <p:layoutUnit position="north" size="45%" >
+                <ui:insert name="titulo">titulo</ui:insert>
+                <ui:insert name="lista">lista</ui:insert>
+            </p:layoutUnit>
+            <p:layoutUnit position="center" >
+                <ui:insert name="formulario">formulario</ui:insert>
+            </p:layoutUnit>
+        </p:layout>
+        <ui:insert name="dialogos">dialogos</ui:insert>
+    </h:body>
+</html>
+

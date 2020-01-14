@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/templates/plantillaBase.xhtml">
+        <ui:define name="tituloNavegador">Gestión del Conocimiento - UNACH - ICITS</ui:define>
+        <ui:define name="content">
+            <h:form id="frmIndex">
+                <h:panelGrid id="pnlIndexPrincipal" columns="1" class="center_content">
+                    <h:panelGrid columns="2" >
+                        <p:carousel id="tabsCarouselBlog" headerText="Blog" numVisible="1" itemStyle="width: 420px; height: 150px;"
+                                    effect="easeInStrong" value="#{indexControlador.lstBlogs}" var="blog" circular="true" 
+                                    autoPlayInterval="4000" >  
+                            <p:tab title="#{blog.titulo}" >  
+                                <h:panelGrid columns="2" >
+                                    <h:commandLink action="#{detalleArticuloC.leerArticulo()}">
+                                        <f:setPropertyActionListener value="#{blog.codigo}" 
+                                                                     target="#{detalleArticuloC.dmSitio.articuloActual.codigo}"/>
+                                        <p:graphicImage value="#{blog.codigo_imagen.path}" width="160px" 
+                                                        title="#{blog.codigo_imagen.titulo}"> 
+                                        </p:graphicImage> 
+                                    </h:commandLink>
+                                    <h:panelGrid columns="1">
+                                        <h:commandLink action="#{detalleArticuloC.leerArticulo()}" >
+                                            <f:setPropertyActionListener value="#{blog.codigo}" 
+                                                                         target="#{detalleArticuloC.dmSitio.articuloActual.codigo}"/>
+                                            <h:outputText value="#{blog.titulo}" styleClass="titulo_news"/>
+                                        </h:commandLink>
+                                        <h:outputText value="#{blog.introduccion}" />
+                                        <h:commandLink value="leer mas..." action="#{detalleArticuloC.leerArticulo()}" styleClass="titulo_readmore">
+                                            <f:setPropertyActionListener value="#{blog.codigo}" 
+                                                                         target="#{detalleArticuloC.dmSitio.articuloActual.codigo}"/>
+                                        </h:commandLink>
+                                    </h:panelGrid>  
+                                </h:panelGrid>  
+                            </p:tab> 
+                        </p:carousel>
+                        <p:carousel id="tabsCarouselNoticias" headerText="Noticias" numVisible="1" itemStyle="width: 420px; height: 150px;"   
+                                    effect="fade" value="#{indexControlador.lstNoticias}" var="noticia" circular="true" autoPlayInterval="4000">   
+                            <p:tab title="#{noticia.titulo}">  
+                                <h:panelGrid columns="2" > 
+                                    <h:commandLink action="#{detalleArticuloC.leerArticulo()}" styleClass="titulo_readmore">
+                                        <f:setPropertyActionListener value="#{noticia.codigo}" 
+                                                                     target="#{detalleArticuloC.dmSitio.articuloActual.codigo}"/>
+                                        <p:graphicImage value="#{noticia.codigo_imagen.path}" width="160px" 
+                                                        alt="#{noticia.codigo_imagen.titulo}">  
+                                        </p:graphicImage>
+                                    </h:commandLink>
+
+                                    <h:panelGrid columns="1">
+                                        <h:commandLink action="#{detalleArticuloC.leerArticulo()}" styleClass="titulo_negro">
+                                            <f:setPropertyActionListener value="#{noticia.codigo}" 
+                                                                         target="#{detalleArticuloC.dmSitio.articuloActual.codigo}"/>
+                                            <h:outputText value="#{noticia.titulo}" styleClass="titulo_news"/>
+                                        </h:commandLink>
+
+                                        <h:outputText value="#{noticia.introduccion}" />
+                                        <h:commandLink value="leer mas..." action="#{detalleArticuloC.leerArticulo()}" styleClass="titulo_readmore">
+                                            <f:setPropertyActionListener value="#{noticia.codigo}" 
+                                                                         target="#{detalleArticuloC.dmSitio.articuloActual.codigo}"/>
+                                        </h:commandLink>
+                                    </h:panelGrid>  
+                                </h:panelGrid>  
+                            </p:tab> 
+                        </p:carousel>
+                    </h:panelGrid>
+                    <h:panelGrid columns="1">
+                        <p:carousel id="tabsCarouselProyectos" headerText="Proyectos" numVisible="4" effect="easeInStrong"
+                                    itemStyle="width: 210px; height: 150px;" value="#{indexControlador.lstProyectos}" var="proyectos">  
+                            <p:tab title="#{proyectos.titulo}" > 
+                                <h:panelGrid columns="1" >
+                                    <h:commandLink  action="#{detalleArticuloC.leerArticulo()}" styleClass="titulo_negro">
+                                        <f:setPropertyActionListener value="#{proyectos.codigo}" 
+                                                                     target="#{detalleArticuloC.dmSitio.articuloActual.codigo}"/>
+                                        <h:outputText value="#{proyectos.titulo}" styleClass="titulo_negro"/>
+                                        <p:graphicImage value="#{proyectos.codigo_imagen.path}" width="200px"
+                                                        title="#{proyectos.codigo_imagen.titulo}">
+                                        </p:graphicImage>
+                                    </h:commandLink>
+
+                                </h:panelGrid>  
+                            </p:tab> 
+                        </p:carousel>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <h:panelGrid columns="1">
+                            <p:carousel id="tabsCarouselEquipo" headerText="Equipo" numVisible="6" itemStyle="height:50px;width:66px;" effect="easeInStrong">  
+                                <p:tab title="Entrada 1">  
+                                    <h:panelGrid columns="1" >  
+                                        <p:graphicImage value="resources/images/nature1.jpg" width="50px" />
+                                    </h:panelGrid>  
+                                </p:tab> 
+                            </p:carousel>
+
+                            <p:panel header="Documentos" style="height:200px;width:417px;"> 
+                                <p:dataList value="#{indexControlador.lstDocumento}" var="documentos" type="definition" >  
+                                    <p:lightBox >  
+                                        <h:outputLink value="#" title="#{documentos.titulo}" >  
+                                            <p:graphicImage  value="resources/images/pdf.png" /> 
+                                            <h:outputText value="#{documentos.titulo}"/>
+                                        </h:outputLink> 
+                                        <f:facet name="inline">
+                                            <p:media value="#{documentos.path}" height="600" width="800" />
+                                        </f:facet>
+                                    </p:lightBox>
+                                </p:dataList>  
+                            </p:panel>
+                        </h:panelGrid>
+
+                        <p:carousel id="tabsCarouselMultimedia" headerText="Multimedia" numVisible="1" 
+                                    itemStyle="height:280px;width:420px;" effect="easeInStrong" value="#{indexControlador.lstVideos}"
+                                    var="video" >  
+                            <p:tab title="#{video.titulo}">
+                                <div id="myElement#{video.codigo}">Cargando Reproductor...</div>
+                                <script type="text/javascript">
+                                    jwplayer("myElement#{video.codigo}").setup({
+                                        file: "faces#{video.path}",
+                                        title: "#{video.titulo}",
+                                        height: "100%",
+                                        width: "100%",
+                                        aspectratio: "16:9",
+                                        image: "faces/resources/images/nature1.jpg",
+                                        skin: "resources/jwplayer/skin_trebola/skin_trebola.xml"
+                                    });
+                                </script>
+                            </p:tab>                                                     
+                        </p:carousel>
+
+                        <p:dataGrid var="sonido" value="#{indexControlador.lstSonidos}" columns="1"  
+                                    rows="3" paginator="true"  
+                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} 
+                                    {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                    rowsPerPageTemplate="3,6,9" paginatorPosition="top" style="text-align:center;width:400px"> 
+
+                            <p:tab title="#{sonido.titulo}"  >
+
+                                <div id="myElement#{sonido.codigo}">Cargando Reproductor...</div>
+                                <script type="text/javascript">
+                                    jwplayer("myElement#{sonido.codigo}").setup({
+                                        file: "faces#{sonido.path}",
+                                        title: "#{sonido.titulo}",
+                                        height: "30",
+                                        width: "380",
+                                        aspectratio: "16:9",
+                                        image: "faces/resources/images/nature1.jpg"
+                                                //skin: "faces/resources/jwplayer/skin_trebola.zip"
+                                    });
+                                </script>  
+                                <h:outputText value="#{sonido.titulo}" styleClass="titulo_negro"/>
+                            </p:tab>
+                        </p:dataGrid>
+                    </h:panelGrid>
+                </h:panelGrid>                           
+            </h:form>           
+        </ui:define>
+    </ui:composition>
+</html>
+

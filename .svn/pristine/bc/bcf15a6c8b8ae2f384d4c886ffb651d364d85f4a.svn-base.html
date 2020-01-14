@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">Gestion de Acciones</ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">Gestión de Acciones</ui:define>
+            <ui:define name="contenido">
+                <p:growl id="mensajes" autoUpdate="true"/>
+                <h:form id="frmAccion">
+                    <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                    <p:panel id="pnlAccion">
+                        <p:dataTable id="tblAccion" value="#{accionControlador.acciones}" var="accion" paginator="true" rows="10"
+                                     rowKey="#{accion.codigo}" selectionMode="single" selection="#{accionControlador.seleccionarAccion}">
+                            <p:column filterBy="#{accion.codigo}" filterMatchMode="startsWith" sortBy="#{accion.codigo}">
+                                <f:facet name="header">
+                                    <h:outputText value="CODIGO"/>
+                                </f:facet>
+                                <h:outputText value="#{accion.codigo}"/>
+                            </p:column>
+                            <p:column filterBy="#{accion.url}" filterMatchMode="startsWith" sortBy="#{accion.url}">
+                                <f:facet name="header">
+                                    <h:outputText value="URL"/>
+                                </f:facet>
+                                <h:outputText value="#{accion.url}"/>
+                            </p:column>
+                            <p:column filterBy="#{accion.titulo}" filterMatchMode="startsWith" sortBy="#{accion.titulo}">
+                                <f:facet name="header">
+                                    <h:outputText value="TITULO"/>
+                                </f:facet>
+                                <h:outputText value="#{accion.titulo}"/>
+                            </p:column>
+                            <p:column filterBy="#{accion.descripcion}" filterMatchMode="startsWith" sortBy="#{accion.descripcion}">
+                                <f:facet name="header">
+                                    <h:outputText value="DESCRIPCIóN"/>
+                                </f:facet>
+                                <h:outputText value="#{accion.descripcion}"/>
+                            </p:column>
+                            <p:column filterBy="#{accion.estado}" filterMatchMode="startsWith" sortBy="#{accion.estado}">
+                                <f:facet name="header">
+                                    <h:outputText value="ESTADO"/>
+                                </f:facet>
+                                <h:outputText value="#{accion.estado==false ?'INACTIVO':'ACTIVO'}"/>
+
+                            </p:column>
+                            <f:facet name="footer">  
+                                <p:commandButton id="btnNuevaAccion" value="Nuevo" icon="ui-icon-newwin"
+                                                 oncomplete="wdlgaccionAgregar.show()" title="Agregar Acción"/>  
+                                <p:commandButton id="btnEditarAccion" value="Editar" icon="ui-icon-pencil"
+                                                 update=":dlgaccionActualizar" oncomplete="wdlgaccionActualizar.show()"
+                                                 title="Editar Acción"/> 
+                                <p:commandButton id="btnEliminarAcccion" value="Eliminar" icon="ui-icon-trash"
+                                                 update=":dlgaccionEliminar" oncomplete="wdlgaccionEliminar.show()"
+                                                 title="Eliminar Acción"/>
+                            </f:facet>
+
+
+
+                        </p:dataTable>
+                        <!--<p:commandButton value="Nuevo" id="btnNuevoGrupo" onclick="dlggrupoAgregar.show()">
+                        </p:commandButton> -->
+                    </p:panel>
+                </h:form>
+
+            </ui:define>
+
+            <ui:define name="dialogos">
+                <p:dialog id="dlgaccionAgregar" header="Nueva Acción" widgetVar="wdlgaccionAgregar" 
+                          modal="true" closable="false" resizable="false"
+                          showEffect="clip" hideEffect="fold">  
+                    <h:form id="frmNuevaAccion">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <p:panelGrid id="pngNuevaAccion" columns="2">
+                            <h:outputText value="Url"/>
+                            <p:inputText value="#{accionControlador.accion.url}" />
+                            <h:outputText value="Título"/>
+                            <p:inputText value="#{accionControlador.accion.titulo}"/>
+                            <h:outputText value="Descripción"/>
+                            <p:inputTextarea value="#{accionControlador.accion.descripcion}"/>
+                            <h:outputText id="otxtAccion" value="Estado"/>
+                            <p:selectBooleanCheckbox id="ochkAccion" value="#{accionControlador.accion.estado}"/>
+
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{accionControlador.insertarAccion}" update=":frmAccion:pnlAccion"/>
+                        <p:commandButton value="Cancelar" onclick="wdlgaccionAgregar.hide()" type="reset"/>
+                    </h:form> 
+                </p:dialog>
+
+                <p:dialog id="dlgaccionActualizar" header="Edita Acción" widgetVar="wdlgaccionActualizar" modal="true" closable="false" 
+                          resizable="false"
+                          showEffect="clip" hideEffect="fold">  
+                    <h:form id="frmactualizarAccion">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <p:messages id="messages" autoUpdate="true"/>  
+                        <p:panelGrid id="pngactualizarAccion" columns="2">
+                            <h:outputText value="Url"/>
+                            <p:inputText value="#{accionControlador.seleccionarAccion.url}"/>
+                            <h:outputText value="Título"/>
+                            <p:inputText value="#{accionControlador.seleccionarAccion.titulo}"/>
+                            <h:outputText value="Descripción"/>
+                            <p:inputTextarea value="#{accionControlador.seleccionarAccion.descripcion}"/>
+                            <h:outputText id="otxtAccion" value="Estado"/>
+                            <p:selectBooleanCheckbox id="ochkAccion" value="#{accionControlador.seleccionarAccion.estado}"/>
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{accionControlador.actualizarAccion()}" 
+                                         update=":frmAccion:pnlAccion"/>
+                        <p:commandButton value="Cancelar" onclick="wdlgaccionActualizar.hide()" type="reset"/>
+                    </h:form> 
+                </p:dialog>
+
+                <p:dialog id="dlgaccionEliminar" header="Elimina Acción" widgetVar="wdlgaccionEliminar" modal="true" closable="false" 
+                          resizable="false"
+                          showEffect="clip" hideEffect="fold">  
+                    <h:form id="frmeliminarAccion">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <h:outputText value="¿Desea Eliminar la Acción?"/>
+                        <p:panelGrid id="pngeliminarAccion" columns="2">
+                            <h:outputText value="Url"/>
+                            <h:outputText value="#{accionControlador.seleccionarAccion.url}"/>
+                            <h:outputText value="Título"/>
+                            <h:outputText value="#{accionControlador.seleccionarAccion.titulo}"/>
+                            <h:outputText value="Descripción"/>
+                            <h:outputText value="#{accionControlador.seleccionarAccion.descripcion}"/>
+                            <h:outputText value="Estado"/>
+                            <h:outputText value="#{accionControlador.seleccionarAccion.estado==false ? 'INACTIVO':'ACTIVO'}"/>
+
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{accionControlador.eliminarAccion()}" 
+                                         update=":frmAccion:pnlAccion"/>
+                        <p:commandButton value="Cancelar" onclick="wdlgaccionEliminar.hide()" type="reset"/>
+                    </h:form> 
+                </p:dialog>
+                <p:dialog modal="true" widgetVar="dlgStatus" header="Procesando" draggable="false" closable="false" 
+                          resizable="false"> 
+                    <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />  
+                </p:dialog>
+
+            </ui:define>
+
+        </ui:composition>
+    </h:body>
+</html>
+

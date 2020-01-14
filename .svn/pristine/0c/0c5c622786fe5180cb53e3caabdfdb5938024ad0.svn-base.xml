@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">
+                Adminstración de Categorías
+            </ui:define>
+        </title>
+    </h:head>
+
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+
+            <ui:define name="top">
+                ADMINISTRACIÓN DE CATEGORIAS
+            </ui:define>
+
+            <ui:define name="contenido">
+                <p:growl autoUpdate="true" showDetail="true"/>
+                <h:form id="frmTablaCategoria">
+                    <p:dataTable id="tblTablaCategoria" value="#{categoriaControlador.lstCategoria}" var="categoria" 
+                                 rowKey="#{categoria.codigo}" selectionMode="single" selection="#{categoriaControlador.categoriaSel}"                                 >
+                        
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{categoria.nombre}"/>
+                        </p:column>
+                        
+                        <p:column headerText="Descripción">
+                            <h:outputText value="#{categoria.descripcion}"/>
+                        </p:column>
+                        
+                        <p:column headerText="Estado" >
+                            <h:outputText value="#{categoria.estado==0 ? 'INACTIVO':'ACTIVO'}"/>
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <p:commandButton value="Insertar" onclick="dlgInsertarCategoria.show();" 
+                                             update=":frmInsertarCategoria:displayInsertarCategoria"/>
+                            <p:commandButton value="Editar" onclick="dlgEditarCategoria.show();" 
+                                             update=":frmEditarCategoria:displayEditarCategoria"/>
+                            <p:commandButton value="Eliminar" onclick="dlgEliminarCategoria.show();" 
+                                             update=":frmEliminarCategoria:displayEliminarCategoria"/>
+                        </f:facet>
+                    </p:dataTable>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="dialogos">
+
+                <h:form id="frmInsertarCategoria">
+                    <p:dialog widgetVar="dlgInsertarCategoria" header="Insertar Categoría" modal="true">
+                        <p:panel id="displayInsertarCategoria" >
+                            <p:panelGrid columns="2">
+
+                                <p:outputLabel value="Nombre"/>
+                                <p:inputText value="#{categoriaControlador.objCategoria.nombre}"/>
+                                
+                                <p:outputLabel value="Descripción"/>
+                                <p:inputText value="#{categoriaControlador.objCategoria.descripcion}"/>
+
+                                <p:outputLabel value="Estado"/>
+                                <p:selectOneMenu value="#{categoriaControlador.estadoSel}">
+                                    
+                                    <f:selectItem itemLabel="Seleccione un Estado" itemValue="#{-1}"/>
+                                    <f:selectItem itemLabel="Activo" itemValue="#{1}"/>
+                                    <f:selectItem itemLabel="Inactivo" itemValue="#{0}"/>
+                                </p:selectOneMenu>
+
+                                <p:commandButton value="Aceptar" action="#{categoriaControlador.insertaCategoria()}"
+                                                 update=":frmTablaCategoria:tblTablaCategoria"/>
+                                <p:commandButton value="Cancelar" onclick="dlgInsertarCategoria.hide();"/>
+                            
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="frmEditarCategoria">
+                    <p:dialog widgetVar="dlgEditarCategoria" header="Editar las Categorías" modal="true">
+                        <p:panel id="displayEditarCategoria" >
+                            <p:panelGrid columns="2">
+
+                                <p:outputLabel value="Nombre"/>
+                                <p:inputText value="#{categoriaControlador.categoriaSel.nombre}"/>
+
+                                <p:outputLabel value="Descripción"/>
+                                <p:inputText value="#{categoriaControlador.categoriaSel.descripcion}"/>
+
+                                <p:outputLabel value="Estado"/>
+                                <p:selectOneMenu value="#{categoriaControlador.categoriaSel.estado}">
+                                    <f:selectItem itemLabel="Seleccione un Estado" itemValue="#{-1}"/>
+                                    <f:selectItem itemLabel="Activo" itemValue="#{1}"/>
+                                    <f:selectItem itemLabel="Inactivo" itemValue="#{0}"/>
+                                </p:selectOneMenu>
+
+                                <p:commandButton value="Aceptar" action="#{categoriaControlador.actualizarCategoria()}"
+                                                 update=":frmTablaCategoria:tblTablaCategoria"/>
+                                <p:commandButton value="Cancelar" onclick="dlgEditarCategoria.hide();"/>
+
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:dialog>
+                </h:form>
+                
+                <h:form id="frmEliminarCategoria">
+                    <p:dialog widgetVar="dlgEliminarCategoria" header="Desea Eliminar la Categoría Seleccionada" modal="true">
+                        <p:panel id="displayEliminarCategoria" >
+                            <p:panelGrid columns="2">
+                                
+                                <p:outputLabel value="Nombre"/>
+                                <p:inputText value="#{categoriaControlador.categoriaSel.nombre}" disabled="true"/>
+                                
+                                <p:outputLabel value="Descripción"/>
+                                <p:inputText value="#{categoriaControlador.categoriaSel.descripcion}" disabled="true"/>
+                                
+                                <p:outputLabel value="Estado"/>
+                                <p:selectOneMenu value="#{categoriaControlador.categoriaSel.estado}" disabled="true">
+                                    <f:selectItem itemLabel="Seleccione un Estado" itemValue="#{-1}"/>
+                                    <f:selectItem itemLabel="Activo" itemValue="#{1}"/>
+                                    <f:selectItem itemLabel="Inactivo" itemValue="#{0}"/>
+                                </p:selectOneMenu>
+                                
+                                <p:commandButton value="Aceptar" action="#{categoriaControlador.eliminarCategoria()}"
+                                                 update=":frmTablaCategoria:tblTablaCategoria"/>
+                                <p:commandButton value="Cancelar" onclick="dlgEliminarCategoria.hide();"/>
+
+                            </p:panelGrid>
+
+                        </p:panel>
+
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

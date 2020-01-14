@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">
+                Adminstración de Articulos
+            </ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">
+                ADMINISTRACIÓN DE ARTICULOS
+            </ui:define>
+            <ui:define name="contenido">
+
+                <h:form id="frmAgregarArticulo">
+                    <p:growl showDetail="true" autoUpdate="true"/>
+                    <p:commandButton value="Seleccione para Editar" onclick="dlgSeleccionarArticulo.show()"/>
+                    <p:panelGrid id="pnlAgregarArticulo" columns="3">
+
+                        <p:panelGrid columns="1">
+                            <p:panel id="displayAgregarArticulo" header="Datos del Artículo">
+
+                                <p:panelGrid columns="2">
+                                    <p:outputLabel value="Título"/>
+                                    <p:inputText id="txtTituloArticulo" value="#{agregarArticuloControlador.objArticulo.titulo}"/>
+
+                                    <p:outputLabel value="Introducción"/>
+                                    <p:inputText id="txtIntroduccionArticulo" value="#{agregarArticuloControlador.objArticulo.introduccion}"/>
+
+                                    <p:outputLabel value="Estado"/>
+                                    <p:selectOneMenu id="cmbEstadoSonido" value="#{agregarArticuloControlador.objArticulo.estado}">
+                                        <f:selectItem itemLabel="Seleccione un Estado" itemValue="#{-1}"/>
+                                        <f:selectItem itemLabel="Publicado" itemValue="#{1}"/>
+                                        <f:selectItem itemLabel="Despublicado" itemValue="#{0}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="Categoría"/>
+                                    <p:selectOneMenu id="cmbEstadoCategoria" value="#{agregarArticuloControlador.categoriaSel.codigo}">
+                                        <f:selectItem itemLabel="Seleccione una Categoría" itemValue="#{-1}"/>
+                                        <f:selectItems value="#{agregarArticuloControlador.lstCategorias}" var="categoria"
+                                                       itemValue="#{categoria.codigo}" itemLabel="#{categoria.nombre}"/>
+                                    </p:selectOneMenu>
+                                </p:panelGrid>
+
+                            </p:panel>
+
+                            <p:panel id="displayAgregarTexto" header="Texto del Artículo">
+                                <p:panelGrid columns="1">
+                                    <p:commandButton value="Seleccionar Texto" onclick="dlgSeleccionarTexto.show()"/>
+                                    <p:editor id="editorTexto" value="#{agregarArticuloControlador.textoSel.contenido}" width="300"/>
+                                </p:panelGrid>
+                            </p:panel>
+
+                        </p:panelGrid>
+
+
+                        <p:panelGrid columns="1" style="width: 350px;">
+                            <p:panel id="displayAgregarImagen" header="Datos de la Imagen"  >
+
+                                <p:dataTable value="#{agregarArticuloControlador.lstImagenSel}" var="imagen"
+                                             rowKey="#{imagen.codigo}" >
+
+                                    <p:column headerText="Nombre">
+                                        <h:outputText value="#{imagen.titulo}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Previsualización">
+                                        <p:graphicImage value="#{imagen.path}" width="30px"/>
+                                    </p:column>
+
+                                    <p:column headerText="X">
+                                        <p:commandLink id="lnkEliminarImagen" value="eliminar" update=":frmAgregarArticulo:displayAgregarImagen" 
+                                                       action="#{agregarArticuloControlador.eliminarLstImagenSel}" process=":frmAgregarArticulo:displayAgregarImagen">
+                                            <f:setPropertyActionListener value="#{imagen}" target="#{agregarArticuloControlador.objImagen}"/>
+                                        </p:commandLink>
+                                    </p:column>
+
+                                    <f:facet name="footer">
+                                        <p:commandButton value="Seleccionar la/s Imagen/es" onclick="dlgSeleccionarImagen.show()"/>
+                                    </f:facet>
+
+                                </p:dataTable>
+                            </p:panel>
+
+                            <p:panel id="displayAgregarSonido" header="Datos del Sonido">
+                                <p:dataTable value="#{agregarArticuloControlador.lstSonidoSel}" var="sonido"
+                                             rowKey="#{sonido.codigo}" selectionMode="multiple" selection="#{agregarArticuloControlador.lstSonidoSel}" >
+
+                                    <p:column headerText="Nombre">
+                                        <h:outputText value="#{sonido.titulo}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Previsualización">
+                                        <h:outputText value="#{sonido.path}"/>
+                                    </p:column>
+
+                                    <p:column headerText="X">
+                                        <p:commandLink id="lnkEliminarSonido" value="eliminar" update=":frmAgregarArticulo:displayAgregarSonido" 
+                                                       action="#{agregarArticuloControlador.eliminarLstSonidoSel}" process=":frmAgregarArticulo:displayAgregarSonido">
+                                            <f:setPropertyActionListener value="#{sonido}" target="#{agregarArticuloControlador.objSonido}"/>
+                                        </p:commandLink>
+                                    </p:column>
+
+                                    <f:facet name="footer">
+                                        <p:commandButton value="Seleccionar el/los Sonido/s" onclick="dlgSeleccionarSonido.show()"/>
+                                    </f:facet>
+
+                                </p:dataTable>
+                            </p:panel>
+                        </p:panelGrid>
+
+                        <p:panelGrid columns="1" style="width: 350px;">
+                            <p:panel id="displayAgregarVideo" header="Datos del Video"  >
+
+                                <p:dataTable value="#{agregarArticuloControlador.lstVideoSel}" var="video"
+                                             rowKey="#{video.codigo}" selectionMode="multiple" selection="#{agregarArticuloControlador.lstVideoSel}" >
+
+                                    <p:column headerText="Nombre">
+                                        <h:outputText value="#{video.titulo}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Previsualización">
+                                        <h:outputText value="#{video.path}"/>
+                                    </p:column>
+
+                                    <p:column headerText="X">
+                                        <p:commandLink id="lnkEliminarVideo" value="eliminar" update=":frmAgregarArticulo:displayAgregarVideo" 
+                                                       action="#{agregarArticuloControlador.eliminarLstVideoSel}" process=":frmAgregarArticulo:displayAgregarVideo">
+                                            <f:setPropertyActionListener value="#{video}" target="#{agregarArticuloControlador.objVideo}"/>
+                                        </p:commandLink>
+                                    </p:column>
+
+                                    <f:facet name="footer">
+                                        <p:commandButton value="Seleccionar el/los Video/s" onclick="dlgSeleccionarVideo.show()"/>
+                                    </f:facet>
+
+                                </p:dataTable>
+
+                            </p:panel>
+
+                            <p:panel id="displayAgregarDocumento" header="Datos del Documento">
+                                <p:dataTable value="#{agregarArticuloControlador.lstDocumentoSel}" var="documento"
+                                             rowKey="#{documento.codigo}" selectionMode="multiple" selection="#{agregarArticuloControlador.lstDocumentoSel}" >
+
+                                    <p:column headerText="Nombre">
+                                        <h:outputText value="#{documento.titulo}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Previsualización">
+                                        <h:outputText value="#{documento.path}"/>
+                                    </p:column>
+
+                                    <p:column headerText="X">
+                                        <p:commandLink id="lnkEliminarDocumento" value="eliminar" update=":frmAgregarArticulo:displayAgregarDocumento" 
+                                                       action="#{agregarArticuloControlador.eliminarLstDocumentoSel}" process=":frmAgregarArticulo:displayAgregarDocumento">
+                                            <f:setPropertyActionListener value="#{documento}" target="#{agregarArticuloControlador.objDocumento}"/>
+                                        </p:commandLink>
+                                    </p:column>
+
+                                    <f:facet name="footer">
+                                        <p:commandButton value="Seleccionar el/los Documento/s" onclick="dlgSeleccionarDocumento.show()"/>
+                                    </f:facet>
+
+                                </p:dataTable>
+                            </p:panel>
+                        </p:panelGrid>
+
+                    </p:panelGrid>
+
+                    <p:panelGrid columns="2" style="text-align: center;">
+                        <p:commandButton value="Guardar" action="#{agregarArticuloControlador.guardarDatos()}"
+                                         update=":frmAgregarArticulo:pnlAgregarArticulo" process="frmAgregarArticulo"/>
+                        <p:commandButton value="Cancelar" onclick="dlgGuardarDatos.hide();"/>
+                    </p:panelGrid>
+                </h:form>
+
+            </ui:define>
+
+
+            <ui:define name="dialogos">
+
+                <h:form id="frmSeleccionarTexto" >
+                    <p:dialog widgetVar="dlgSeleccionarTexto" header="Seleccionar Texto" modal="true" >
+                        <p:panel id="displaySeleccionarTexto" >
+
+                            <p:dataTable id="tblSeleccionarTexto" value="#{agregarArticuloControlador.lstTextos}" var="texto"
+                                         rowKey="#{texto.codigo}" selectionMode="single" selection="#{agregarArticuloControlador.textoSel}">
+
+                                <p:column headerText="Título">
+                                    <h:outputText value="#{texto.titulo}"/>
+                                </p:column>
+
+                                <p:column headerText="Resumen">
+                                    <h:outputText value="#{texto.resumen}"/>
+                                </p:column>
+
+                            </p:dataTable>
+
+                            <p:panelGrid columns="2" style="text-align: center;">
+                                <p:commandButton value="Aceptar" update=":frmAgregarArticulo:displayAgregarTexto" 
+                                                 onclick="dlgSeleccionarTexto.hide();"/>
+                                <p:commandButton value="Cancelar" onclick="dlgSeleccionarTexto.hide();"/>
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="frmSeleccionarImagen" >
+                    <p:dialog widgetVar="dlgSeleccionarImagen" header="Seleccionar Imagen" modal="true" height="300px">
+                        <p:panel id="displaySeleccionarImagen" >
+
+                            <p:dataTable id="tblSeleccionarImagen" value="#{agregarArticuloControlador.lstImagen}" var="imagen"
+                                         rowKey="#{imagen.codigo}" selectionMode="multiple" selection="#{agregarArticuloControlador.lstImagenSel}">
+
+                                <p:column headerText="Título">
+                                    <h:outputText value="#{imagen.titulo}"/>
+                                </p:column>
+
+                                <p:column headerText="Previsualización">
+                                    <p:graphicImage  value="#{imagen.path}" width="100px"/>
+                                </p:column>
+
+                            </p:dataTable>
+
+                            <p:panelGrid columns="2" style="text-align: center;">
+                                <p:commandButton value="Aceptar" update=":frmAgregarArticulo:displayAgregarImagen" 
+                                                 onclick="dlgSeleccionarImagen.hide();"/>
+                                <p:commandButton value="Cancelar" onclick="dlgSeleccionarImagen.hide();"/>
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="frmSeleccionarSonido" >
+                    <p:dialog widgetVar="dlgSeleccionarSonido" header="Seleccionar Sonido" modal="true" >
+                        <p:panel id="displaySeleccionarSonido" >
+
+                            <p:dataTable id="tblSeleccionarSonido" value="#{agregarArticuloControlador.lstSonido}" var="sonido"
+                                         rowKey="#{sonido.codigo}" selectionMode="multiple" selection="#{agregarArticuloControlador.lstSonidoSel}">
+
+                                <p:column headerText="Título">
+                                    <h:outputText value="#{sonido.titulo}"/>
+                                </p:column>
+
+                                <p:column headerText="Previsualización">
+                                    <h:outputText value="#{sonido.path}"/>
+                                </p:column>
+
+                            </p:dataTable>
+
+                            <p:panelGrid columns="2" style="text-align: center;">
+                                <p:commandButton value="Aceptar" update=":frmAgregarArticulo:displayAgregarSonido" 
+                                                 onclick="dlgSeleccionarSonido.hide();"/>
+                                <p:commandButton value="Cancelar" onclick="dlgSeleccionarSonido.hide();"/>
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="frmSeleccionarVideo" >
+                    <p:dialog widgetVar="dlgSeleccionarVideo" header="Seleccionar Video" modal="true" >
+                        <p:panel id="displaySeleccionarVideo" >
+
+                            <p:dataTable id="tblSeleccionarVideo" value="#{agregarArticuloControlador.lstVideo}" var="video"
+                                         rowKey="#{video.codigo}" selectionMode="multiple" selection="#{agregarArticuloControlador.lstVideoSel}">
+
+                                <p:column headerText="Título">
+                                    <h:outputText value="#{video.titulo}"/>
+                                </p:column>
+
+                                <p:column headerText="Previsualización">
+                                    <h:outputText value="#{video.path}"/>
+                                </p:column>
+
+                            </p:dataTable>
+
+                            <p:panelGrid columns="2" style="text-align: center;">
+                                <p:commandButton value="Aceptar" update=":frmAgregarArticulo:displayAgregarVideo" 
+                                                 onclick="dlgSeleccionarVideo.hide();"/>
+                                <p:commandButton value="Cancelar" onclick="dlgSeleccionarVideo.hide();"/>
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="frmSeleccionarDocumento" >
+                    <p:dialog widgetVar="dlgSeleccionarDocumento" header="Seleccionar Documento" modal="true" >
+                        <p:panel id="displaySeleccionarDocumento" >
+
+                            <p:dataTable id="tblSeleccionarDocumento" value="#{agregarArticuloControlador.lstDocumento}" var="documento"
+                                         rowKey="#{documento.codigo}" selectionMode="multiple" selection="#{agregarArticuloControlador.lstDocumentoSel}">
+
+                                <p:column headerText="Título">
+                                    <h:outputText value="#{documento.titulo}"/>
+                                </p:column>
+
+                                <p:column headerText="Previsualización">
+                                    <h:outputText value="#{documento.path}"/>
+                                </p:column>
+
+                            </p:dataTable>
+
+                            <p:panelGrid columns="2" style="text-align: center;">
+                                <p:commandButton value="Aceptar" update=":frmAgregarArticulo:displayAgregarDocumento" 
+                                                 onclick="dlgSeleccionarDocumento.hide();"/>
+                                <p:commandButton value="Cancelar" onclick="dlgSeleccionarDocumento.hide();"/>
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="frmSeleccionarArticulo" >
+                    <p:dialog widgetVar="dlgSeleccionarArticulo" header="Seleccione el Artículo" modal="true" width="500" height="500">
+                        <p:panel id="displaySeleccionarArticulo" >
+
+                            <p:dataTable id="tblSeleccionarArticulo" value="#{agregarArticuloControlador.lstArticulos}" var="articulo"
+                                         rowKey="#{articulo.codigo}" selectionMode="single" selection="#{agregarArticuloControlador.objArticuloSel}">
+
+                                <p:column headerText="Título">
+                                    <h:outputText value="#{articulo.titulo}"/>
+                                </p:column>
+
+                                <p:column headerText="Introducción">
+                                    <h:outputText value="#{articulo.introduccion}"/>
+                                </p:column>
+                                
+                                <p:column headerText="Categoría">
+                                    <h:outputText value="#{articulo.codigo_categoria.nombre}"/>
+                                </p:column>
+
+                            </p:dataTable>
+
+                            <p:panelGrid columns="2" style="text-align: center;">
+                                <p:commandButton value="Aceptar" update=":frmAgregarArticulo" action="#{agregarArticuloControlador.cargarFormulario()}" 
+                                                 onclick="dlgSeleccionarArticulo.hide();"/>
+                                <p:commandButton value="Cancelar" onclick="dlgSeleccionarArticulo.hide();"/>
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="frmGuardarDatos" >
+                    <p:dialog widgetVar="dlgGuardarDatos" header="Guardar Datos" modal="true" >
+                        <p:panel id="displayGuardarDatos" >
+
+                            <p:panelGrid columns="2" style="text-align: center;">
+                                <p:commandButton value="Guardar" update=":frmGuardarDatos:displayGuardarDatos" 
+                                                 onclick="dlgGuardarDatos.hide();"/>
+                                <p:commandButton value="Cancelar" onclick="dlgGuardarDatos.hide();"/>
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:dialog>
+                </h:form>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+
+
+

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>
+            <ui:define name="Detalle de Articulo">Menú Sitio</ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="/templates/plantillaBase.xhtml">           
+            <ui:define name="content">
+                <p:growl autoUpdate="true" showDetail="true"/>
+                <h:form id="frmDetalleArticulo">
+                    <h:panelGrid id="pnlDetalleArticuloPrincipal" columns="1" class="center_content">
+                        <h:panelGrid columns="2" >
+
+                            <h:panelGrid columns="1" >
+                                <h:outputText value="#{detalleArticuloC.objArticulo.titulo}" styleClass="titulo_negro_detalle"/>
+                                <p:galleria value="#{detalleArticuloC.lstImagen}" var="imagen" panelWidth="425" panelHeight="213" showCaption="true">                                
+                                    <p:graphicImage value="#{imagen.path}" title="#{imagen.titulo}"/>                       
+                                </p:galleria>
+                                <h:outputText value="#{detalleArticuloC.objArticulo.codigo_persona.nombre} 
+                                              #{detalleArticuloC.objArticulo.codigo_persona.apellido}" styleClass="titulo_news"/>
+                                <h:outputText value="#{detalleArticuloC.obtieneFecha(detalleArticuloC.objArticulo.fecha_edicion/1000)}" 
+                                              styleClass="titulo_news"/>
+                                <h:outputText value="#{detalleArticuloC.objTexto.contenido}" styleClass="texto_negro_detalle" escape="false"/>
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="1" >
+                                <p:carousel id="tabsCarouselVideo" headerText="Video" numVisible="1" itemStyle="height:235px;width:420px;" 
+                                            effect="fade" value="#{detalleArticuloC.lstVideo}" var="video">  
+                                    <p:tab title="#{video.titulo}">  
+                                        <div id="myElement#{video.codigo}">Cargando Reproductor...</div>
+                                        <script type="text/javascript">
+                                            jwplayer("myElement#{video.codigo}").setup({
+                                                file: "faces#{video.path}",
+                                                title: "#{video.titulo}",
+                                                height: "100%",
+                                                width: "100%",
+                                                aspectratio: "16:9",
+                                                image: "faces/resources/images/nature1.jpg"
+                                                        //skin: "faces/resources/jwplayer/skin_trebola.zip"
+                                            });
+                                        </script>
+                                    </p:tab> 
+                                </p:carousel>
+                                <p:carousel id="tabsCarouselSonido" headerText="Sonido" numVisible="1" itemStyle="height:50px;width:420px;" effect="easeInStrong"
+                                            value="#{detalleArticuloC.lstSonido}" var="sonido">  
+                                    <p:tab title="#{sonido.titulo}">  
+
+                                        <div id="myElement#{sonido.codigo}">Cargando Reproductor...</div>
+                                        <script type="text/javascript">
+                                            jwplayer("myElement#{sonido.codigo}").setup({
+                                                file: "faces#{sonido.path}",
+                                                title: "#{sonido.titulo}",
+                                                height: "30",
+                                                width: "420",
+                                                aspectratio: "16:9",
+                                                image: "faces/resources/images/nature1.jpg"
+                                                        //skin: "faces/resources/jwplayer/skin_trebola.zip"
+                                            });
+                                        </script>
+                                        <h:outputText value="#{sonido.titulo}" styleClass="titulo_negro"/>
+                                    </p:tab> 
+                                </p:carousel>
+                                <p:panel header="Documentos" style="height:200px;width:420px;"> 
+                                    <p:dataList value="#{detalleArticuloC.lstDocumento}" var="documentos" type="definition" >  
+                                        <p:lightBox >  
+                                            <h:outputLink value="#" title="#{documentos.titulo}" >  
+                                                <p:graphicImage  value="resources/images/pdf.png" /> 
+                                                <h:outputText value="#{documentos.titulo}"/>
+                                            </h:outputLink> 
+                                            <f:facet name="inline">
+                                                <p:media value="#{documentos.path}" height="600" width="800" />
+                                            </f:facet>
+                                        </p:lightBox>
+                                    </p:dataList>  
+                                </p:panel>
+
+                            </h:panelGrid>
+
+                        </h:panelGrid>
+                    </h:panelGrid>                    
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

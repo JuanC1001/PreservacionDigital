@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        
+        <title>
+            <ui:define name="tituloNavegador">
+                Adminstración de Videos
+            </ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">
+                ADMINISTRACIÓN DE VIDEOS
+            </ui:define>
+            <ui:define name="contenido">
+                <p:growl autoUpdate="true" showDetail="true"/>
+                <h:form id="frmTablaVideo" enctype="multipart/form-data">
+                    <p:dataTable id="tblTablaVideo" value="#{videoControlador.lstVideo}" var="video" 
+                                 rowKey="#{video.codigo}" selectionMode="single" selection="#{videoControlador.videoSel}">
+
+                        <p:column headerText="Video">
+                            <h:outputText value="#{video.titulo}"/>
+                        </p:column>
+
+                        <p:column headerText="Previsualizacion">
+                            <p:lightBox>  
+                                <h:outputLink value="#">
+                                    <div id="myElement#{video.codigo}">Cargando Reproductor...</div>
+                                <script type="text/javascript">
+                                    jwplayer("myElement#{video.codigo}").setup({
+                                        //file: "faces/media/sonido/17 - Traketeo - Nene Malo ( SubidaMix Edit 2 ) DJ Zurge Mix.mp3",
+                                        //file: "faces/media/imagen/PROMO Telefono Super Inteligente.mp4",
+                                        file: "../../faces#{video.path}",
+                                        title: "#{video.titulo}",
+                                        height: "100%",
+                                        width: "100%",
+                                        aspectratio: "16:9",
+                                        //stagevideo: "false",
+                                        image: "../../faces/resources/images/nature1.jpg",
+                                        //skin: "resources/jwplayer/skin_trebola/skin_trebola.xml"
+                                    });
+                                </script>
+                                    <h:outputText value="#{video.titulo}"/>
+                                </h:outputLink>             
+                                
+
+                            </p:lightBox>
+                        </p:column>
+
+                        <p:column headerText="Tipo">
+                            <h:outputText value="#{video.tipo}"/>
+                        </p:column>
+
+                        <p:column headerText="Palabras Claves" >
+                            <h:outputText value="#{video.keywords}"/>
+                        </p:column>
+
+                        <p:column headerText="Estado" >
+                            <h:outputText value="#{video.estado==0 ? 'DESPUBLICADO':'PUBLICADO'}"/>
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <p:commandButton value="Insertar" onclick="dlgInsertarVideo.show();" 
+                                             update=":frmInsertarVideo:displayInsertarVideo"/>
+                            <p:commandButton value="Editar" onclick="dlgEditarVideo.show();" 
+                                             update=":frmEditarVideo:displayEditarVideo"/>
+                            <p:commandButton value="Eliminar" onclick="dlgEliminarVideo.show();" 
+                                             update=":frmEliminarVideo:displayEliminarVideo"/>
+                        </f:facet>
+                    </p:dataTable>
+                </h:form>
+            </ui:define>
+            <ui:define name="dialogos">
+
+                <h:form id="frmInsertarVideo" enctype="multipart/form-data">
+                    <p:dialog widgetVar="dlgInsertarVideo" header="Insertar Video" modal="true" height="300" width="600">
+                        <p:panel id="displayInsertarVideo" >
+                            <p:panelGrid columns="1" >
+
+                                <p:outputLabel value="Nombre"/>
+                                <p:inputText id="txtTituloVideo" value="#{videoControlador.objVideo.titulo}"/>
+
+                                <p:outputLabel value="Ruta"/>
+                                <p:inputText  id="txtRutaVideo" value="#{videoControlador.objVideo.path}"/>
+
+
+                                <p:outputLabel value="Tipo"/>
+                                <p:inputText id="txtTipoVideo" value="#{videoControlador.objVideo.tipo}"/>
+
+                                <p:panelGrid id="pngSubirArchivo" columns="2" style="width: 510px;">
+                                    <p:graphicImage value="#{videoControlador.objVideo.path}" 
+                                                    height="80"/>
+                                    <p:fileUpload fileUploadListener="#{videoControlador.cargarArchivoVideo}"
+                                                  allowTypes="/(\.|\/)(mp4|avi|mov|3gp)$/" label="Abrir" mode="advanced"  
+                                                  update="displayInsertarVideo" uploadLabel="Subir" cancelLabel="Cancelar"   
+                                                  value="#{videoControlador.archivoVideo}"
+                                                  required="true" requiredMessage="Cargar el video!!" />
+                                </p:panelGrid>
+
+                                <p:outputLabel value="Palabras Clave"/>
+                                <p:inputText id="txtPalabrasClaveVideo" value="#{videoControlador.objVideo.keywords}"/>
+
+                                <p:outputLabel value="Estado"/>
+                                <p:selectOneMenu  id="cmbEstadoVideo" value="#{videoControlador.estadoSel}">
+                                    <f:selectItem itemLabel="Seleccione un Estado" itemValue="#{-1}"/>
+                                    <f:selectItem itemLabel="Publicado" itemValue="#{1}"/>
+                                    <f:selectItem itemLabel="Despublicado" itemValue="#{0}"/>
+                                </p:selectOneMenu>
+                                <p:panelGrid columns="2" style="text-align: center;">
+                                    <p:commandButton value="Aceptar" action="#{videoControlador.insertarVideo()}"
+                                                     update=":frmTablaVideo:tblTablaVideo" process="@this txtTituloVideo txtRutaVideo
+                                                     txtTipoVideo txtPalabrasClaveVideo cmbEstadoVideo"/>
+                                    <p:commandButton value="Cancelar" onclick="dlgInsertarVideo.hide();"/>
+                                </p:panelGrid>
+                            </p:panelGrid>
+
+                        </p:panel>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="frmEditarVideo" enctype="multipart/form-data">
+                    <p:dialog widgetVar="dlgEditarVideo" header="Editar Video" modal="true">
+                        <p:panel id="displayEditarVideo" >
+                            <p:panelGrid columns="2">
+
+                                <p:outputLabel value="Título"/>
+                                <p:inputText value="#{videoControlador.videoSel.titulo}"/>
+
+                                <p:outputLabel value="Ruta"/>
+                                <p:inputText value="#{videoControlador.videoSel.path}"/>
+
+                                <p:outputLabel value="Tipo"/>
+                                <p:inputText value="#{videoControlador.videoSel.tipo}"/>
+
+                                <p:outputLabel value="Palabras Clave"/>
+                                <p:inputText value="#{videoControlador.videoSel.keywords}"/>
+
+                                <p:outputLabel value="Estado"/>
+                                <p:selectOneMenu value="#{videoControlador.videoSel.estado}">
+                                    <f:selectItem itemLabel="Seleccione un Estado" itemValue="#{-1}"/>
+                                    <f:selectItem itemLabel="Publicado" itemValue="#{1}"/>
+                                    <f:selectItem itemLabel="Despublicado" itemValue="#{0}"/>
+                                </p:selectOneMenu>
+
+                                <p:commandButton value="Aceptar" action="#{videoControlador.actualizarVideo()}"
+                                                 update=":frmTablaVideo:tblTablaVideo"/>
+                                <p:commandButton value="Cancelar" onclick="dlgEditarVideo.hide();"/>
+
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="frmEliminarVideo" enctype="multipart/form-data">
+                    <p:dialog widgetVar="dlgEliminarVideo" header="Desea Eliminar el Video Seleccionado" modal="true">
+                        <p:panel id="displayEliminarVideo" >
+                            <p:panelGrid columns="2">
+
+                                <p:outputLabel value="Título"/>
+                                <p:inputText value="#{videoControlador.videoSel.titulo}" disabled="true"/>
+
+                                <p:outputLabel value="Ruta"/>
+                                <p:inputText value="#{videoControlador.videoSel.path}" disabled="true"/>
+
+                                <p:outputLabel value="Tipo"/>
+                                <p:inputText value="#{videoControlador.videoSel.tipo}" disabled="true"/>
+
+                                <p:outputLabel value="Palabras Clave"/>
+                                <p:inputText value="#{videoControlador.videoSel.keywords}" disabled="true"/>
+
+                                <p:outputLabel value="Estado"/>
+                                <p:selectOneMenu value="#{videoControlador.videoSel.estado}" disabled="true">
+                                    <f:selectItem itemLabel="Seleccione un Estado" itemValue="#{-1}"/>
+                                    <f:selectItem itemLabel="Publicado" itemValue="#{1}"/>
+                                    <f:selectItem itemLabel="Despublicado" itemValue="#{0}"/>
+                                </p:selectOneMenu>
+
+                                <p:commandButton value="Aceptar" action="#{videoControlador.eliminarVideo()}"
+                                                 update=":frmTablaVideo:tblTablaVideo"/>
+                                <p:commandButton value="Cancelar" onclick="dlgEliminarVideo.hide();"/>
+
+                            </p:panelGrid>
+
+                        </p:panel>
+
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">Gestión de Cuentas</ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">Gestión de Cuentas</ui:define>
+            <ui:define name="contenido">
+                <p:growl id="mensajes" autoUpdate="true" showDetail="true"/>
+                <h:form id="frmUsuario">
+                    <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                    <p:panel id="pnlUsuario">
+                        <p:dataTable id="tblUsuario" value="#{usuarioControlador.usuarios}" var="usuario" paginator="true" rows="10" draggableColumns="false"
+                                     rowKey="#{usuario.codigo}" selectionMode="single" selection="#{usuarioControlador.seleccionarusuario}">
+                           
+                            <p:column filterBy="#{usuario.nick}" filterMatchMode="startsWith" sortBy="#{usuario.nick}">
+                                <f:facet name="header">
+                                    <h:outputText value="NICK"/>
+                                </f:facet>
+                                <h:outputText value="#{usuario.nick}"/>
+                            </p:column>
+
+                            <p:column filterBy="#{usuario.estado}" filterMatchMode="startsWith" sortBy="#{usuario.estado}">
+                                <f:facet name="header">
+                                    <h:outputText value="ESTADO"/>
+                                </f:facet>
+                                <h:outputText value="#{usuario.estado==0 ? 'INACTIVO':'ACTIVO'}"/>
+                            </p:column>
+
+
+                            <f:facet name="footer">  
+                                <p:commandButton id="btnVerUsuario" value="Ver" icon="ui-icon-circle-plus"
+                                                 update=":dlgusuarioVer" oncomplete="wdlgusuarioVer.show()" title="Detalle Usuario"/>  
+                                <p:commandButton id="btnNuevoUsuario" value="Nuevo" icon="ui-icon-newwin"
+                                                 update=":frmUsuario:pnlUsuario" oncomplete="wdlgusuarioAgregar.show()"
+                                                 title="Agregar Usuario"/>  
+
+                                <p:commandButton id="btnEditarUsuario" value="Editar" icon="ui-icon-pencil"
+                                                 update=":dlgusuarioActualizar" oncomplete="wdlgusuarioActualizar.show()"
+                                                 title="Editar Usuario"/> 
+                                <p:commandButton id="btnEliminarUsuario" value="Eliminar" icon="ui-icon-trash"
+                                                 update=":dlgusuarioEliminar" oncomplete="wdlgusuarioEliminar.show()"
+                                                 title="Eliminar Usuario"/>
+                            </f:facet>
+
+                        </p:dataTable>
+                        <!--<p:commandButton value="Nuevo" id="btnNuevoGrupo" onclick="dlggrupoAgregar.show()">
+                        </p:commandButton> -->
+                    </p:panel>
+                </h:form>
+            </ui:define>
+            <ui:define name="dialogos">
+
+                <p:dialog id="dlgusuarioVer" header="Ver Usuario" widgetVar="wdlgusuarioVer" modal="true" closable="false" 
+                          resizable="false"
+                          showEffect="clip" hideEffect="fold">  
+                    <h:form id="frmVerUsuario">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <p:panelGrid id="pngVerUsuario" columns="2">
+                            <h:outputText value="Nombres y Apellidos"/>
+                            <h:outputText value="#{usuarioControlador.seleccionarusuario.nombres} #{usuarioControlador.seleccionarusuario.apellidos}"/>
+                            <h:outputText value="Nick"/>
+                            <h:outputText value="#{usuarioControlador.seleccionarusuario.nick}"/>
+                            <h:outputText value="E-mail"/>
+                            <h:outputText value="#{usuarioControlador.seleccionarusuario.mail}" />
+                            <h:outputText value="Clave"/>
+                            <h:outputText value="#{usuarioControlador.seleccionarusuario.clave}"/>
+                            <h:outputText value="Estado"/>
+                            <h:outputText value="#{usuarioControlador.seleccionarusuario.estado==0 ? 'INACTIVO':'ACTIVO'}"/>
+                            <h:outputText value="Primer Acceso"/>
+                            <h:outputText value="#{usuarioControlador.seleccionarusuario.primer_acceso}"/>
+                            <h:outputText value="Ultimo Acceso"/>
+                            <h:outputText value="#{usuarioControlador.seleccionarusuario.utimo_acceso}"/>
+                            <h:outputText value="Fecha Modificación"/>
+                            <h:outputText value="#{usuarioControlador.seleccionarusuario.fecha_modificacion}"/>
+                            <h:outputText value="Codigo de Salto"/>
+                            <h:outputText value="#{usuarioControlador.seleccionarusuario.codigo_salt}"/>
+
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" onclick="wdlgusuarioVer.hide()" type="reset"/>
+                    </h:form> 
+                </p:dialog>
+
+
+                <p:dialog id="dlgusuarioAgregar" header="Nuevo Usuario" widgetVar="wdlgusuarioAgregar" modal="true" closable="false" 
+                          resizable="false"
+                          showEffect="clip" hideEffect="fold">  
+                    <h:form id="frmNuevoUsuario">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <p:messages id="messages" autoUpdate="true"/>  
+                        <p:panelGrid id="pngNuevoUsuario" columns="2">
+                             <h:outputText value="Busque una Persona:"/>
+                            <p:commandButton value="Buscar" onclick="wdialogoBusquedaPersonas.show()" process="@this"/>
+                            <h:outputText value="Nombres"/>
+                            <p:inputText id="txtNombres" value="#{usuarioControlador.persona.nombre}" disabled="true"/>
+                            <h:outputText value="Apellidos"/>
+                            <p:inputText id="txtApellidos" value="#{usuarioControlador.persona.apellido}" disabled="true"/>
+                            <h:outputText value="Nick"/>
+                            <p:inputText value="#{usuarioControlador.usuario.nick}"/>
+                            <h:outputText value="E-mail"/>
+                            <p:inputText id="txtMail" value="#{usuarioControlador.persona.mail}" disabled="true">
+                                <f:validator validatorId="recursos.utilBeans.ValidatorBean" for="txtMail"/>
+                            </p:inputText>
+                            <h:outputText id="otclave1" value="Clave"/>
+                            <p:password  id="pssclave1" value="#{usuarioControlador.usuario.clave}" match="pssclave2" feedback="true" 
+                                         strongLabel="FUERTE"
+                                         required="true" validatorMessage="Las claves no coinciden."/>
+                            <h:outputText id="otclave2" value="Repita la Clave"/>
+                            <p:password  id="pssclave2" value="#{usuarioControlador.usuario.clave}" feedback="true" 
+                                         strongLabel="FUERTE"
+                                         required="true" validatorMessage="Las claves no coinciden."/>
+                            <h:outputText value="Estado"/>
+                            <p:selectOneRadio id="sorEstadoUsuario" value="#{usuarioControlador.usuario.estado}" required="true" 
+                                              requiredMessage="Seleccione un Estado" style="list-style: transparent;">  
+                                <f:selectItem itemLabel="Activo" itemValue="1" />
+                                <f:selectItem itemLabel="Inactivo" itemValue="0" />  
+                            </p:selectOneRadio>
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{usuarioControlador.insertarUsuario}" 
+                                         update=":frmUsuario:pnlUsuario"/>
+                        <p:commandButton value="Cancelar" onclick="wdlgusuarioAgregar.hide()" type="reset"/>
+                    </h:form> 
+                </p:dialog>
+
+                <p:dialog id="dlgusuarioActualizar" header="Edita Usuario" widgetVar="wdlgusuarioActualizar" modal="true" closable="false" 
+                          resizable="false"
+                          showEffect="clip" hideEffect="fold">  
+                    <h:form id="frmactualizarUsuario">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <p:messages id="messages" autoUpdate="true"/>  
+                        <p:panelGrid id="pngactualizarUsuario" columns="2">
+                            <h:outputText value="Nombres"/>
+                            <p:inputText value="#{usuarioControlador.seleccionarusuario.nombres}"/>
+                            <h:outputText value="Apellidos"/>
+                            <p:inputText value="#{usuarioControlador.seleccionarusuario.apellidos}"/>
+                            <h:outputText value="Nick"/>
+                            <p:inputText value="#{usuarioControlador.seleccionarusuario.nick}"/>
+                            <h:outputText value="E-mail"/>
+                            <p:inputText id="txtMail" value="#{usuarioControlador.seleccionarusuario.mail}">
+                                <f:validator validatorId="recursos.utilBeans.ValidatorBean" for="txtMail"/>
+                            </p:inputText>
+                            <h:outputText id="otclave1" value="Clave"/>
+                            <p:password  id="pssclave1" value="#{usuarioControlador.seleccionarusuario.clave}" match="pssclave2" feedback="true" required="true" validatorMessage="Las claves no coinciden."/>
+                            <h:outputText id="otclave2" value="Repita la Clave"/>
+                            <p:password  id="pssclave2" value="#{usuarioControlador.seleccionarusuario.clave}" feedback="true" required="true" validatorMessage="Las claves no coinciden"/>
+                            <h:outputText value="Estado"/>
+                            <p:selectOneRadio id="sorEstadoUsuario" value="#{usuarioControlador.seleccionarusuario.estado}" required="true" 
+                                              requiredMessage="Seleccione un Estado" style="list-style: transparent;">  
+                                <f:selectItem itemLabel="Activo" itemValue="1" />
+                                <f:selectItem itemLabel="Inactivo" itemValue="0" />  
+                            </p:selectOneRadio>
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{usuarioControlador.actualizarUsuario()}" 
+                                         update=":frmUsuario:pnlUsuario"/>
+                        <p:commandButton value="Cancelar" onclick="wdlgusuarioActualizar.hide()" type="reset"/>
+                    </h:form> 
+                </p:dialog>
+
+                <p:dialog id="dlgusuarioEliminar" header="Elimina Usuario" widgetVar="wdlgusuarioEliminar" modal="true" closable="false" 
+                          resizable="false"
+                          showEffect="clip" hideEffect="fold">  
+                    <h:form id="frmeliminarUsuario">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <h:outputText value="¿Desea Eliminar el Usuario?"/>
+                        <p:panelGrid id="pngeliminarUsuario" columns="2">
+                            <h:outputText value="Nombres"/>
+                            <h:outputText value="#{usuarioControlador.seleccionarusuario.nombres}"/>
+                            <h:outputText value="Apellidos"/>
+                            <h:outputText value="#{usuarioControlador.seleccionarusuario.apellidos}"/>
+                            <h:outputText value="Nick"/>
+                            <h:outputText value="#{usuarioControlador.seleccionarusuario.nick}"/>
+                            <h:outputText value="Estado"/>
+                            <h:outputText value="#{usuarioControlador.seleccionarusuario.estado==0 ? 'INACTIVO':'ACTIVO'}"/>
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{usuarioControlador.eliminarUsuario}" 
+                                         update=":frmUsuario:pnlUsuario"/>
+                        <p:commandButton value="Cancelar" onclick="wdlgusuarioEliminar.hide()" type="reset"/>
+                    </h:form> 
+                </p:dialog>
+                <p:dialog modal="true" widgetVar="dlgStatus" header="Procesando" draggable="false" closable="false" 
+                          resizable="false"> 
+                    <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />  
+                </p:dialog>
+                
+                 <p:dialog header="Busqueda de Personas"  widgetVar="wdialogoBusquedaPersonas"  
+                          id="dialogoBusquedaPersonas" resizable="false" modal="true">
+                    <p:panel id="pnlContenedorBusquedaPersonas">
+                        <h:form id="formPersonas"> 
+                            <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                            <p:panelGrid id="pngBusqueda" columns="4">
+                                <h:outputText id="otxtBuscar" value="Buscar por:"/>
+                                <p:selectOneMenu id="cmbCriterioBusqueda" value="#{usuarioControlador.criterioBusquedaTitular}" 
+                                                 style="width: 150px;">
+                                    <f:selectItem itemValue="#{null}" itemLabel="--Elija una opción--"/>
+                                    <f:selectItem itemValue="cedula" itemLabel="CEDULA"/>
+                                    <f:selectItem itemValue="apellido" itemLabel="APELLIDOS"/>
+                                </p:selectOneMenu>
+                                <p:inputText id="txtBuscar" value="#{usuarioControlador.datoBusqueda}"/>
+                                <p:commandButton value="Aceptar" update="pTabla" 
+                                                 action="#{usuarioControlador.obtenerPersonas}" process="@form cmbCriterioBusqueda" />
+                            </p:panelGrid>
+
+                            <p:panel id="pTabla">
+                                <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                                <p:dataTable var="persona" value="#{usuarioControlador.lazyModel}" paginator="true" rows="5"  
+                                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} 
+                                             {CurrentPageReport} {NextPageLink} {LastPageLink}"  
+                                             rowsPerPageTemplate="5,10" selectionMode="single" 
+                                             selection="#{usuarioControlador.selectedPersona}"
+                                             id="personaTable" sortBy="#{persona.apellido}"
+                                             rowKey="#{persona.codigo_persona}">  
+
+                                    <p:column headerText="Código" sortBy="#{persona.codigo_persona}">  
+                                        <h:outputText value="#{persona.codigo_persona}" />  
+                                    </p:column>  
+
+                                    <p:column headerText="Cédula" sortBy="#{persona.cedula}">  
+                                        <h:outputText value="#{persona.cedula}" />  
+                                    </p:column>  
+
+                                    <p:column headerText="Apellidos" sortBy="#{persona.apellido}">  
+                                        <h:outputText value="#{persona.apellido}" />  
+                                    </p:column>  
+
+                                    <p:column headerText="Nombre" sortBy="#{persona.nombre}">  
+                                        <h:outputText value="#{persona.nombre}" />  
+                                    </p:column>  
+                                </p:dataTable>  
+                                <p:commandButton value="Aceptar"  action="#{usuarioControlador.asignarSelectedPersona}"  
+                                                 update=":frmNuevoUsuario:txtNombres :frmNuevoUsuario:txtApellidos :frmNuevoUsuario:txtMail" />
+                            </p:panel>
+                        </h:form>  
+                    </p:panel>
+                </p:dialog>
+
+            </ui:define>
+            
+            
+
+        </ui:composition>
+    </h:body>
+</html>
+

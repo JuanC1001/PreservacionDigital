@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">
+                Adminstración de Sonidos
+            </ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">
+                ADMINISTRACIÓN DE SONIDOS
+            </ui:define>
+            <ui:define name="contenido">
+                <p:growl autoUpdate="true" showDetail="true"/>
+                <h:form id="frmTablaSonido" enctype="multipart/form-data">
+                    <p:dataTable id="tblTablaSonido" value="#{sonidoControlador.lstSonido}" var="sonido" 
+                                 rowKey="#{sonido.codigo}" selectionMode="single" selection="#{sonidoControlador.sonidoSel}">
+
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{sonido.titulo}"/>
+                        </p:column>
+
+                        <p:column headerText="Previsualización">
+                            <div id="myElement#{sonido.codigo}">Cargando Reproductor...</div>
+                            <script type="text/javascript">
+                                jwplayer("myElement#{sonido.codigo}").setup({
+                                    //file: "faces/media/sonido/17 - Traketeo - Nene Malo ( SubidaMix Edit 2 ) DJ Zurge Mix.mp3",
+                                    //file: "faces/media/imagen/PROMO Telefono Super Inteligente.mp4",
+                                    file: "../../faces#{sonido.path}",
+                                    title: "#{sonido.titulo}",
+                                    height: "30",
+                                    width: "300",
+                                    aspectratio: "16:9",
+                                    //stagevideo: "false",
+                                    image: "../../faces/resources/images/nature1.jpg",
+                                    //skin: "resources/jwplayer/skin_trebola/skin_trebola.xml"
+                                });
+                            </script>
+                            <h:outputText value="#{sonido.titulo}"/>
+
+                        </p:column>
+
+                        <p:column headerText="Tipo">
+                            <h:outputText value="#{sonido.tipo}"/>
+                        </p:column>
+
+                        <p:column headerText="Palabras Claves" >
+                            <h:outputText value="#{sonido.keywords}"/>
+                        </p:column>
+
+                        <p:column headerText="Estado" >
+                            <h:outputText value="#{sonido.estado==0 ? 'DESPUBLICADO':'PUBLICADO'}"/>
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <p:commandButton value="Insertar" onclick="dlgInsertarSonido.show();" 
+                                             update=":frmInsertarSonido:displayInsertarSonido"/>
+                            <p:commandButton value="Editar" onclick="dlgEditarSonido.show();" 
+                                             update=":frmEditarSonido:displayEditarSonido"/>
+                            <p:commandButton value="Eliminar" onclick="dlgEliminarSonido.show();" 
+                                             update=":frmEliminarSonido:displayEliminarSonido"/>
+                        </f:facet>
+                    </p:dataTable>
+                </h:form>
+            </ui:define>
+            <ui:define name="dialogos">
+
+                <h:form id="frmInsertarSonido" enctype="multipart/form-data">
+                    <p:dialog widgetVar="dlgInsertarSonido" header="Insertar Sonido" modal="true" height="300" width="600">
+                        <p:panel id="displayInsertarSonido" >
+                            <p:panelGrid columns="1" >
+
+                                <p:outputLabel value="Nombre"/>
+                                <p:inputText id="txtTituloSonido" value="#{sonidoControlador.objSonido.titulo}"/>
+
+                                <p:outputLabel value="Ruta"/>
+                                <p:inputText id="txtRutaSonido" value="#{sonidoControlador.objSonido.path}"/>
+
+                                <p:outputLabel value="Tipo"/>
+                                <p:inputText id="txtTipoSonido" value="#{sonidoControlador.objSonido.tipo}"/>
+
+                                <p:panelGrid id="pngSubirArchivo" columns="1" style="width: 510px;">
+                                    <div id="myElement#{sonidoControlador.objSonido.codigo}">Cargando Reproductor...</div>
+                            <script type="text/javascript">
+                                jwplayer("myElement#{sonidoControlador.objSonido.codigo}").setup({
+                                    //file: "faces/media/sonido/17 - Traketeo - Nene Malo ( SubidaMix Edit 2 ) DJ Zurge Mix.mp3",
+                                    //file: "faces/media/imagen/PROMO Telefono Super Inteligente.mp4",
+                                    file: "../../faces#{sonidoControlador.objSonido.path}",
+                                    title: "#{sonidoControlador.objSonido.titulo}",
+                                    height: "30",
+                                    width: "300",
+                                    aspectratio: "16:9",
+                                    //stagevideo: "false",
+                                    image: "../../faces/resources/images/nature1.jpg",
+                                    //skin: "resources/jwplayer/skin_trebola/skin_trebola.xml"
+                                });
+                            </script>
+                                    <p:graphicImage value="#{sonidoControlador.objSonido.path}" 
+                                                    height="80"/>
+                                    <p:fileUpload fileUploadListener="#{sonidoControlador.cargarArchivoSonido}"
+                                                  allowTypes="/(\.|\/)(mp3|wma|wav)$/" label="Abrir" mode="advanced"  
+                                                  update="displayInsertarSonido" uploadLabel="Subir" cancelLabel="Cancelar"   
+                                                  value="#{sonidoControlador.archivoSonido}"
+                                                  required="true" requiredMessage="Cargar el sonido!!" />
+                                </p:panelGrid>
+
+                                <p:outputLabel value="Palabras Clave"/>
+                                <p:inputText id="txtPalabrasClaveSonido" value="#{sonidoControlador.objSonido.keywords}"/>
+
+                                <p:outputLabel value="Estado"/>
+                                <p:selectOneMenu id="cmbEstadoSonido" value="#{sonidoControlador.estadoSel}">
+                                    <f:selectItem itemLabel="Seleccione un Estado" itemValue="#{-1}"/>
+                                    <f:selectItem itemLabel="Publicado" itemValue="#{1}"/>
+                                    <f:selectItem itemLabel="Despublicado" itemValue="#{0}"/>
+                                </p:selectOneMenu>
+                                <p:panelGrid columns="2" style="text-align: center;">
+                                    <p:commandButton value="Aceptar" action="#{sonidoControlador.insertarSonido()}"
+                                                     update=":frmTablaSonido:tblTablaSonido" process="@this txtTituloSonido
+                                                     txtRutaSonido txtTipoSonido txtPalabrasClaveSonido cmbEstadoSonido"/>
+                                    <p:commandButton value="Cancelar" onclick="dlgInsertarSonido.hide();"/>
+                                </p:panelGrid>
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="frmEditarSonido" enctype="multipart/form-data">
+                    <p:dialog widgetVar="dlgEditarSonido" header="Editar Sonido" modal="true">
+                        <p:panel id="displayEditarSonido" >
+                            <p:panelGrid columns="2">
+
+                                <p:outputLabel value="Nombre"/>
+                                <p:inputText value="#{sonidoControlador.sonidoSel.titulo}"/>
+
+                                <p:outputLabel value="Ruta"/>
+                                <p:inputText value="#{sonidoControlador.sonidoSel.path}"/>
+
+                                <p:outputLabel value="Tipo"/>
+                                <p:inputText value="#{sonidoControlador.sonidoSel.tipo}"/>
+
+                                <p:outputLabel value="Palabras Clave"/>
+                                <p:inputText value="#{sonidoControlador.sonidoSel.keywords}"/>
+
+                                <p:outputLabel value="Estado"/>
+                                <p:selectOneMenu value="#{sonidoControlador.sonidoSel.estado}">
+                                    <f:selectItem itemLabel="Seleccione un Estado" itemValue="#{-1}"/>
+                                    <f:selectItem itemLabel="Publicado" itemValue="#{1}"/>
+                                    <f:selectItem itemLabel="Despublicado" itemValue="#{0}"/>
+                                </p:selectOneMenu>
+
+                                <p:commandButton value="Aceptar" action="#{sonidoControlador.actualizarSonido()}"
+                                                 update=":frmTablaSonido:tblTablaSonido"/>
+                                <p:commandButton value="Cancelar" onclick="dlgEditarSonido.hide();"/>
+
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="frmEliminarSonido" enctype="multipart/form-data">
+                    <p:dialog widgetVar="dlgEliminarSonido" header="Desea Eliminar el Sonido Seleccionado" modal="true">
+                        <p:panel id="displayEliminarSonido" >
+                            <p:panelGrid columns="2">
+
+                                <p:outputLabel value="Nombre"/>
+                                <p:inputText value="#{sonidoControlador.sonidoSel.titulo}" disabled="true"/>
+
+                                <p:outputLabel value="Ruta"/>
+                                <p:inputText value="#{sonidoControlador.sonidoSel.path}" disabled="true"/>
+
+                                <p:outputLabel value="Tipo"/>
+                                <p:inputText value="#{sonidoControlador.sonidoSel.tipo}" disabled="true"/>
+
+                                <p:outputLabel value="Palabras Clave"/>
+                                <p:inputText value="#{sonidoControlador.sonidoSel.keywords}" disabled="true"/>
+
+                                <p:outputLabel value="Estado"/>
+                                <p:selectOneMenu value="#{sonidoControlador.sonidoSel.estado}" disabled="true">
+                                    <f:selectItem itemLabel="Seleccione un Estado" itemValue="#{-1}"/>
+                                    <f:selectItem itemLabel="Publicado" itemValue="#{1}"/>
+                                    <f:selectItem itemLabel="Despublicado" itemValue="#{0}"/>
+                                </p:selectOneMenu>
+
+                                <p:commandButton value="Aceptar" action="#{sonidoControlador.eliminarSonido()}"
+                                                 update=":frmTablaSonido:tblTablaSonido"/>
+                                <p:commandButton value="Cancelar" onclick="dlgEliminarSonido.hide();"/>
+
+                            </p:panelGrid>
+
+                        </p:panel>
+
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

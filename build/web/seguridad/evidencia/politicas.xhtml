@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">
+                Políticas
+            </ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">
+                ADMINISTRACIÓN DE POLÍTICAS
+            </ui:define>
+            <ui:define name="contenido">
+                <p:growl autoUpdate="true" showDetail="true"/>
+                <h:form id="frmTablaPoliticas">
+                    <p:dataTable id="tblTablaPoliticas" value="#{politicasControlador.lstpoliticas}" var="politicas"
+                                 paginator="true" rows="10" draggableColumns="false"
+                                 selectionMode="single" rowKey="#{politicas.codigo}"  
+                                 selection="#{politicasControlador.politicassel}">
+
+                        <p:column headerText="Política ">
+                            <h:outputText value="#{politicas.nombre_politica}"/>
+                        </p:column>
+                        <p:column headerText="Detalle">
+                            <h:outputText value="#{politicas.detalle}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton value="Insertar" onclick="dlgInsertarPoliticas.show();" 
+                                             update=":frmInsertarPoliticas:pngInsertarPoliticas"/>
+                            <p:commandButton value="Editar" onclick="dlgEditarPoliticas.show();" 
+                                             update=":frmEditarPoliticas:pngEditarPoliticas"/>
+                            <p:commandButton value="Eliminar" onclick="dlgEliminarPoliticas.show();" 
+                                             update=":frmEliminarPoliticas:pngEliminarPoliticas"/>
+                        </f:facet>
+                    </p:dataTable>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="dialogos">
+                <h:form id="frmInsertarPoliticas" enctype="multipart/form-data" >
+                    <p:dialog widgetVar="dlgInsertarPoliticas" header="Insertar Políticas" modal="true" height="250" width="670">
+                        <p:panel id="displayInsertarPoliticas" >
+                            <p:panelGrid id="pngInsertarPoliticas" columns="2" >
+                                <p:outputLabel value="Nombre de la Política"/>
+                                <p:inputText id="txtpolitica" value="#{politicasControlador.objpoliticas.nombre_politica}" style="width:350px" 
+                                             title="ej:Los análisis de ejemplos" required="true" requiredMessage="Ingrese el Nombre de la Politica"/>
+                                <p:outputLabel value="Resumen de Politica"/>                                                           
+                                <p:inputTextarea id="txtdetalle" rows="5" cols="60" 
+                                                 value="#{politicasControlador.objpoliticas.detalle}" queryDelay="700" minQueryLength="4"
+                                                 title="ej: Los análisis de ejemplos" required="true" requiredMessage="Ingrese el Detalle de la Política"/> 
+
+                                <p:panelGrid columns="2" style="text-align: center;">
+                                    <p:commandButton value="Aceptar" action="#{politicasControlador.insertarPoliticas()}"
+                                                     update=":frmTablaPoliticas:tblTablaPoliticas" process="@this txtpolitica
+                                                     txtdetalle"/>
+                                    <p:commandButton value="Cancelar" onclick="dlgInsertarPoliticas.hide();"
+                                                     update=":frmTablaPoliticas:tblTablaPoliticas"/>
+                                </p:panelGrid>
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:dialog>
+                </h:form>
+
+                <p:dialog widgetVar="dlgEditarPoliticas" header="Editar Politicas" modal="true"
+                          closable="false" resizable="false" showEffect="clip" hideEffect="fold">     
+                    <h:form id="frmEditarPoliticas">
+                        <p:messages id="messages" autoUpdate="true"/>                   
+                        <p:panelGrid  id="pngEditarPoliticas" columns="2">
+                            <p:outputLabel value="Nombre de la Política"/>
+                            <p:inputText  value="#{politicasControlador.politicassel.nombre_politica}" style="width:350px" 
+                                         title="ej:Los análisis de ejemplos" required="true" requiredMessage="Ingrese el Nombre de la Politica"/>
+                            <p:outputLabel value="Resumen de Politica"/>                                                           
+                            <p:inputTextarea rows="5" cols="60" 
+                                             value="#{politicasControlador.politicassel.detalle}" queryDelay="700" minQueryLength="4"
+                                             title="ej: Los análisis de ejemplos" required="true" requiredMessage="Ingrese el Detalle de la Política"/> 
+
+                            <p:commandButton value="Aceptar" action="#{politicasControlador.actualizarPoliticas()}"
+                                             update=":frmTablaPoliticas:tblTablaPoliticas"/>
+                            <p:commandButton value="Cancelar" onclick="dlgEditarPoliticas.hide();"/>
+                        </p:panelGrid>                      
+                    </h:form>
+                </p:dialog>
+
+                <h:form id="frmEliminarPoliticas" enctype="multipart/form-data">
+                    <p:dialog widgetVar="dlgEliminarPoliticas" header="Desea Eliminar Politicas Seleccionado" modal="true">
+                        <p:panel id="displayEliminarDocumento" >
+                            <p:panelGrid id="pngEliminarPoliticas" columns="2">
+
+
+                                <p:outputLabel value="Ruta"/>
+                                <p:inputText value="#{politicasControlador.politicassel.nombre_politica}" disabled="true"/>
+
+                                <p:outputLabel value="Tipo"/>
+                                <p:inputText value="#{politicasControlador.politicassel.detalle}" disabled="true"/>
+
+                                <p:outputLabel value="Palabras Clave"/>
+                                <p:inputText value="#{politicasControlador.politicassel.fecha_registro}" disabled="true"/>
+
+
+
+                                <p:commandButton value="Aceptar" action="#{politicasControlador.eliminarPoliticas()}"
+                                                 update=":frmTablaPoliticas:tblTablaPoliticas"/>
+                                <p:commandButton value="Cancelar" onclick="dlgEliminarPoliticas.hide();"/>
+
+                            </p:panelGrid>
+
+                        </p:panel>
+
+                    </p:dialog>
+                </h:form>
+
+            </ui:define>
+        </ui:composition>       
+    </h:body>
+</html>

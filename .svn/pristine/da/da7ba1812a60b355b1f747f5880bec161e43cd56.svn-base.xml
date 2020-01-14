@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">Menú Sitio</ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">Menú Sitio</ui:define>
+            <ui:define name="contenido">
+                <p:growl id="mensajes" autoUpdate="true"/>
+                <h:form id="frmmenuSitio">
+                    <p:panel id="pnlmenuSitio">
+                        <p:dataTable id="tblmenuSitio" value="#{menu_SitioC.menuSitios}" var="menusitio"
+                                     paginator="true" rows="10" rowKey="#{menusitio.codigo}" selectionMode="single" 
+                                     selection="#{menu_SitioC.selMenuSitio}">
+                            <p:column filterBy="#{menusitio.codigo}" filterMatchMode="startsWith" sortBy="#{menusitio.codigo}">
+                                <f:facet name="header">
+                                    <h:outputText value="CODIGO"/>
+                                </f:facet>
+                                <h:outputText value="#{menusitio.codigo}"/>
+                            </p:column>
+                            <p:column filterBy="#{menusitio.nombre}" filterMatchMode="startsWith" sortBy="#{menusitio.nombre}">
+                                <f:facet name="header">
+                                    <h:outputText value="NOMBRE"/>
+                                </f:facet>
+                                <h:outputText value="#{menusitio.nombre}"/>
+                            </p:column>
+                            <p:column filterBy="#{menusitio.descripcion}" filterMatchMode="startsWith" sortBy="#{menusitio.descripcion}">
+                                <f:facet name="header">
+                                    <h:outputText value="DESCRIPCION"/>
+                                </f:facet>
+                                <h:outputText value="#{menusitio.descripcion}"/>
+                            </p:column>
+                            <p:column filterBy="#{menusitio.url}" filterMatchMode="startsWith" sortBy="#{menusitio.url}">
+                                <f:facet name="header">
+                                    <h:outputText value="URL"/>
+                                </f:facet>
+                                <h:outputText value="#{menusitio.url}"/>
+                            </p:column>
+                            <p:column filterBy="#{menusitio.estado}" filterMatchMode="startsWith" sortBy="#{menusitio.estado}">
+                                <f:facet name="header">
+                                    <h:outputText value="ESTADO"/>
+                                </f:facet>
+                                <h:outputText value="#{menusitio.estado==0 ?'INACTIVO':'ACTIVO'}"/>
+                            </p:column>
+
+                            <f:facet name="footer">  
+
+                                <p:commandButton id="btnNuevoMenuSitio" value="Nuevo" icon="ui-icon-newwin" 
+                                                 title="Insertar Menú Sitio" onclick="wdlgInsertarMenuSitio.show()"/>  
+                                <p:commandButton id="btnEditarMenuSitio" value="Editar" icon="ui-icon-pencil"
+                                                 update=":dlgActualizarMenuSitio" oncomplete="wdlgActualizarMenuSitio.show()"
+                                                 title="Editar Menú Sitio"/>
+                                <p:commandButton id="btnEliminarMenuSitio" value="Eliminar" icon="ui-icon-trash"
+                                                 update=":dlgEliminarMenuSitio" oncomplete="wdlgEliminarMenuSitio.show()"
+                                                 title="Eliminar Menú Sitio"/>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="dialogos">
+
+                <p:dialog id="dlgInsertarMenuSitio" header="Nueva Menú Sitio" widgetVar="wdlgInsertarMenuSitio" 
+                          modal="true" closable="false" resizable="false" 
+                          showEffect="clip" hideEffect="fold">  
+                    <h:form id="frmNuevoMenuSitio">                        
+                        <p:panelGrid id="pngNuevoMenuSitio" columns="2">
+                            <h:outputText value="Nombre"/>
+                            <p:inputText value="#{menu_SitioC.menuSitio.nombre}" />
+                            <h:outputText value="Descripción"/>
+                            <p:inputText value="#{menu_SitioC.menuSitio.descripcion}" />
+                            <h:outputText value="Url"/>
+                            <p:inputText value="#{menu_SitioC.menuSitio.url}" />                      
+                            <h:outputText value="Estado"/>
+                            <p:selectOneMenu value="#{menu_SitioC.estadoSel}">
+                                <f:selectItem itemLabel="Seleccione un Estado" itemValue="#{-1}"/>
+                                <f:selectItem itemLabel="Activo" itemValue="#{1}"/>
+                                <f:selectItem itemLabel="Inactivo" itemValue="#{0}"/>
+                            </p:selectOneMenu>                                                      
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{menu_SitioC.insertarMenuSitio()}" 
+                                         update=":frmmenuSitio:pnlmenuSitio"/>
+                        <p:commandButton value="Cancelar" onclick="wdlgInsertarMenuSitio.hide();" type="reset"/>
+                    </h:form> 
+                </p:dialog>
+
+                <p:dialog id="dlgActualizarMenuSitio" header="Edita Menú Sitio" widgetVar="wdlgActualizarMenuSitio" 
+                          modal="true" closable="false"  resizable="false"
+                          showEffect="clip" hideEffect="fold">  
+                    <h:form id="frmactualizarMenuSitio">                        
+                        <p:messages id="messages" autoUpdate="true"/>  
+                        <p:panelGrid id="pngactualizarAccion" columns="2">
+                            <h:outputText value="Nombre"/>
+                            <p:inputText value="#{menu_SitioC.selMenuSitio.nombre}"/>
+                            <h:outputText value="Descripción"/>
+                            <p:inputText value="#{menu_SitioC.selMenuSitio.descripcion}"/>
+                            <h:outputText value="Url"/>
+                            <p:inputText value="#{menu_SitioC.selMenuSitio.url}"/>
+
+                            <h:outputText value="Estado"/>
+                            <p:selectOneMenu value="#{menu_SitioC.selMenuSitio.estado}">
+                                <f:selectItem itemLabel="Seleccione un Estado" itemValue="#{-1}"/>
+                                <f:selectItem itemLabel="Activo" itemValue="#{1}"/>
+                                <f:selectItem itemLabel="Inactivo" itemValue="#{0}"/>
+                            </p:selectOneMenu>                              
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{menu_SitioC.actualizarMenuSitio()}" 
+                                         update=":frmmenuSitio:pnlmenuSitio"/>
+                        <p:commandButton value="Cancelar" onclick="wdlgActualizarMenuSitio.hide()" type="reset"/>
+                    </h:form> 
+                </p:dialog>
+
+                <p:dialog id="dlgEliminarMenuSitio" header="Eliminar Menú Sitio" widgetVar="wdlgEliminarMenuSitio" modal="true" closable="false" 
+                          resizable="false"
+                          showEffect="clip" hideEffect="fold">  
+                    <h:form id="frmeliminarAccion">                       
+                        <h:outputText value="¿Desea Eliminar la Acción?"/>
+                        <p:panelGrid id="pngeliminarAccion" columns="2">
+                            <h:outputText value="Nombre"/>
+                            <h:outputText value="#{menu_SitioC.selMenuSitio.nombre}"/>
+                            <h:outputText value="Descripción"/>
+                            <h:outputText value="#{menu_SitioC.selMenuSitio.descripcion}"/>
+                            <h:outputText value="Url"/>                         
+                            <h:outputText value="#{menu_SitioC.selMenuSitio.url}"/>
+                            <h:outputText value="Estado"/>
+                            <h:outputText value="#{menu_SitioC.selMenuSitio.estado==0 ? 'INACTIVO':'ACTIVO'}"/>
+
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{menu_SitioC.eliminarMenuSitio()}" 
+                                         update=":frmmenuSitio:pnlmenuSitio"/>
+                        <p:commandButton value="Cancelar" onclick="wdlgEliminarMenuSitio.hide()" type="reset"/>
+                    </h:form> 
+                </p:dialog>
+            </ui:define>
+
+        </ui:composition>           
+    </h:body>
+</html>

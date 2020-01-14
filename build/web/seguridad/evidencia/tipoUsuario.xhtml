@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">
+                Tipo de Usuario
+            </ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">
+                ADMINISTRACIÓN DE TIPO DE USUARIO
+            </ui:define>
+            <ui:define name="contenido">
+                <p:growl autoUpdate="true" showDetail="true"/>
+                <h:form id="frmTablaTipoUsuario">
+                    <p:dataTable id="tblTablaTipoUsuario" value="#{tipoUsuarioControlador.lstTipoUsuario}" var="tipousuario"
+                                 paginator="true" rows="10" draggableColumns="false"
+                                 selectionMode="single" rowKey="#{tipousuario.codigo}"  
+                                 selection="#{tipoUsuarioControlador.tipoUsariosel}">
+
+                        <p:column headerText="Política ">
+                            <h:outputText value="#{tipousuario.nombre_usuario}"/>
+                        </p:column>
+                        <p:column headerText="Detalle">
+                            <h:outputText value="#{tipousuario.detalle}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton value="Insertar" onclick="dlgInsertarTipoUsuario.show();" 
+                                             update=":frmInsertarTipoUsuario:pngInsertarTipoUsuario"/>
+                            <p:commandButton value="Editar" onclick="dlgEditarTipoUsuario.show();" 
+                                             update=":frmEditarTipoUsuario:pngEditarTipoUsuario"/>
+                            <p:commandButton value="Eliminar" onclick="dlgEliminarTipoUsuario.show();" 
+                                             update=":frmEliminarTipoUsuario:pngEliminarTipoUsuario"/>
+                        </f:facet>
+                    </p:dataTable>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="dialogos">
+                <h:form id="frmInsertarTipoUsuario" enctype="multipart/form-data" >
+                    <p:dialog widgetVar="dlgInsertarTipoUsuario" header="Insertar Tipo de Usuario" modal="true" height="250" width="670">
+                        <p:panel id="displayInsertarTipoUsuario" >
+                            <p:panelGrid id="pngInsertarTipoUsuario" columns="2" >
+                                <p:outputLabel value="Tipo de Usuario"/>
+                                <p:inputText id="txttipousuario" value="#{tipoUsuarioControlador.objTipoUsuario.nombre_usuario}" style="width:350px" 
+                                             title="ej:Los análisis de ejemplos" required="true" requiredMessage="Ingrese el Nombre de la Politica"/>
+                                <p:outputLabel value="Detalle de Usuario"/>                                                           
+                                <p:inputTextarea id="txtdetalle" rows="5" cols="60" 
+                                                 value="#{tipoUsuarioControlador.objTipoUsuario.detalle}" queryDelay="700" minQueryLength="4"
+                                                 title="ej: Los análisis de ejemplos" required="true" requiredMessage="Ingrese el Detalle de la Política"/> 
+
+                                <p:panelGrid columns="2" style="text-align: center;">
+                                    <p:commandButton value="Aceptar" action="#{tipoUsuarioControlador.insertarTipoUsuario()}"
+                                                     update=":frmTablaTipoUsuario:tblTablaTipoUsuario" process="@this txttipousuario
+                                                     txtdetalle"/>
+                                    <p:commandButton value="Cancelar" onclick="dlgInsertarTipoPoliticas.hide();"
+                                                     update=":frmTablaTipoUsuario:tblTablaTipoUsuario"/>
+                                </p:panelGrid>
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:dialog>
+                </h:form>
+
+                <p:dialog widgetVar="dlgEditarTipoUsuario" header="Editar Tipo de Usuarios" modal="true"
+                          closable="false" resizable="false" showEffect="clip" hideEffect="fold">     
+                    <h:form id="frmEditarTipoUsuario">
+                        <p:messages id="messages" autoUpdate="true"/>                   
+                        <p:panelGrid  id="pngEditarTipoUsuario" columns="2">
+                            <p:outputLabel value="Tipo de Usuario"/>
+                            <p:inputText  value="#{tipoUsuarioControlador.tipoUsariosel.nombre_usuario}" style="width:350px" 
+                                          title="ej:Los análisis de ejemplos" required="true" requiredMessage="Ingrese el Nombre de la Politica"/>
+                            <p:outputLabel value="Resumen de Politica"/>                                                           
+                            <p:inputTextarea rows="5" cols="60" 
+                                             value="#{tipoUsuarioControlador.tipoUsariosel.detalle}" queryDelay="700" minQueryLength="4"
+                                             title="ej: Los análisis de ejemplos" required="true" requiredMessage="Ingrese el Detalle de la Política"/> 
+
+                            <p:commandButton value="Aceptar" action="#{tipoUsuarioControlador.actualizarTipoUsuario()}"
+                                             update=":frmTablaTipoUsuario:tblTablaTipoUsuario"/>
+                            <p:commandButton value="Cancelar" onclick="dlgEditarTipoUsuario.hide();"/>
+                        </p:panelGrid>                      
+                    </h:form>
+                </p:dialog>
+
+                <h:form id="frmEliminarTipoUsuario" enctype="multipart/form-data">
+                    <p:dialog widgetVar="dlgEliminarTipoUsuario" header="Desea Eliminar Tipo de Usuario Seleccionado" modal="true">
+                        <p:panel id="displayEliminarTipoUsuario" >
+                            <p:panelGrid id="pngEliminarTipoUsuario" columns="2">
+
+
+                                <p:outputLabel value="Tipo Usuario"/>
+                                <p:inputText value="#{tipoUsuarioControlador.tipoUsariosel.nombre_usuario}" disabled="true"/>
+
+                                <p:outputLabel value="Detalle"/>
+                                <p:inputText value="#{tipoUsuarioControlador.tipoUsariosel.detalle}" disabled="true"/>
+
+                                <p:outputLabel value="Fecha de Inscripción"/>
+                                <p:inputText value="#{tipoUsuarioControlador.tipoUsariosel.fecha_registro}" disabled="true"/>
+
+
+
+                                <p:commandButton value="Aceptar" action="#{tipoUsuarioControlador.eliminarTipoUsuario()}"
+                                                 update=":frmTablaTipoUsuario:tblTablaTipoUsuario"/>
+                                <p:commandButton value="Cancelar" onclick="dlgEliminarTipoUsuario.hide();"/>
+
+                            </p:panelGrid>
+
+                        </p:panel>
+
+                    </p:dialog>
+                </h:form>
+
+            </ui:define>
+        </ui:composition>  
+    </h:body>
+</html>
+

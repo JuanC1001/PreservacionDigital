@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>
+            <ui:define name="Inicio">Inicio</ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="/templates/plantillaBase.xhtml">
+            <ui:define name="tituloNavegador">PREDECI</ui:define>
+            <ui:define name="content">
+                  <p:growl showDetail="true" autoUpdate="true"/>
+                <h:form>
+                    <p:growl id="msgs" showDetail="true" />
+                    <h:panelGrid style="text-align:center">
+                        <p:graphicImage value="/resources/images/logoicono.png" title="SIPDODA"
+                                        style=" height: 150px; width: 150px"/>
+                      
+                        <h:panelGrid columns="2"  width="850" style=" text-align : justify; color: #5459c9; font-size: 12px">
+                            <p:panel header="Predeci V 1.0" style="text-align:center">
+                                <p:graphicImage value="/resources/images/Logo-letra.png" title="SIPDODA"
+                                                style=" height: 100px; width: 250px"/>
+                            </p:panel>
+                            <p:panel  style="text-align: justify; font-size: 1em">                                    
+                                <p>  </p>
+                                <p>  </p>
+                                <p> Texto </p>
+                                <p>  </p>
+                                <p>  </p>
+                                <p>El repositorio digital mediante el  ??</p> 
+                                <p>  </p>
+                                <p>  </p>
+                            </p:panel>
+                        </h:panelGrid>
+                        
+                    </h:panelGrid>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+
+</html>
+

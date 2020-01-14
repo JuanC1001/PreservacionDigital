@@ -1,0 +1,390 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" 
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" 
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:composition template="/templates/plantillaInternaCenter.xhtml">
+        <ui:define name="top">Ingreso de Titulares</ui:define>
+        <ui:define name="contenido">
+            <ui:define name="tituloNavegador">Insertar Persona</ui:define>
+
+            <h:form id="frmSeleccionarTipoTitular">
+                <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                <p:panelGrid id="pngPersona" columns="2">
+                    <p:selectOneMenu id="cmbTipoTitular" value="#{ingresoTitularesControlador.valorTipoTitularSeleccionado}">
+                        <f:selectItem itemValue="0" itemLabel="--Elija una opción--"/>
+                        <f:selectItems value="#{ingresoTitularesControlador.dm.tiposTitular}" var="tiposTitular" 
+                                       itemLabel="#{tiposTitular.descripcion}" itemValue="#{tiposTitular.codigo}"/>
+                        <p:ajax event="change" listener="#{ingresoTitularesControlador.obtenerTipotularDadoCodigo}"/>
+                    </p:selectOneMenu>
+                    <p:commandButton value="Aceptar" update=":dialogoNuevaPersona :dialogoSeleccioneOpcion :dialogoNuevaEmpresa" 
+                                     action="#{ingresoTitularesControlador.activarDialogos}" />
+                </p:panelGrid>
+            </h:form>
+        </ui:define>
+
+        <ui:define name="dialogos">
+            <p:dialog header="Nuevo Titular - Personas Naturales"  widgetVar="wdialogoNuevaPersona"  id="dialogoNuevaPersona" resizable="true">
+
+                <p:panel id="pnlContenedorPersona">
+                    <h:form id="frmInsertarPersona">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <p:messages id="msgPersona" autoUpdate="false" />
+                        <h:outputText id="otxtTipoPersoneriaJuridica" value="TIPO DE PERSONERIA JURIDICA:"/>
+                        <h:outputText id="otxtTipoPersoneriaJuridicaValor" value="#{ingresoTitularesControlador.tipoTitular.descripcion}"/>
+
+                        <p:wizard widgetVar="wwizP" id="wizP" flowListener="#{wizardBean.onFlowProcess}"
+                                  nextLabel="Siguiente" backLabel="Atrás" showStepStatus="true">
+                            
+                            <p:tab id="informacionTributaria" title="Paso 1">  
+                                <p:panel header="Información Tributaria" id="pnInformacionTributaria">  
+                                    <p:focus context="pnInformacionTributaria"/> 
+                                    <h:panelGrid columns="3" columnClasses="label, value">  
+                                        <h:outputText id="otxtContribuyenteEspecial" value="Contribuyente Escpecial:"/>
+                                        <p:selectBooleanCheckbox id="ochkContribuyenteEspecial" value="#{ingresoTitularesControlador.titular.contrib_especial}"/>
+                                        <h:outputText value=""/>
+
+                                        <h:outputText id="otxtNombreComercial" value="Nombre Comercial:"/>
+                                        <h:inputText id="txtNombreComercial" value="#{ingresoTitularesControlador.titular.nombre_comercial}"/>
+                                        <h:outputText value=""/>
+
+                                        <h:outputText id="otxtCedula" value="Cédula:"/>
+                                        <h:inputText id="txtCedula" value="#{ingresoTitularesControlador.persona.cedula}" 
+                                                     required="true" requiredMessage="La cédula es un Campo Obligatorio">
+                                            <f:validateLength maximum="10" minimum="10"/>  
+                                        </h:inputText>
+                                        <p:message id="msgCedula" for="txtCedula"/>  
+
+
+                                        <h:outputText id="otxtPasaporte" value="Pasaporte:"/>
+                                        <h:inputText id="txtPasaporte" value="#{ingresoTitularesControlador.persona.pasaporte}"/>
+                                        <h:outputText value=""/>
+
+                                        <h:outputText id="otxtRuc" value="Ruc:"/>
+                                        <h:inputText id="txtRuc" value="#{ingresoTitularesControlador.ruc.identificacion}"/>
+                                        <h:outputText value=""/>
+
+                                        <h:outputText id="otxtApellidoPaterno" value="Apellidos:"/>
+                                        <h:inputText id="txtApellidoPaterno" value="#{ingresoTitularesControlador.personaFinanciero.apellido_paternno}" 
+                                                     required="true" requiredMessage="Los Apellidos es un Campo Obligatorio" />
+                                        <p:message id="msgApellidos" for="txtApellidoPaterno"/>  
+
+                                        <h:outputText id="otxtPrimerNombre"  value="Nombres:"/>
+                                        <h:inputText id="txtPrimerNombre" value="#{ingresoTitularesControlador.personaFinanciero.primer_nombre}" 
+                                                     required="true" requiredMessage="Los nombres es un Campo Obligatorio" />
+                                        <p:message id="msgNombres" for="txtPrimerNombre"/>  
+
+                                    </h:panelGrid>  
+                                </p:panel>  
+                            </p:tab>  
+
+                            <p:tab id="ubicacion" title="Paso 2">  
+                                <p:panel header="Ubicación" id="pnUbicacion">  
+                                    <p:focus context="pnUbicacion"/>  
+                                    <h:panelGrid columns="2" columnClasses="label, value">  
+                                        <h:outputText id="otxtDireccion" value="Dirección:"/>
+                                        <p:inputTextarea id="txtaDireccion" value="#{ingresoTitularesControlador.direccion.descripcion}"/>
+
+                                        <h:outputText id="otxtPaises" value="País:"/>
+                                        <p:selectOneMenu value="#{ingresoTitularesControlador.valorPaisSeleccionado}">
+                                            <f:selectItem itemValue="#{null}" itemLabel="--Elija una opción--"/>
+                                            <f:selectItems value="#{ingresoTitularesControlador.dm.paises}" var="paises" 
+                                                           itemLabel="#{paises.nombre}" itemValue="#{paises.codigo}"/>
+                                            <p:ajax event="change" listener="#{ingresoTitularesControlador.obtenerProvinciasDadoPais}" update="cmbProvincias, cmbCiudades"/>
+                                        </p:selectOneMenu>
+
+                                        <h:outputText id="otxtProvincias" value="Provincia:"/>
+                                        <p:selectOneMenu id="cmbProvincias" value="#{ingresoTitularesControlador.valorProvinciaSeleccionado}">
+                                            <f:selectItem itemValue="0" itemLabel="--Elija una opción--"/>
+                                            <f:selectItems value="#{ingresoTitularesControlador.provincias}" var="provincias" 
+                                                           itemLabel="#{provincias.nombre}" itemValue="#{provincias.codigo}"/>
+                                            <p:ajax event="change" listener="#{ingresoTitularesControlador.obtenerCiudadesDadoProvincia}" 
+                                                    update="cmbCiudades"/>
+                                        </p:selectOneMenu>
+                                        <h:outputText id="otxtCiudades" value="Ciudad:"/>
+                                        <p:selectOneMenu id="cmbCiudades" value="#{ingresoTitularesControlador.valorCiudadSeleccionado}">
+                                            <f:selectItem itemValue="0" itemLabel="--Elija una opción--"/>
+                                            <f:selectItems value="#{ingresoTitularesControlador.ciudades}" var="ciudad" 
+                                                           itemLabel="#{ciudad.nombre}" itemValue="#{ciudad.codigo}"/>
+                                        </p:selectOneMenu>
+
+                                    </h:panelGrid>  
+                                </p:panel>  
+                            </p:tab>  
+
+
+                            <p:tab id="contacto" title="Paso 3">  
+                                <p:panel header="Contacto" id="pnContacto">  
+                                    <p:focus context="pnContacto"/> 
+                                    <h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">  
+                                        <h:outputText id="otxtTelefonoConvencional" value="Teléfono Convencional:"/>
+                                        <p:inputText id="txtTelefonoConvencional" value="#{ingresoTitularesControlador.persona.telefonofijo}"/>
+
+                                        <h:outputText id="otxtTelefonoCelular" value="Teléfono Celular"/>
+                                        <p:inputText id="txtTelefonoCelular" value="#{ingresoTitularesControlador.persona.telefonoCelular}"/>
+
+                                        <h:outputText id="otxtTelefonoOficina" value="Teléfono Oficina:"/>
+                                        <p:inputText id="txtTelefonoOficina" value="#{ingresoTitularesControlador.persona.telefonoTrabajo}"/>
+
+                                        <h:outputText id="otxtMail" value="Mail:"/>
+                                        <p:inputText id="txtMail" value="#{ingresoTitularesControlador.personaFinanciero.mail}" required="false">
+                                            <f:validator validatorId="recursos.utilBeans.ValidatorBean"/>
+                                        </p:inputText>
+                                    </h:panelGrid>  
+                                </p:panel>      
+                            </p:tab>  
+
+                            <p:tab id="confirmacion" title="Paso 4">  
+                                <p:panel header="Confirmacion">  
+                                    <h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">  
+                                        <h:outputText id="otxtDatosEmpresa" value="Datos Generales de la Empresa:"/>
+                                        <h:outputText value=""/>
+
+                                        <h:outputText id="otxtCedulaConf" value="Cédula:"/>
+                                        <h:outputText id="txtCedulaConf" value="#{ingresoTitularesControlador.persona.cedula}"/>
+
+
+                                        <h:outputText id="otxtPasaporteConf" value="Pasaporte:"/>
+                                        <h:outputText id="txtPasaporteConf" value="#{ingresoTitularesControlador.persona.pasaporte}"/>
+
+                                        <h:outputText id="otxtRucConf" value="Ruc:"/>
+                                        <h:outputText id="txtRucConf" value="#{ingresoTitularesControlador.ruc.identificacion}"/>
+
+                                        <h:outputText id="otxtApellidoPaternoConf" value="Apellidos:"/>
+                                        <h:outputText id="txtApellidoPaternoConf" value="#{ingresoTitularesControlador.personaFinanciero.apellido_paternno}"/>
+
+                                        <h:outputText id="otxtPrimerNombreConf" value="Nombres:"/>
+                                        <h:outputText id="txtPrimerNombreConf" value="#{ingresoTitularesControlador.personaFinanciero.primer_nombre}"/>
+
+                                    </h:panelGrid>  
+                                    <p:commandButton value="Aceptar" action="#{ingresoTitularesControlador.insertarPersona}" process="@this" update="msgPersona"/> 
+                                    <p:commandButton value="Cancelar" onsuccess="wdialogoNuevaPersona.hide()" process="@this"/> 
+                                </p:panel>  
+
+                            </p:tab>  
+
+                        </p:wizard>  
+                    </h:form>
+                </p:panel>
+            </p:dialog>
+
+            <p:dialog header="Ingreso de Información"  widgetVar="wdialogoSeleccioneOpcion"  id="dialogoSeleccioneOpcion" resizable="false" >
+                <p:panel id="pnlContenedorSeleccioneOpcion">
+                    <h:form id="frmSeleccioneOpcion">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <p:panelGrid id="pnPersona" columns="1">
+                            <h:outputText id="otxtSeleccioneOpcion" value="Seleccione una opción"/>
+                            <p:commandButton value="Aceptar" onclick="wdialogoSeleccioneOpcion.hide()" type="reset"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:panel>
+            </p:dialog>
+
+            <p:dialog header="Nuevo Titular - Sociedades"  widgetVar="wdialogoNuevaEmpresa"  id="dialogoNuevaEmpresa" resizable="false">
+                <p:panel id="pnlContenedorEmpresa">
+                    <h:form id="frmInsertarEmpresa">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <p:messages id="msgEmpresa" autoUpdate="true"/>
+                        <h:outputText id="otxtTipoPersoneriaJuridica" value="TIPO DE PERSONERIA JURIDICA:"/>
+                        <h:outputText id="otxtTipoPersoneriaJuridicaValor" value="#{ingresoTitularesControlador.tipoTitular.descripcion}"/>
+
+                        <p:wizard widgetVar="wwizE" id="wizE" flowListener="#{wizardBean.onFlowProcess}"
+                                  nextLabel="Siguiente" backLabel="Atrás" showStepStatus="true">
+
+                            <p:tab id="informacionTributaria" title="Paso 1">  
+                                <p:panel header="Información Tributaria" id="pnInformacionTributaria">  
+                                    <p:focus context="pnInformacionTributaria"/> 
+                                    <h:panelGrid columns="3" columnClasses="label, value">  
+                                        <h:outputText id="otxtContribuyenteEspecialE" value="Contribuyente Escpecial:"/>
+                                        <p:selectBooleanCheckbox id="ochkContribuyenteEspecialE" value="#{ingresoTitularesControlador.titular.contrib_especial}"/>
+                                        <h:outputText value=""/>
+                                        <h:outputText id="otxtRuc" value="Ruc:"/>
+                                        <h:inputText id="txtRuc" value="#{ingresoTitularesControlador.ruc.identificacion}" required="true" 
+                                                     requiredMessage="El Ruc es unCampo Obligatorio" validatorMessage="Ingrese mínimo 13 caracteres">
+                                            <f:validateLength maximum="13" minimum="13"/>  
+                                        </h:inputText>
+                                        <p:message id="msgRucE" for="txtRuc"/>
+
+                                        <h:outputText id="otxtRazonSocial" value="Razón Social:"/>
+                                        <h:inputText id="txtRazonSocial" value="#{ingresoTitularesControlador.empresa.razon_social}" 
+                                                     required="true" requiredMessage="La Razón Social es un Campo Obligatorio"/>
+                                        <p:message id="msgRSocialE" for="txtRazonSocial"/>
+
+                                        <h:outputText id="otxtNombreComercial" value="Nombre Comercial:"/>
+                                        <h:inputText id="txtNombreComercial" value="#{ingresoTitularesControlador.titular.nombre_comercial}"/>
+                                        <h:outputText value=""/>
+
+
+                                    </h:panelGrid>  
+                                </p:panel>  
+                            </p:tab>  
+
+                            <p:tab id="representanteLegal" title="Paso 2">  
+                                <p:panel header="Representante Legal" id="pnrepresentanteLegal">  
+                                    <p:focus context="pnrepresentanteLegal"/> 
+                                    <h:panelGrid columns="3" columnClasses="label, value">  
+                                        <h:outputText value="Busque un Representante Legal:"/>
+                                        <p:commandButton value="Buscar" onclick="wdialogoBusquedaPersonas.show()" process="@this"/>
+                                        <h:outputText value=""/>
+                                        <h:outputText id="txtRepresentanteLegal" 
+                                                      value="Nombres: #{ingresoTitularesControlador.personaRepresentanteLegal.apellido_paternno} 
+                                                      #{ingresoTitularesControlador.personaRepresentanteLegal.primer_nombre}"></h:outputText>
+                                        <h:outputText value=""/>
+                                        <h:outputText value=""/>
+                                        <h:outputText id="txtCedulaRepresentanteLegal" 
+                                                      value="Cédula: #{ingresoTitularesControlador.personaRepresentanteLegal.cedula}"></h:outputText>
+
+                                    </h:panelGrid>  
+                                </p:panel>  
+                            </p:tab>  
+
+                            <p:tab id="ubicacion" title="Paso 3">  
+                                <p:panel header="Ubicación" id="pnUbicacion">  
+                                    <p:focus context="pnUbicacion"/>  
+                                    <h:panelGrid columns="2" columnClasses="label, value">  
+                                        <h:outputText id="otxtDireccion" value="Dirección:"/>
+                                        <p:inputTextarea id="txtaDireccion" value="#{ingresoTitularesControlador.empresa.direccion}"/>
+
+                                        <h:outputText id="otxtPaises" value="País:"/>
+                                        <p:selectOneMenu value="#{ingresoTitularesControlador.valorPaisSeleccionado}">
+                                            <f:selectItem itemValue="0" itemLabel="Seleccione"/>
+                                            <f:selectItems value="#{ingresoTitularesControlador.dm.paises}" var="paises" 
+                                                           itemLabel="#{paises.nombre}" itemValue="#{paises.codigo}"/>
+                                            <p:ajax event="change" listener="#{ingresoTitularesControlador.obtenerProvinciasDadoPais}" update="cmbProvincias, cmbCiudades"/>
+                                        </p:selectOneMenu>
+                                        <h:outputText id="otxtProvincias" value="Provincia:"/>
+                                        <p:selectOneMenu id="cmbProvincias" value="#{ingresoTitularesControlador.valorProvinciaSeleccionado}">
+                                            <f:selectItem itemValue="0" itemLabel="Seleccione"/>
+                                            <f:selectItems value="#{ingresoTitularesControlador.provincias}" var="provincias" 
+                                                           itemLabel="#{provincias.nombre}" itemValue="#{provincias.codigo}"/>
+                                            <p:ajax event="change" listener="#{ingresoTitularesControlador.obtenerCiudadesDadoProvincia}" 
+                                                    update="cmbCiudades"/>
+                                        </p:selectOneMenu>
+
+                                        <h:outputText id="otxtCiudades" value="Ciudad:"/>
+                                        <p:selectOneMenu id="cmbCiudades" value="#{ingresoTitularesControlador.valorCiudadSeleccionado}">
+                                            <f:selectItem itemValue="0" itemLabel="Seleccione"/>
+                                            <f:selectItems value="#{ingresoTitularesControlador.ciudades}" var="ciudad" 
+                                                           itemLabel="#{ciudad.nombre}" itemValue="#{ciudad.codigo}"/>
+                                        </p:selectOneMenu>
+
+                                    </h:panelGrid>  
+                                </p:panel>  
+                            </p:tab>  
+
+                            <p:tab id="contacto" title="Paso 4">  
+                                <p:panel header="Contacto" id="pnContacto">  
+                                    <p:focus context="pnContacto"/> 
+                                    <h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">  
+                                        <h:outputText id="otxtTelefonoCelular" value="Celular:"/>
+                                        <h:inputText id="txtTelefonoCelular" value="#{ingresoTitularesControlador.empresa.telefono_celular}"/>
+
+                                        <h:outputText id="otxtTelefonoOficina" value="teléfono Oficina:"/>
+                                        <h:inputText id="txtTelefonoOficina" value="#{ingresoTitularesControlador.empresa.telefono_oficina}"/>
+
+                                        <h:outputText id="otxtMail" value="Mail:"/>
+                                        <h:inputText id="txtMail" value="#{ingresoTitularesControlador.empresa.mail}" required="false" validatorMessage="Mail incorrecto" >
+                                            <f:validator validatorId="recursos.utilBeans.ValidatorBean" for="txtMail"/>
+                                        </h:inputText>
+
+                                    </h:panelGrid>  
+                                </p:panel>      
+                            </p:tab>  
+
+                            <p:tab id="confirmacion" title="Paso 5">  
+                                <p:panel header="Confirmacion">  
+                                    <h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">  
+                                        <h:outputText id="otxtDatosEmpresa" value="Datos Generales de la Empresa:"/>
+                                        <h:outputText value=""/>
+                                        <h:outputText id="otxtRucConf" value="Ruc:"/>
+                                        <h:outputText id="txtRucConf" value="#{ingresoTitularesControlador.ruc.identificacion}"/>
+                                        <h:outputText id="otxtRazonSocialConf" value="Razón Social:"/>
+                                        <h:outputText id="txtRazonSocialConf" value="#{ingresoTitularesControlador.empresa.razon_social}"/>
+                                        <h:outputText id="otxtRepresentanteLegalConf" value="Representante Legal:"/>
+                                        <h:outputText id="txtRepresentanteLegalConf" 
+                                                      value="#{ingresoTitularesControlador.personaRepresentanteLegal.apellido_paternno} 
+                                                      #{ingresoTitularesControlador.personaRepresentanteLegal.apellido_materno} 
+                                                      #{ingresoTitularesControlador.personaRepresentanteLegal.cedula}"/>
+
+                                    </h:panelGrid>  
+                                    <p:commandButton value="Aceptar"  action="#{ingresoTitularesControlador.insertarPersona}" process="@this" update="msgEmpresa"/>
+                                    <p:commandButton value="Cancelar" onclick="wdialogoNuevaEmpresa.hide()" type="reset" process="@this" update=":dialogoBusquedaPersonas"/> 
+                                </p:panel>  
+
+                            </p:tab>  
+                        </p:wizard>
+                    </h:form>
+                </p:panel>
+            </p:dialog>
+            <p:dialog header="Busqueda de Titulares - Personas Naturales"  widgetVar="wdialogoBusquedaPersonas"  
+                      id="dialogoBusquedaPersonas" resizable="false" modal="true">
+                <p:panel id="pnlContenedorBusquedaPersonas">
+                    <h:form id="formPersonas">  
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <p:panelGrid id="pngBusqueda" columns="4">
+                            <h:outputText id="otxtBuscar" value="Buscar por:"/>
+                            <p:selectOneMenu id="cmbCriterioBusqueda" value="#{busquedaTitularesControlador.criterioBusquedaTitular}">
+                                <f:selectItem itemValue="#{null}" itemLabel="--Elija una opción--"/>
+                                <f:selectItem itemValue="cedula" itemLabel="CEDULA"/>
+                                <f:selectItem itemValue="ruc" itemLabel="RUC"/>
+                                <f:selectItem itemValue="pasaporte" itemLabel="PASAPORTE"/>
+                                <f:selectItem itemValue="apellido" itemLabel="APELLIDOS"/>
+                                <f:selectItem itemValue="nombre_comercial" itemLabel="NOMBRE COMERCIAL"/>
+                            </p:selectOneMenu>
+                            <p:inputText id="txtBuscar" value="#{busquedaTitularesControlador.datoBusqueda}"/>
+                            <p:commandButton value="Aceptar" update="pTabla" 
+                                             action="#{busquedaTitularesControlador.obtenerPersonasTitulares}" process="@form" />
+                        </p:panelGrid>
+
+                        <p:panel id="pTabla">
+                            <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                            <p:dataTable var="persona" value="#{busquedaTitularesControlador.lazyModel}" paginator="true" rows="5"  
+                                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} 
+                                         {CurrentPageReport} {NextPageLink} {LastPageLink}"  
+                                         rowsPerPageTemplate="5,10" selectionMode="single" 
+                                         selection="#{busquedaTitularesControlador.selectedPersona}"
+                                         id="personaTable" sortBy="#{persona.apellido_paternno}"
+                                         rowKey="#{persona.codigo}">  
+
+
+                                <p:column headerText="Código" sortBy="#{persona.codigo}">  
+                                    <h:outputText value="#{persona.codigo}" />  
+                                </p:column>  
+
+                                <p:column headerText="Cédula" sortBy="#{persona.cedula}">  
+                                    <h:outputText value="#{persona.cedula}" />  
+                                </p:column>  
+
+                                <p:column headerText="Pasaporte" sortBy="#{persona.pasaporte}">  
+                                    <h:outputText value="#{persona.pasaporte}" />  
+                                </p:column>  
+
+                                <p:column headerText="Ruc" sortBy="#{persona.ruc.identificacion}">  
+                                    <h:outputText value="#{persona.ruc.identificacion}" />  
+                                </p:column>  
+
+                                <p:column headerText="Apellidos" sortBy="#{persona.apellido_paternno}">  
+                                    <h:outputText value="#{persona.apellido_paternno}" />  
+                                </p:column>  
+
+                                <p:column headerText="Nombre" sortBy="#{persona.primer_nombre}">  
+                                    <h:outputText value="#{persona.primer_nombre}" />  
+                                </p:column>  
+
+                                <p:column headerText="Nombre Comercial" sortBy="#{persona.nombre_comercial}">  
+                                    <h:outputText value="#{persona.nombre_comercial}" />  
+                                </p:column>  
+                            </p:dataTable>  
+                            <p:commandButton value="Aceptar"  action="#{ingresoTitularesControlador.asignarSelectedRepresentanteLegal}"  
+                                             update=":frmInsertarEmpresa:txtRepresentanteLegal :frmInsertarEmpresa:txtCedulaRepresentanteLegal" />
+                        </p:panel>
+                    </h:form>  
+                </p:panel>
+            </p:dialog>
+            <p:dialog modal="true" widgetVar="dlgStatus" header="Procesando" draggable="false" closable="false" resizable="false"> 
+                <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />  
+            </p:dialog>
+
+         
+        </ui:define>
+    </ui:composition>
+</html>

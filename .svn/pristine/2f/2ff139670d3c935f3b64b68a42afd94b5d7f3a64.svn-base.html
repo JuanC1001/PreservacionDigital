@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">Asignar roles a la Cuenta</ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">Asignar roles a la Cuenta</ui:define>
+            <ui:define name="contenido">
+                <p:growl id="mensajes" autoUpdate="true"/>
+                <h:form id="frmUsuarioRol">
+                    <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                    <p:panel id="pnlUsuarioRol">
+                        <p:dataTable id="tblAccion" value="#{usuariorolControlador.usuarioroles}" var="usuariorol" paginator="true" rows="10"
+                                     rowKey="#{usuariorol.codigo}" selectionMode="single" selection="#{usuariorolControlador.seleccionarUsuarioRol}">
+                            <p:column filterBy="#{usuariorol.codigo_rol.nombre}" filterMatchMode="startsWith" sortBy="#{usuariorol.codigo_rol.codigo}">
+                                <f:facet name="header">
+                                    <h:outputText value="MODULO - ROL"/>
+                                </f:facet>
+                                <h:outputText value="#{usuariorol.codigo_rol.codigo_modulo.nombre} - #{usuariorol.codigo_rol.nombre} "/>
+                            </p:column>
+                            <p:column filterBy="#{usuariorol.codigo_usuario.codigo}" filterMatchMode="startsWith" sortBy="#{usuariorol.codigo_usuario.codigo}">
+                                <f:facet name="header">
+                                    <h:outputText value="USUARIO"/>
+                                </f:facet>
+                                <h:outputText value="#{usuariorol.codigo_usuario.nombres} #{usuariorol.codigo_usuario.apellidos}"/>
+                            </p:column>
+                            <p:column sortBy="#{usuariorol.estado}">
+                                <f:facet name="header">
+                                    <h:outputText value="ESTADO"/>
+                                </f:facet>
+                                <h:outputText value="#{usuariorol.estado==1 ? 'ACTIVO':'INACTIVO'}"/>
+                            </p:column>
+                            <f:facet name="footer">  
+                                <p:commandButton id="btnNuevoUsuarioRol" value="Nuevo" icon="ui-icon-newwin"
+                                                 update=":frmNuevoUsuarioRol:pngNuevoUsuarioRol" oncomplete="wdlgusuariorolAgregar.show()"
+                                                 title="Agregar Rol de Usuario"/>  
+                                <p:commandButton id="btnEditarUsuarioRol" value="Editar" icon="ui-icon-pencil"
+                                                 update=":frmEditarUsuarioRol:pngEditarUsuarioRol" oncomplete="wdlgUsuarioRolEditar.show()"
+                                                 title="Editar Rol de Usuario" action="#{usuariorolControlador.procesarEditar}"/> 
+                                <p:commandButton id="btnEliminarUsuarioRol" value="Eliminar" icon="ui-icon-trash"
+                                                 update=":frmEliminarUsuarioRol:pngEliminarUsuarioRol" oncomplete="wdlgUsuarioRolEliminar.show()"
+                                                 title="Eliminar Rol de Usuario" action="#{usuariorolControlador.procesarEditar}"/> 
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+            <ui:define name="dialogos">
+                <p:dialog id="dlgusuariorolAgregar" header="Nuevo Rol de Usuario" widgetVar="wdlgusuariorolAgregar" modal="true" closable="false" 
+                          resizable="false" showEffect="clip" hideEffect="fold">  
+                    <p:growl autoUpdate="true"/>
+                    <h:form id="frmNuevoUsuarioRol">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <p:panelGrid id="pngNuevoUsuarioRol" columns="2">
+                            <h:outputText value="Seleccione el Modulo"/>
+                            <p:selectOneMenu id="cmbModulo" value="#{usuariorolControlador.valorModuloSeleccionado}">
+                                <f:selectItem itemLabel="--Elija una opción--" itemValue="#{null}"/>
+                                <f:selectItems value="#{usuariorolControlador.modulos}" var="modulo" itemLabel="#{modulo.nombre}" itemValue="#{modulo.codigo}"/>
+                                <p:ajax event="change" listener="#{usuariorolControlador.cargarRolesDadoModulo()}" update="cmbRol"/>
+                            </p:selectOneMenu>
+                            <h:outputText value="Seleccione el Rol"/>
+                            <p:selectOneMenu id="cmbRol" value="#{usuariorolControlador.valorRolSeleccionado}">
+                                <f:selectItem itemLabel="--Elija una opción--" itemValue="#{null}"/>
+                                <f:selectItems value="#{usuariorolControlador.roles}" var="rol" itemLabel="#{rol.nombre}" itemValue="#{rol.codigo}"/>
+                            </p:selectOneMenu>
+                            <h:outputText value="Seleccione el Usuario"/>
+                            <p:selectOneMenu id="cmbUsuario" value="#{usuariorolControlador.valorUsuarioSeleccionado}">
+                                <f:selectItem itemLabel="--Elija una opción--" itemValue="#{null}"/>
+                                <f:selectItems value="#{usuariorolControlador.usuarios}" var="usuario" itemLabel="#{usuario.nombres} #{usuario.apellidos}" itemValue="#{usuario.codigo}"/>
+                            </p:selectOneMenu>
+                            <h:outputText value="Seleccione el Estado"/>
+                            <p:selectOneRadio id="sorEstado" value="#{usuariorolControlador.usuariorol.estado}" required="true" 
+                                              requiredMessage="Seleccione un estado" style="list-style: transparent;">  
+                                <f:selectItem itemLabel="Activo" itemValue="1" />
+                                <f:selectItem itemLabel="Inactivo" itemValue="0" />  
+                            </p:selectOneRadio>
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{usuariorolControlador.insertarUsuarioRol}" update=":frmUsuarioRol:pnlUsuarioRol"/>
+                        <p:commandButton value="Cancelar" onclick="wdlgusuariorolAgregar.hide()" type="reset"/>
+                    </h:form> 
+                </p:dialog>
+                <p:dialog id="dlgUsuarioRolEditar" header="Edita Rol de Usuario" widgetVar="wdlgUsuarioRolEditar" modal="true" closable="false" 
+                          resizable="false" showEffect="clip" hideEffect="fold">  
+                    <p:growl autoUpdate="true"/>
+                    <h:form id="frmEditarUsuarioRol">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <p:panelGrid id="pngEditarUsuarioRol" columns="2">
+                            <h:outputText value="Seleccione el Modulo"/>
+                            <p:selectOneMenu id="cmbModulo" value="#{usuariorolControlador.seleccionarUsuarioRol.codigo_rol.codigo_modulo.codigo}">
+                                <f:selectItem itemLabel="--Elija una opción--" itemValue="#{null}"/>
+                                <f:selectItems value="#{usuariorolControlador.modulos}" var="modulo" itemLabel="#{modulo.nombre}" itemValue="#{modulo.codigo}"/>
+                                <p:ajax event="change" listener="#{usuariorolControlador.cargarRolesDadoModuloEditar}" update="cmbRol"/>
+                            </p:selectOneMenu>
+                            <h:outputText value="Seleccione el Rol"/>
+                            <p:selectOneMenu id="cmbRol" value="#{usuariorolControlador.seleccionarUsuarioRol.codigo_rol.codigo}">
+                                <f:selectItem itemLabel="--Elija una opción--" itemValue="#{null}"/>
+                                <f:selectItems value="#{usuariorolControlador.roles}" var="rol" itemLabel="#{rol.nombre}" itemValue="#{rol.codigo}"/>
+                            </p:selectOneMenu>
+                            <h:outputText value="Seleccione el Usuario"/>
+                            <p:selectOneMenu id="cmbUsuario" value="#{usuariorolControlador.seleccionarUsuarioRol.codigo_usuario.codigo}">
+                                <f:selectItem itemLabel="--Elija una opción--" itemValue="#{null}"/>
+                                <f:selectItems value="#{usuariorolControlador.usuarios}" var="usuario" itemLabel="#{usuario.nombres} #{usuario.apellidos}" itemValue="#{usuario.codigo}"/>
+                            </p:selectOneMenu>
+                            <h:outputText value="Seleccione el Estado"/>
+                            <p:selectOneRadio id="sorEstado" value="#{usuariorolControlador.seleccionarUsuarioRol.estado}" required="true" 
+                                              requiredMessage="Seleccione un estado" style="list-style: transparent;">  
+                                <f:selectItem itemLabel="Activo" itemValue="1" />
+                                <f:selectItem itemLabel="Inactivo" itemValue="0" />  
+                            </p:selectOneRadio>
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{usuariorolControlador.editarUsuarioRol}" update=":frmUsuarioRol:pnlUsuarioRol"/>
+                        <p:commandButton value="Cancelar" onclick="wdlgUsuarioRolEditar.hide()" type="reset"/>
+                    </h:form> 
+                </p:dialog>
+                <p:dialog id="dlgUsuarioRolEliminar" header="Elimina Rol de Usuario" widgetVar="wdlgUsuarioRolEliminar" modal="true" closable="false" 
+                          resizable="false" showEffect="clip" hideEffect="fold">  
+                    <p:growl autoUpdate="true"/>
+                    <h:form id="frmEliminarUsuarioRol">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <p:panelGrid id="pngEliminarUsuarioRol" columns="2">
+                            <h:outputText value="Seleccione el Modulo"/>
+                            <p:selectOneMenu id="cmbModulo" value="#{usuariorolControlador.seleccionarUsuarioRol.codigo_rol.codigo_modulo.codigo}" disabled="true">
+                                <f:selectItem itemLabel="--Elija una opción--" itemValue="#{null}"/>
+                                <f:selectItems value="#{usuariorolControlador.modulos}" var="modulo" itemLabel="#{modulo.nombre}" itemValue="#{modulo.codigo}"/>
+                                <p:ajax event="change" listener="#{usuariorolControlador.cargarRolesDadoModuloEditar}" update="cmbRol"/>
+                            </p:selectOneMenu>
+                            <h:outputText value="Seleccione el Rol"/>
+                            <p:selectOneMenu id="cmbRol" value="#{usuariorolControlador.seleccionarUsuarioRol.codigo_rol.codigo}" disabled="true">
+                                <f:selectItem itemLabel="--Elija una opción--" itemValue="#{null}"/>
+                                <f:selectItems value="#{usuariorolControlador.roles}" var="rol" itemLabel="#{rol.nombre}" itemValue="#{rol.codigo}"/>
+                            </p:selectOneMenu>
+                            <h:outputText value="Seleccione el Usuario"/>
+                            <p:selectOneMenu id="cmbUsuario" value="#{usuariorolControlador.seleccionarUsuarioRol.codigo_usuario.codigo}" disabled="true">
+                                <f:selectItem itemLabel="--Elija una opción--" itemValue="#{null}"/>
+                                <f:selectItems value="#{usuariorolControlador.usuarios}" var="usuario" itemLabel="#{usuario.nombres} #{usuario.apellidos}" itemValue="#{usuario.codigo}"/>
+                            </p:selectOneMenu>
+                            <h:outputText value="Seleccione el Estado"/>
+                            <p:selectOneRadio id="sorEstado" value="#{usuariorolControlador.seleccionarUsuarioRol.estado}" required="true" 
+                                              requiredMessage="Seleccione un estado" style="list-style: transparent;" disabled="true">  
+                                <f:selectItem itemLabel="Activo" itemValue="1" />
+                                <f:selectItem itemLabel="Inactivo" itemValue="0" />  
+                            </p:selectOneRadio>
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{usuariorolControlador.eliminarUsuarioRol}" update=":frmUsuarioRol:pnlUsuarioRol"/>
+                        <p:commandButton value="Cancelar" onclick="wdlgUsuarioRolEliminar.hide()" type="reset"/>
+                    </h:form> 
+                </p:dialog>
+                <p:dialog modal="true" widgetVar="dlgStatus" header="Procesando" draggable="false" closable="false" 
+                          resizable="false"> 
+                    <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />  
+                </p:dialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

@@ -1,0 +1,13 @@
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+
+# Standar para todas las BD
+driver = org.postgresql.Driver
+#user = radius
+#password = saweDesitel2010
+user = gconv0
+password = gconv0
+#Cadena conexion para cada BD
+url= jdbc:postgresql://192.168.113.49:5432/gconv0_db
+#url= jdbc:postgresql://190.15.135.169:5432/gconv0_db
+#url= jdbc:postgresql://localhost:5434/FINANCIERO_DB

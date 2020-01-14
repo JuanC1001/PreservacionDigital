@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">
+                Lista de Casos
+            </ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">Caso</ui:define>
+            <ui:define name="contenido">
+                <p:growl id="mensajes" autoUpdate="true" showDetail="true"/>
+                <center>
+                    <h:form id="frmTipo">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <p:panelGrid columns="4" >          
+                            <p:outputLabel  value="Ingrese Número de Cédula o su Código de Caso" />
+                            <p:inputText id="txtcedula" value="#{casoPersonaUsuarioControlador.condicion}"
+                                         title="ej: 0601233433" required="true" requiredMessage="Ingrese Cédula para Buscar"/>
+                            <p:commandButton id="btnBuscar"  icon="ui-icon-search" title="Buscar Autor"                                                                   
+                                             action="#{casoPersonaUsuarioControlador.cargarCasoPersonaUsuario()}" 
+                                             process="@this,@form, txtcedula" update=":formCargarDocumento">
+                            </p:commandButton>
+                        </p:panelGrid>
+                    </h:form>
+                </center>
+                <p:separator />
+                <h:form id="formCargarDocumento">
+                    <p:dataTable id="singleDT" var="cpu" value="#{casoPersonaUsuarioControlador.lstCaPerUsFil}" 
+                                 selectionMode="single" 
+                                 selection="#{casoPersonaUsuarioControlador.cpsSel}" 
+                                 rowKey="#{cpu.codigo_caso}">
+
+                        <p:column headerText="Provincia:" style="font-weight: bold">
+                            <h:outputText value="#{cpu.codigo_caso.provincia}" />
+                        </p:column>
+                        <p:column headerText="Código Institucion:" style="font-weight: bold">
+                            <h:outputText value="#{cpu.codigo_caso.codigo_institucional}" />
+                        </p:column>
+                        <p:column headerText="Usuario:" style="font-weight: bold">
+                            <h:outputText value="#{cpu.codigo_persona.nombres} #{cpu.codigo_persona.apellidos}" />
+                        </p:column>
+                        <p:column headerText="Cargo:" style="font-weight: bold">
+                            <h:outputText value="#{cpu.codigo_tipo_usuario.nombre_usuario}" />
+                        </p:column>
+                        <p:column headerText="Dependencia:" style="font-weight: bold">
+                            <h:outputText value="#{cpu.codigo_caso.codigo_dependencia.nombre_dependencia}" />
+                        </p:column>
+                        <p:column headerText="Acción Infracción:" style="font-weight: bold">
+                            <h:outputText value="#{cpu.codigo_caso.accion_infraccion}" />
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <p:commandButton actionListener="#{casoPersonaUsuarioControlador.cargarEvidecniaDadoCodigoCaso()}" process="singleDT" 
+                                             update=":p:carDetail" icon="ui-icon-search" 
+                                             value="Ver Evidencia" 
+                                             oncomplete="PF('carDialog').show()" />
+                        </f:facet>
+                    </p:dataTable>
+                </h:form>
+
+            </ui:define>
+
+            <ui:define name="dialogos">
+                <h:form id="p"> 
+                    <p:dialog header="Evidencia" widgetVar="carDialog" modal="true" showEffect="fade" 
+                              hideEffect="fade" resizable="false" height="474" width="1050">                        
+                        <p:outputPanel id="carDetail" style="text-align:center;">
+                            <p:panelGrid  columns="1" rendered="#{not empty  casoPersonaUsuarioControlador.evJuSel}" 
+                                          columnClasses="label,value">                 
+                                <p:panel header="Caso:">
+                                    <p:panelGrid  columns="2" rendered="#{not empty    casoPersonaUsuarioControlador.evJuSel}"  columnClasses="label,value">
+                                        <h:outputText value="Código Institucional:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_caso.codigo_institucional}"/>
+                                        <h:outputText value="Tipo de Caso:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_caso.codigo_tipo_caso.nombre_tipoCaso}" />
+                                        <h:outputText value="Materia:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_caso.materia}"/> 
+                                        <h:outputText value="Provincia:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_caso.provincia}"/>
+                                        <h:outputText value="Cantón:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_caso.canton}"/>                            
+                                        <h:outputText value="Judicatura:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_caso.judicatura}"/>
+                                        <h:outputText value="Dependencia:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_caso.codigo_dependencia.nombre_dependencia}"/>
+                                        <h:outputText value="Acción Infracción:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_caso.accion_infraccion}"/>
+                                        <h:outputText value="Políticas:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_caso.politicas}"/>
+                                        <h:outputText value="Actores:" style="font-weight: bold"/>
+                                    </p:panelGrid>
+                                </p:panel>
+
+                                <p:panel header="Autorización del Juez">
+                                    <p:panelGrid  columns="2" rendered="#{not empty   casoPersonaUsuarioControlador.evJuSel}"  columnClasses="label,value">
+
+                                        <h:outputText value="Juéz:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_autorizacion_juez.codigo_persona.nombres}"/>
+
+                                        <h:outputText value="Documento:" style="font-weight: bold"/>
+                                        <p:lightBox >  
+                                            <h:outputLink value=" " title="#{casoPersonaUsuarioControlador.evJuSel.codigo_autorizacion_juez.codigo_persona.nombres}" >                                       
+                                                <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_autorizacion_juez.fecharegistro_autjuez}"/>
+                                            </h:outputLink> 
+                                        </p:lightBox> 
+                                    </p:panelGrid>
+                                </p:panel>
+
+                                <p:panel header="Detalle de Evidencia">
+                                    <p:panelGrid  columns="2" rendered="#{not empty   casoPersonaUsuarioControlador.evJuSel}"  columnClasses="label,value">
+
+                                        <h:outputText value="Tipo de Evidencia:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_detalle_evidencia.tipo_evidencia}"/>
+                                        <h:outputText value="Titulo:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_detalle_evidencia.titulo}" />
+                                        <h:outputText value="Nombre de Responsable Recojido:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_detalle_evidencia.nombre_responsable_reco}"/> 
+                                        <h:outputText value="Fuente:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_detalle_evidencia.fuete}"/>
+                                        <h:outputText value="Resumen de Contexto Recojido:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_detalle_evidencia.resumen_contexto_recojido}"/>                            
+                                        <h:outputText value="Resumen de Contexto Contenido:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_detalle_evidencia.resumen_contexto_contenido}"/> 
+                                        <h:outputText value="Ver Archivo:" style="font-weight: bold"/>
+                                        <p:lightBox>  
+                                            <h:outputLink value="#" title="#{casoPersonaUsuarioControlador.evJuSel.codigo_detalle_evidencia.titulo}" >  
+                                                <p:graphicImage  value="resources/images/pdfico.png" height="120px" width="90px"/> 
+                                                <br/>
+                                                <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_detalle_evidencia.titulo}"/>
+                                            </h:outputLink> 
+                                            <!--f:facet name="inline">
+                                                <p:media value="#{casoPersonaUsuarioControlador.evJuSel.codigo_detalle_evidencia.path}" height="600" width="800" />
+                                            </f:facet-->
+                                        </p:lightBox> 
+
+                                    </p:panelGrid>
+                                </p:panel>
+
+                                <p:panel header="Entorno de Software Recojido">
+                                    <p:panelGrid  columns="2" rendered="#{not empty   casoPersonaUsuarioControlador.evJuSel}"  columnClasses="label,value">
+                                        <h:outputText value="Software:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_entorno_sw_recogido.nombre}"/>
+                                        <h:outputText value="Versión:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_entorno_sw_recogido.ver_sion}" />
+                                        <h:outputText value="Software Base:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_entorno_sw_recogido.sw_base}"/> 
+                                        <h:outputText value="Software de Aplicación:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_entorno_sw_recogido.sw_aplicacion}"/>
+                                        <h:outputText value="Observación:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_entorno_sw_recogido.observacion}"/>                            
+                                        <h:outputText value="Fecha de Registro:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_entorno_sw_recogido.fecharegistro_entornoswreco}"/>                              
+                                    </p:panelGrid>
+                                </p:panel>
+
+                                <p:panel header="Entorno de H Recojido">
+                                    <p:panelGrid  columns="2" rendered="#{not empty   casoPersonaUsuarioControlador.evJuSel}"  columnClasses="label,value">
+                                        <h:outputText value="Tipo:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_entorno_hw_recogido.tipo}"/>
+                                        <h:outputText value="Marca:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_entorno_hw_recogido.marca}" />
+                                        <h:outputText value="Modelo:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_entorno_hw_recogido.modelo}"/> 
+                                        <h:outputText value="Onservaciones:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_entorno_hw_recogido.observacion}"/>
+                                        <h:outputText value="Fecha de Registro:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_entorno_hw_recogido.fecharegistro_hwreco}"/>                            
+                                        <h:outputText value="Foto:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_entorno_hw_recogido.foto}"/>  
+                                         <!--p:graphicImage name="#{casoPersonaUsuarioControlador.evJuSel.codigo_entorno_hw_recogido.foto}"/--> 
+
+                                    </p:panelGrid>
+                                </p:panel>
+
+                                <p:panel header="Entorno Recojido">
+                                    <p:panelGrid  columns="2" rendered="#{not empty   casoPersonaUsuarioControlador.evJuSel}"  columnClasses="label,value">
+                                        <h:outputText value="Hoja de Ruta:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_procedimiento_recojida.hoja_ruta}"/>
+                                        <h:outputText value="Cadena de Custodia:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_procedimiento_recojida.cadena_custudia}" />
+                                        <h:outputText value="Registro:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_procedimiento_recojida.registros}"/> 
+                                        <h:outputText value="Onservaciones:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_procedimiento_recojida.observacion}"/>
+                                        <h:outputText value="Fecha de Registro:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_procedimiento_recojida.fecharegistro_procereco}"/>                                                        
+                                    </p:panelGrid>
+                                </p:panel>
+
+                                <p:panel header="Metadatos">
+                                    <p:panelGrid  columns="4" rendered="#{not empty casoPersonaUsuarioControlador.evJuSel}" columnClasses="label,value" >                                
+                                        <h:outputText value="Nombre de Archivo:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_metadatos.nombre}"/>
+                                        <h:outputText value="Tipo:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_metadatos.tipo}"/>
+                                        <h:outputText value="Tamaño:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_metadatos.tamanio/1000}"/>
+                                    </p:panelGrid>
+                                </p:panel> 
+
+                                <p:panel header="Técnica">
+                                    <p:panelGrid  columns="2" rendered="#{not empty casoPersonaUsuarioControlador.evJuSel}" columnClasses="label,value" >                                
+                                        <h:outputText value="Tecnica Preservación:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_tecnicas.detalle}"/>
+                                        <h:outputText value="Detalle de Tecnica Preservación:" style="font-weight: bold"/>
+                                        <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_tecnicas.tecnica}"/>
+                                        <h:outputText value="Ver Archivos:" style="font-weight: bold"/>
+                                        <p:lightBox >  
+                                            <h:outputLink value=" " title="#{casoPersonaUsuarioControlador.evJuSel.codigo_tecnicas.tecnica}" >                                       
+                                                <h:outputText value="#{casoPersonaUsuarioControlador.evJuSel.codigo_tecnicas.tecnica}"/>
+                                            </h:outputLink>  
+
+                                        </p:lightBox>  
+                                    </p:panelGrid>
+                                </p:panel> 
+
+                            </p:panelGrid>
+                        </p:outputPanel>
+                    </p:dialog>
+                </h:form>
+
+                <p:dialog modal="true" widgetVar="dlgStatus" header="Procesando" draggable="false" closable="false" 
+                          resizable="false"> 
+                    <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />  
+                </p:dialog>
+            </ui:define>
+
+        </ui:composition>
+    </h:body>
+</html>
+

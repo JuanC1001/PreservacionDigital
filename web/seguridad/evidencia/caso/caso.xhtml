@@ -1,0 +1,90 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="../../../templates/plantillaInternaCenter.xhtml">
+    <h:head>
+        <title>
+            <ui:define name="Autor">Gestión de Casos</ui:define>
+        </title>
+    </h:head>
+    <ui:define name="top">Gestión de Casos</ui:define>
+    <ui:define name="contenido">
+        <p:growl id="mensajes" autoUpdate="true" showDetail="true"/>
+        <h:form id="frmcaso">
+            <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+            <p:panel id="pnlCaso">
+                <p:dataTable  id="tblCaso" value="#{casoControlador.lstCaso}"
+                              var="caso" paginator="true" rows="13" draggableColumns="false" 
+                              rowKey="#{caso.codigo}" selectionMode="single"
+                              selection="#{casoControlador.casoSel}"
+                              filteredValue="#{casoControlador.filterCaso}">
+
+                    <p:column filterBy="#{caso.codigo}" filterMatchMode="startsWith" 
+                              sortBy="#{caso.codigo}" headerText="Código">
+                        <h:outputText value="#{caso.codigo}"/>
+                    </p:column> 
+
+                    <p:column filterBy="#{caso.codigo_institucional}" filterMatchMode="startsWith" 
+                              sortBy="#{caso.codigo_institucional}" headerText="Codigo Institucional">
+                        <h:outputText value="#{caso.codigo_institucional}"/>
+                    </p:column> 
+
+                    <p:column filterBy="#{caso.codigo_tipo_caso.nombre_tipoCaso}" filterMatchMode="startsWith" 
+                              sortBy="#{caso.codigo_tipo_caso.nombre_tipoCaso}" headerText="Tipo Caso">
+                        <h:outputText value="#{caso.codigo_tipo_caso.nombre_tipoCaso}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{caso.provincia}" filterMatchMode="startsWith" 
+                              sortBy="#{caso.provincia}" headerText="Provincia">
+                        <h:outputText value="#{caso.provincia}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{caso.canton}" filterMatchMode="startsWith" 
+                              sortBy="#{caso.canton}" headerText="Cantón">
+                        <h:outputText value="#{caso.canton}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{caso.codigo_dependencia.nombre_dependencia}" filterMatchMode="startsWith" 
+                              sortBy="#{caso.codigo_dependencia.nombre_dependencia}" headerText="Dependencia">
+                        <h:outputText value="#{caso.codigo_dependencia.nombre_dependencia}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{caso.accion_infraccion}" filterMatchMode="startsWith" 
+                              sortBy="#{caso.accion_infraccion}" headerText="Judicatura">
+                        <h:outputText value="#{caso.accion_infraccion}"/>
+                    </p:column>
+
+                    <f:facet name="footer">                                                                
+                        <p:commandButton id="btnNuevoCaso" value="Registro Caso" icon="ui-icon-plus"                                                                          
+                                         onclick="PF('wdlgNuevoCaso').show()"
+                                         title="Nueva Caso"
+                                         update=":frmNuevoCaso"/>  
+
+                        <p:commandButton id="btnEvidencia" value="Ingreso de Evidencia" icon="ui-icon-plus"                                       
+                                         onclick="PF('wdlgNuevoEvidencia').show()"
+                                         title="Cancelar"
+                                         update=":frmEvidencia:caso"/>
+
+                        <h:commandLink>
+                            <img src="../../../resources/images/excel.png" alt=""/>
+                            <p:dataExporter type="xls" target="tblCaso" fileName="caso" pageOnly="true" />
+                        </h:commandLink>
+
+                        <h:commandLink>
+                            <img src="../../../resources/images/pdf.png" alt=""/>
+                            <p:dataExporter type="pdf" target="tblCaso" fileName="caso" pageOnly="true" />
+                        </h:commandLink>
+                    </f:facet>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <ui:include src="insertarCaso.xhtml"/>
+        <ui:include src="insertarEvidencia.xhtml"/>
+        <p:dialog modal="true" widgetVar="dlgStatus" header="Procesando" draggable="false" closable="false" 
+                  resizable="false" appendTo="@(body)"> 
+            <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />  
+        </p:dialog>
+    </ui:define>
+</ui:composition>      

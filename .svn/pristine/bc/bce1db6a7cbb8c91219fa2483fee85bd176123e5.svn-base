@@ -1,0 +1,10 @@
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+
+#Mensajes obligados para ingresar usuarios
+rutaDocumentos=/home/icits/Documentos/Netbeans Postgres/gconv0/web/media/documento/
+rutaImagenes=/home/icits/Documentos/Netbeans Postgres/gconv0/web/media/imagen/
+rutaSonidos=/home/icits/Documentos/Netbeans Postgres/gconv0/web/media/sonido/
+rutaVideos=/home/icits/Documentos/Netbeans Postgres/gconv0/web/media/video/
+rutaTemporal=/home/icits/Documentos/Netbeans Postgres/gconv0/web/media/temp/
+logitudRelativa=51

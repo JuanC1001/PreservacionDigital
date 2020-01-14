@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>
+            <ui:define name="Misión y Visión">Inicio</ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="/templates/plantillaBase.xhtml">
+            <ui:define name="tituloNavegador">Misión y Visión</ui:define>
+            <ui:define name="content">
+
+                <h:form>
+                    <p:growl id="msgs" showDetail="true" />
+                    <h:panelGrid style="text-align:center">
+                        <img src="../resources/images/SISTEMAS.png" 
+                             style=" height: 150px; width: 150px"/>
+
+                        <h:panelGrid columns="1"  width="850" style=" text-align : justify; color: #5459c9; font-size: 12px">
+                            
+                            <p:panel header="MISIÓN" style="text-align: justify">
+                                <p>  </p>
+                                <p>La carrera de Ingeniería en Sistemas y Computación, forma profesionales con bases científicas, críticos, éticos e innovadores que apoyados en la investigación y vinculación constituyan un aporte
+                                    para el desarrollo sostenible de la provincia y país a través de la creación y aplicación de sistemas informáticos y computacionales con calidad.</p>
+                                <p>  </p>
+                            </p:panel>
+
+                            <p:panel  header="VISIÓN" style="text-align: justify; font-size: 12px">                                    
+                                <p>  </p>                  
+                                <p> La carrera de Ingeniería en Sistemas y Computación, será líder en la formación de profesionales con calidad científica, técnica y humanística, 
+                                    comprometidos con el desarrollo del País y el Régimen del Buen Vivir.</p> 
+                                <p>  </p>                               
+                            </p:panel>
+                        </h:panelGrid>
+
+                    </h:panelGrid>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+
+</html>

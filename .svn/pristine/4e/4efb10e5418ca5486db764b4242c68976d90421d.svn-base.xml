@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">
+                Lista de Articulos
+            </ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="/templates/plantillaBase.xhtml">
+            <ui:define name="content">
+                <h:form id="formListaArticulo">  
+                    <p:dataGrid var="articulo" value="#{listaArticuloC.lstArticulo}" columns="1"  
+                                rows="3" paginator="true"  
+                                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                rowsPerPageTemplate="9,12,15" >  
+                        <h:panelGrid columns="1" >
+                            <h:outputText value="#{articulo.titulo}"/>
+                            <h:panelGrid columns="1"  >
+                                <h:panelGrid columns="2"  >  
+                                    <p:graphicImage value="#{articulo.codigo_imagen.path}" width="100 px"/>
+                                    <h:panelGrid columns="1"  > 
+                                        <h:outputText value="#{listaArticuloC.obtieneFecha(articulo.fecha_edicion/1000)}" />
+                                        <h:outputText value="#{articulo.introduccion}" styleClass="titulo_negro"/>
+                                        <h:commandLink value="leer mas..." action="#{detalleArticuloC.leerArticulo()}" styleClass="titulo_readmore">
+                                            <f:setPropertyActionListener value="#{articulo.codigo}" 
+                                                                         target="#{listaArticuloC.dmSitio.articuloActual.codigo}"/>
+                                        </h:commandLink>
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                            </h:panelGrid>  
+                        </h:panelGrid>  
+                    </p:dataGrid>  
+                </h:form>  
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

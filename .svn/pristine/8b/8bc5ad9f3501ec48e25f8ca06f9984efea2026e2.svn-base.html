@@ -1,0 +1,25 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        UNACH - ICITS
+        <h:form>
+            <p:themeSwitcher style="width:150px" id="defaultSwitcher" value="#{indexMasterControlador.dm.temaSitio}">  
+                <f:selectItem itemLabel="Choose Theme" itemValue="" />  
+                <f:selectItem itemLabel="glass-x" itemValue="glass-x"/>
+                <f:selectItem itemLabel="temaDefault" itemValue="temaDefault"/>
+                <f:selectItem itemLabel="black-tie" itemValue="black-tie"/>
+                <f:selectItem itemLabel="blitzer" itemValue="blitzer"/>
+                <f:selectItem itemLabel="cupertino" itemValue="cupertino"/>
+                <f:selectItem itemLabel="humanity" itemValue="humanity"/>
+                <p:ajax event="change" process="defaultSwitcher" update=":paginas"/>
+            </p:themeSwitcher>
+        </h:form>
+    </h:body>
+</html>
+

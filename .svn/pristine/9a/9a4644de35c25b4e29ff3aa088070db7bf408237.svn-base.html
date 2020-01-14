@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">Gestión Funciones</ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">Gestión de Funciones</ui:define>
+            <ui:define name="contenido">
+                <p:growl id="mensajes" autoUpdate="true"/>
+                <h:form id="frmFuncion">
+                    <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                    <p:panel id="pnlFuncion">
+                        <p:dataTable id="tblFuncion" value="#{funcionControlador.funciones}" var="vfuncion" paginator="true" rows="10"
+                                     rowKey="#{vfuncion.codigo}" selectionMode="single" selection="#{funcionControlador.seleccionarFuncion}">
+
+                            <p:column filterBy="#{vfuncion.codigo_grupo_menus}" filterMatchMode="startsWith" sortBy="#{vfuncion.codigo_grupo_menus}">
+                                <f:facet name="header">
+                                    <h:outputText value="GRUPOS-MENUS"/>
+                                </f:facet>
+                                <h:outputText value="#{vfuncion.codigo_grupo_menus.nombre}"/>
+                            </p:column>
+
+                            <p:column filterBy="#{vfuncion.codigo_rol}" filterMatchMode="startsWith" sortBy="#{vfuncion.codigo_rol}">
+                                <f:facet name="header">
+                                    <h:outputText value="ROL"/>
+                                </f:facet>
+                                <h:outputText value="#{vfuncion.codigo_rol.nombre}"/>
+                            </p:column>
+
+                            <p:column filterBy="#{vfuncion.codigo_accion}" filterMatchMode="startsWith" sortBy="#{vfuncion.codigo_accion}">
+                                <f:facet name="header">
+                                    <h:outputText value="ACCION"/>
+                                </f:facet>
+                                <h:outputText value="#{vfuncion.codigo_accion.descripcion}"/>
+                            </p:column>
+
+                            <p:column sortBy="#{vfuncion.estado}">
+                                <f:facet name="header">
+                                    <h:outputText value="ESTADO"/>
+                                </f:facet>
+                                <h:outputText value="#{vfuncion.estado==1 ? 'ACTIVO':'INACTIVO'}"/>
+                            </p:column>
+                            <f:facet name="footer">  
+                                <p:commandButton id="btnNuevafuncion" value="Nuevo" icon="ui-icon-newwin"
+                                                 update=":dlgfuncionAgregar" oncomplete="wdlgfuncionAgregar.show()"
+                                                 title="Agregar Función"/>  
+                                <p:commandButton id="btnEditarFuncion" value="Editar" icon="ui-icon-pencil"
+                                                 update=":dlgfuncionActualizar" oncomplete="wdlgfuncionActualizar.show()"
+                                                 title="Editar Función">
+                                </p:commandButton>
+                                <p:commandButton id="btnEliminarFuncion" value="Eliminar" icon="ui-icon-trash"
+                                                 update=":dlgfuncionEliminar" oncomplete="wdlgfuncionEliminar.show()"
+                                                 title="Eliminar Función"/>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+            <ui:define name="dialogos">
+                <p:dialog id="dlgfuncionAgregar" header="Nueva Función" widgetVar="wdlgfuncionAgregar" modal="true" closable="false" 
+                          resizable="false" showEffect="clip" hideEffect="fold">  
+                    <h:form id="frmNuevaFuncion">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <p:panelGrid id="pngNuevaFuncion" columns="2">
+
+                            <h:outputText value="Seleccione un GrupoMenus"/>
+                            <p:selectOneMenu id="cmbgrupomenus" value="#{funcionControlador.valorGrupoMenusSelecciondo}">
+                                <f:selectItem itemLabel="Elija una opción" itemValue="#{null}"/>
+                                <f:selectItems value="#{funcionControlador.grupomenus}" var="grupomenu" itemLabel="#{grupomenu.nombre}" itemValue="#{grupomenu.codigo}"/>
+                            </p:selectOneMenu>
+
+                            <h:outputText value="Seleccione un Rol"/>
+                            <p:selectOneMenu id="cmbrol" value="#{funcionControlador.valorRolSeleccionado}">
+                                <f:selectItem itemLabel="Elija una opción" itemValue="#{null}"/>
+                                <f:selectItems value="#{funcionControlador.roles}" var="rol" itemLabel="#{rol.nombre}" itemValue="#{rol.codigo}"/>
+                            </p:selectOneMenu>
+
+                            <h:outputText value="Seleccione la Acción"/>
+                            <p:selectOneMenu id="cmbAccion" value="#{funcionControlador.valorAccionSeleccionada}">
+                                <f:selectItem itemLabel="Elija una opción" itemValue="#{null}"/>
+                                <f:selectItems value="#{funcionControlador.acciones}" var="accion" itemLabel="#{accion.descripcion}" itemValue="#{accion.codigo}"/>
+                            </p:selectOneMenu>
+
+                            <h:outputText value="Seleccione el Estado"/>
+                            <p:selectOneRadio id="sorTipoCuenta" value="#{funcionControlador.funcion.estado}" required="true" 
+                                              requiredMessage="Seleccione un estado" style="list-style: transparent;">  
+                                <f:selectItem itemLabel="Activo" itemValue="1" />
+                                <f:selectItem itemLabel="Inactivo" itemValue="0" />  
+                            </p:selectOneRadio>
+
+                            <h:outputText id="otxtfuncion" value="Insertar"/>
+                            <p:selectBooleanCheckbox id="ochkFuncion" value="#{funcionControlador.funcion.insertar}"/>
+
+                            <h:outputText id="otxtafuncion" value="Actualizar"/>
+                            <p:selectBooleanCheckbox id="ochkaFuncion" value="#{funcionControlador.funcion.actualizar}"/>
+
+                            <h:outputText id="otxtefuncion" value="Eliminar"/>
+                            <p:selectBooleanCheckbox id="ochkeFuncion" value="#{funcionControlador.funcion.eliminar}"/>
+
+                            <h:outputText id="otxtvfuncion" value="Ver"/>
+                            <p:selectBooleanCheckbox id="ochkvFuncion" value="#{funcionControlador.funcion.ver}"/>
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{funcionControlador.insertarFuncion()}" 
+                                         update=":frmFuncion:pnlFuncion" />
+                        <p:commandButton value="Cancelar" onclick="wdlgfuncionAgregar.hide()" type="reset"/>
+                    </h:form> 
+                </p:dialog>
+
+                <p:dialog id="dlgfuncionActualizar" header="Edita Función" widgetVar="wdlgfuncionActualizar" modal="true" closable="false" 
+                          resizable="false" showEffect="clip" hideEffect="fold">  
+                    <h:form id="frmactualizarFuncion">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <p:panelGrid id="pngFuncionActualizar" columns="2">
+                            <h:outputText value="Seleccione un GrupoMenus"/>
+                            <p:selectOneMenu id="cmbgrupomenus" value="#{funcionControlador.seleccionarFuncion.codigo_grupo_menus.codigo}">
+                                <f:selectItem itemLabel="Elija una opción" itemValue="#{null}"/>
+                                <f:selectItems value="#{funcionControlador.grupomenus}" var="grupomenu" itemLabel="#{grupomenu.nombre}" itemValue="#{grupomenu.codigo}"/>
+                            </p:selectOneMenu>
+
+                            <h:outputText value="Seleccione un Rol"/>
+                            <p:selectOneMenu id="cmbrol" value="#{funcionControlador.seleccionarFuncion.codigo_rol.codigo}">
+                                <f:selectItem itemLabel="Elija una opción" itemValue="#{null}"/>
+                                <f:selectItems value="#{funcionControlador.roles}" var="rol" itemLabel="#{rol.nombre}" itemValue="#{rol.codigo}"/>
+                            </p:selectOneMenu>
+
+                            <h:outputText value="Seleccione la Acción"/>
+                            <p:selectOneMenu id="cmbAccion" value="#{funcionControlador.seleccionarFuncion.codigo_accion.codigo}">
+                                <f:selectItem itemLabel="Elija una opción" itemValue="#{null}"/>
+                                <f:selectItems value="#{funcionControlador.acciones}" var="accion" itemLabel="#{accion.descripcion}" itemValue="#{accion.codigo}"/>
+                            </p:selectOneMenu>
+
+                            <h:outputText value="Seleccione el Estado"/>
+                            <p:selectOneRadio id="sorTipoCuenta" value="#{funcionControlador.seleccionarFuncion.estado}" required="true" 
+                                              requiredMessage="Seleccione un estado" style="list-style: transparent;">  
+                                <f:selectItem itemLabel="Activo" itemValue="1" />
+                                <f:selectItem itemLabel="Inactivo" itemValue="0" />  
+                            </p:selectOneRadio>
+
+                            <h:outputText id="otxtfuncion" value="Insertar"/>
+                            <p:selectBooleanCheckbox id="ochkFuncion" value="#{funcionControlador.seleccionarFuncion.insertar}"/>
+
+                            <h:outputText id="otxtafuncion" value="Actualizar"/>
+                            <p:selectBooleanCheckbox id="ochkaFuncion" value="#{funcionControlador.seleccionarFuncion.actualizar}"/>
+
+                            <h:outputText id="otxtefuncion" value="Eliminar"/>
+                            <p:selectBooleanCheckbox id="ochkeFuncion" value="#{funcionControlador.seleccionarFuncion.eliminar}"/>
+
+                            <h:outputText id="otxtvfuncion" value="Ver"/>
+                            <p:selectBooleanCheckbox id="ochkvFuncion" value="#{funcionControlador.seleccionarFuncion.ver}"/> 
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{funcionControlador.actualizarFuncion()}" update=":frmFuncion:pnlFuncion"/>
+                        <p:commandButton value="Cancelar" onclick="wdlgfuncionActualizar.hide()" type="reset"/>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="dlgfuncionEliminar" header="Elimina Función" widgetVar="wdlgfuncionEliminar" modal="true" closable="false" 
+                          resizable="false" showEffect="clip" hideEffect="fold">  
+                    <h:form id="frmEliminarFncion">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <h:outputText value="¿Desea Eliminar la Función?"/>
+                        <p:panelGrid id="pngFuncionEliminar" columns="2">
+                            <h:outputText value="Acción de la Función"/>
+                            <h:outputText value="#{funcionControlador.seleccionarFuncion.codigo_accion.descripcion}"/>
+                            <h:outputText value="Rol de la Función"/>
+                            <h:outputText value="#{funcionControlador.seleccionarFuncion.codigo_rol.nombre}"/>
+                            <h:outputText value="Grupo Menu de la Función"/>
+                            <h:outputText value="#{funcionControlador.seleccionarFuncion.codigo_grupo_menus.nombre}"/>
+                        </p:panelGrid>
+                        <p:commandButton value="Aceptar" action="#{funcionControlador.eliminarFuncion()}" update=":frmFuncion:tblFuncion"/>
+                        <p:commandButton value="Cancelar" onclick="wdlgfuncionEliminar.hide()" type="reset"/>
+                    </h:form>
+                </p:dialog>
+                <p:dialog modal="true" widgetVar="dlgStatus" header="Procesando" draggable="false" closable="false" 
+                          resizable="false"> 
+                    <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />  
+                </p:dialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

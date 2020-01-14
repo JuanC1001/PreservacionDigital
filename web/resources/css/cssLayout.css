@@ -1,0 +1,129 @@
+
+#envoltura{
+    padding: 0;
+    margin: 0 auto 0 auto;
+    width: 900px;
+    background: #FFF;
+}
+
+#top {
+    position: relative;
+    color: #767779;
+    padding: 10px;
+    margin: 5px 5px 5px 5px;
+}
+
+#bottom {
+    position: relative;
+    color: #767779;
+    padding: 10px;
+    margin: 5px 5px 5px 5px;
+}
+
+#centro {
+    position: relative;
+    padding: 0px 5px;
+    margin: 0px 0px 0px 0px;
+}
+
+#left {
+    float: left;
+    padding: 0px 0px 0px 0px;
+    width: 150px;
+}
+
+#right {
+    float: right;
+    padding: 5px;
+}
+
+.center_content {
+    position: relative;
+    padding: 5px;
+}
+
+.left_content {
+    padding: 5px;
+    margin-left: 170px;
+}
+
+.right_content {
+    padding: 5px;
+    margin: 0px 170px 0px 170px;
+}
+
+td {
+    vertical-align: top;
+    padding-bottom: 8px;
+}
+
+.titulo_news {
+    float: right;
+    font-weight: normal;
+    text-transform: fullwidth; 
+    position: relative;
+    color: #dd0000;
+    text-shadow: 0.0001px 0.0001px 0.1px #dd0000;
+    padding: 0px;
+}
+
+.titulo_negro {
+    float: left;
+    font-weight: normal;
+    text-transform: fullwidth; 
+    position: relative;
+    color: #767779;
+    padding: 0px;
+}
+
+.titulo_negro_detalle {
+    float: left;
+    font-weight: bold;
+    text-transform: fullwidth; 
+    font-size-adjust: 0.9;  
+    position: relative;
+    color: #767779;
+    padding: 0px;
+}
+
+.texto_negro_detalle {
+    float: left;
+    font-weight: normal;  
+    position: relative;
+    font-size-adjust: 0.7;
+    color: #767779;
+    padding: 0px;
+}
+
+/*.menu_sitio:link,
+.menu_sitio:visited,
+.menu_sitio:hover,
+.menu_sitio:active*/
+.menu_sitio{
+    float: left;
+    font-weight: normal;
+    /*text-transform: capitalize; */
+    position: relative;
+    color: #767779;
+    padding: 0px;
+}
+
+.titulo_readmore {
+    float: right;
+    font-weight: lighter;
+    font-size: 9px;
+    color: #dd0000 !important;
+    padding: 0px;
+}
+
+top a:link, #top a:visited {
+    color: black;
+    font-weight : bold;
+    text-decoration: none;
+}
+
+top a:link:hover, #top a:visited:hover  {
+    color: black;
+    font-weight : bold;
+    text-decoration : underline;
+}

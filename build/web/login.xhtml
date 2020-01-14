@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:composition template="/templates/plantillaBase.xhtml">
+        <ui:define name="content">
+
+            <h:form id="frmLogin">
+                <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                <p:messages id="msgLogin" showDetail="true" autoUpdate="true"/>
+                <center>
+                    <h:panelGrid style="text-align: center">                    
+                        <p:panel   header="Iniciar Sesión" style="text-align: center; font-size: 12px"> 
+                            <h:panelGrid columns="2"  width="600" style=" text-align : justify; font-size: 12px">
+                                <img src="../resources/images/LoginF1.png" 
+                                     style=" height: 190px; width: 250px; text-align:center "
+                                     /> 
+
+                                <p:panel  >
+                                    <p>  </p>
+                                    <p>  </p>
+                                    <p>  </p>
+                                    <p>  </p>                             
+                                    <h:panelGrid id="pngLogin" columns="2">
+                                        <h:outputText value="Usuario:"  />                                 
+                                        <p:inputText id="txtUsuario" value="#{loginUsuario.usuario.nick}" required="true" requiredMessage="#{msnSeguridad.oblUsuario}"/>                                    
+                                        <h:outputText value="Contraseña:" />                                   
+                                        <p:inputText id="txtContrasenia" type="password" value="#{loginUsuario.usuario.clave}" required="true" requiredMessage="#{msnSeguridad.oblPassword}"/>
+                                    </h:panelGrid>
+                                    <p>  </p>
+                                    <p>  </p>
+                                    <p>  </p>
+                                    <p>  </p> 
+                                    <h:panelGrid columns="2" style="text-align: center" cellpadding="2" cellspacing="0">
+                                        <p:commandButton action="#{loginUsuario.login}" style="width: 70px; height: 25px; cursor: pointer" value="Ingresar" ajax="false"/>
+
+                                        <p:commandButton action="index" value="Cancelar" style="width: 70px; height: 25px; cursor: pointer" ajax="false"/>
+                                    </h:panelGrid> 
+                                    <p>  </p>
+                                    <p>  </p>
+                                    <p>  </p>
+                                    <p>  </p> 
+                                </p:panel>
+
+                            </h:panelGrid>
+                            <h:outputText value="Nota:" style="font-weight: bold; font-size: 20px" />
+                            <p>  </p>
+                            <h:outputText style=" text-align : justify; color: #04578B; font-size: 14px"
+                                          value="Si tiene inconveniencias  en utilizar el sistema consulte con el administrador" />
+                        </p:panel>
+                    </h:panelGrid>
+                </center>
+            </h:form>
+            <p:dialog modal="true" widgetVar="dlgStatus" header="Procesando" draggable="false" closable="false" 
+                      resizable="false"> 
+                <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />  
+            </p:dialog>
+        </ui:define>
+    </ui:composition>
+</html>
+

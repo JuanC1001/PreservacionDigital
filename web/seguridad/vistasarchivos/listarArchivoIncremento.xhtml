@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">
+                Lista de Archivos Incrementos
+            </ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">Archivos Incrementos</ui:define>
+            <ui:define name="contenido">
+                <p:growl id="mensajes" autoUpdate="true" showDetail="true"/>
+                <h:form id="frmTipo">
+                    <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel  value="Seleccione Tipo Producción Académica" />
+                        <p:selectOneMenu id="cmbtipo" value="#{incrmentoControladores.tipo}" style="width:280px">
+                            <f:selectItem itemLabel="Seleccione Tipo" itemValue=" " />
+                            <f:selectItem itemLabel="Proyecto fin de Semestre" itemValue="Proyecto fin de Semestre" />
+                            <f:selectItem itemLabel="Memoria de Prácticas Pre-profesionales" itemValue="Memoria de Prácticas Pre-profesionales" />                                           
+                            <f:selectItem itemLabel="Anteproyecto de Tesis" itemValue="Anteproyecto de Tesis" />
+                            <f:selectItem itemLabel="Trabajo de Graduación" itemValue="Trabajo de Graduación" />
+                            <p:ajax event="change" listener="#{incrmentoControladores.buscarDucumentoIncremento()}"
+                                    process="@this,@form, cmbtipo" update=":frmIncremento"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                </h:form>
+
+                <h:form id="frmIncremento">
+                    <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                    <p:panel id="pnlIncremento">
+                        <p:dataGrid var="incremento" value="#{incrmentoControladores.lstIncrementoArchivos}" columns="1" 
+                                    rows="12" paginator="true" id="incremento" emptyMessage="Datos no encontrados"
+                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    rowsPerPageTemplate="4,6,12">
+                            <p:panel header="#{incremento.codigo_documento.tipo}" style="text-arial">
+                                <h:panelGrid columns="2" >
+                                    <h:outputText value="Fecha de Incremento:" style="font-weight: bold"/>
+                                    <h:outputText value="#{incremento.fecha_registro}" />
+                                    <h:outputText value="Tema del Incremento:" style="font-weight: bold"/>                                                                                                                                                                                                          
+                                    <h:outputText value="#{incremento.titulo}" />
+
+                                    <p:commandLink update=":detalleArchivo" oncomplete="PF('archivoDialog').show()"
+                                                   title="Detalle de Archivos" >
+                                        <h:outputText value="Leer mas..." styleClass="titulo_readmore" />
+                                        <h:outputText />
+                                        <f:setPropertyActionListener value="#{incremento}"
+                                                                     target="#{incrmentoControladores.selIncrmento}"
+                                                                     />
+                                    </p:commandLink>
+                                </h:panelGrid>
+                            </p:panel>
+
+                        </p:dataGrid>
+                    </p:panel>                    
+                </h:form>
+            </ui:define>
+
+            <ui:define name="dialogos">
+
+                <p:dialog id="insertarVerArchivos" header="Archivo" widgetVar="archivoDialog" 
+                          modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:outputPanel id="detalleArchivo" style="text-align">
+                        <p:panelGrid  columns="2" rendered="#{not empty incrmentoControladores.selIncrmento}"  
+                                      columnClasses="label,value">
+                            <h:outputText value="Fecha de Incremento:" style="font-weight: bold"/>                                                                                                                                                                                                          
+                            <h:outputText value="#{incrmentoControladores.selIncrmento.fecha_registro}" />
+                            <h:outputText value="Tema del Archivo:" style="font-weight: bold"/>                                                                                                                                                                                                          
+                            <h:outputText value="#{incrmentoControladores.selIncrmento.codigo_documento.titulo}" />
+                            <h:outputText value="Tipo:" style="font-weight: bold"/>                                                                                                                                                                                                          
+                            <h:outputText value="#{incrmentoControladores.selIncrmento.codigo_documento.tipo}" />
+                            <h:outputText value="Fecha de Almacenado de Archivo:" style="font-weight: bold"/>                                                                                                                                                                                                          
+                            <h:outputText value="#{incrmentoControladores.selIncrmento.codigo_documento.fecha_registro}" />
+                            <h:outputText value="Tema del Incremento:" style="font-weight: bold"/>                                                                                                                                                                                                          
+                            <h:outputText value="#{incrmentoControladores.selIncrmento.titulo}" />
+
+                            <h:outputText value="Ver Incremento:" style="font-weight: bold"/>
+                            <p:lightBox >  
+                                <h:outputLink value="#" title="#{incrmentoControladores.selIncrmento.parte}">  
+                                    <h:outputText value="#{incrmentoControladores.selIncrmento.parte}"/>
+                                </h:outputLink>
+                                <f:facet name="inline">
+                                    <p:media value="#{incrmentoControladores.selIncrmento.path}" height="480" width="750" />    
+                                </f:facet>
+                            </p:lightBox>
+                        </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+
+                <p:dialog modal="true" widgetVar="dlgStatus" header="Procesando" draggable="false" closable="false" 
+                          resizable="false"> 
+                    <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />  
+                </p:dialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

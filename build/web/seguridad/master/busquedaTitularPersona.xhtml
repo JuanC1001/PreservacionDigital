@@ -1,0 +1,500 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" 
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" 
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:composition template="/templates/plantillaInternaCenter.xhtml">
+        <ui:define name="top">Actualización de Titulares</ui:define>
+        <ui:define name="contenido">
+            <ui:define name="tituloNavegador">Edirar Información de Titulares</ui:define>
+            <p:growl id="msg" autoUpdate="true"/>
+            <h:form id="frmSeleccionarTipoTitular">
+                <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                <p:panelGrid id="pngPersona" columns="1">
+
+                    <p:selectOneMenu id="cmbTipoTitular" value="#{ingresoTitularesControlador.valorTipoTitularSeleccionado}">
+                        <f:selectItem itemValue="0" itemLabel="--Elija una opción--"/>
+                        <f:selectItems value="#{ingresoTitularesControlador.dm.tiposTitular}" var="tiposTitular" 
+                                       itemLabel="#{tiposTitular.descripcion}" itemValue="#{tiposTitular.codigo}"/>
+                        <p:ajax event="change" listener="#{ingresoTitularesControlador.obtenerTipotularDadoCodigo}"/>
+                    </p:selectOneMenu>
+                    <p:selectOneMenu id="cmbCriterioBusqueda" value="#{busquedaTitularesControlador.criterioBusquedaTitular}">
+                        <f:selectItem itemValue="#{null}" itemLabel="--Elija una opción--"/>
+                        <f:selectItem itemValue="cedula" itemLabel="CEDULA"/>
+                        <f:selectItem itemValue="ruc" itemLabel="RUC"/>
+                        <f:selectItem itemValue="pasaporte" itemLabel="PASAPORTE"/>
+                        <f:selectItem itemValue="apellido" itemLabel="APELLIDOS"/>
+                        <f:selectItem itemValue="nombre_comercial" itemLabel="NOMBRE COMERCIAL"/>
+                    </p:selectOneMenu>
+                    <p:commandButton id="actualizartitulares" value="Aceptar" update=":dialogoBusquedaPersonas" action="#{ingresoTitularesControlador.activarDialogosBusqueda}" />
+                </p:panelGrid>
+
+            </h:form>
+        </ui:define>
+        <ui:define name="dialogos">
+            <p:dialog header="Busqueda de Titulares - Personas Naturales"  widgetVar="wdialogoBusquedaPersonas" 
+                      id="dialogoBusquedaPersonas" resizable="false" modal="true">
+                <p:panel id="pnlContenedorBusquedaPersonas">
+                    <h:form id="formPersonas">  
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <h:outputText id="otxtBuscar" value="Buscar por #{busquedaTitularesControlador.criterioBusquedaTitular} :"/>
+                        <p:inputText id="txtBuscar" value="#{busquedaTitularesControlador.datoBusqueda}"/>
+                        <p:commandButton value="Aceptar" update="pTabla" 
+                                         action="#{busquedaTitularesControlador.obtenerPersonasTitulares}" process="@form" />
+                        <p:panel id="pTabla">
+                            <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                            <p:dataTable var="persona" value="#{busquedaTitularesControlador.lazyModel}" paginator="true" rows="5"  
+                                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"  
+                                         rowsPerPageTemplate="5,10" selectionMode="single" 
+                                         selection="#{busquedaTitularesControlador.selectedPersona}"
+                                         id="personaTable" sortBy="#{persona.apellido_paternno}" 
+                                         rowKey="#{persona.codigo}">  
+                                <p:column headerText="Código">  
+                                    <h:outputText value="#{persona.codigo}" />  
+                                </p:column>  
+
+                                <p:column headerText="Cédula" sortBy="#{persona.cedula}">  
+                                    <h:outputText value="#{persona.cedula}" />  
+                                </p:column>  
+
+                                <p:column headerText="Pasaporte" sortBy="#{persona.pasaporte}">  
+                                    <h:outputText value="#{persona.pasaporte}" />  
+                                </p:column>  
+
+                                <p:column headerText="Ruc" sortBy="#{persona.ruc.identificacion}">  
+                                    <h:outputText value="#{persona.ruc.identificacion}" />  
+                                </p:column>  
+
+                                <p:column headerText="Apellidos" sortBy="#{persona.apellido_paternno}">  
+                                    <h:outputText value="#{persona.apellido_paternno}" />  
+                                </p:column>  
+
+                                <p:column headerText="Nombre" sortBy="#{persona.primer_nombre}">  
+                                    <h:outputText value="#{persona.primer_nombre}" />  
+                                </p:column>  
+
+                                <p:column headerText="Nombre Comercial" sortBy="#{persona.nombre_comercial}">  
+                                    <h:outputText value="#{persona.nombre_comercial}" />  
+                                </p:column>  
+
+                                <f:facet name="footer">  
+                                    <p:commandButton id="btnVerTitular" value="Ver" icon="ui-icon-circle-plus" 
+                                                     oncomplete="wcarDialog.show()" update=":carDialog" />  
+                                    <p:commandButton id="btnEditarUsuario" value="Editar" icon="ui-icon-pencil" 
+                                                     oncomplete="wdialogoEditarPersona.show(); wwizP.loadStep(wwizP.cfg.steps[0], true);" update=":dialogoEditarPersona"
+                                                     action="#{busquedaTitularesControlador.obtenerTitularNaturalDadoCodigo}"/> 
+                                </f:facet>
+
+                            </p:dataTable>  
+                        </p:panel>
+                    </h:form>  
+                </p:panel>
+            </p:dialog>
+            <p:dialog modal="true" widgetVar="dlgStatus" header="Procesando" draggable="false" closable="false" resizable="false"> 
+                <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />  
+            </p:dialog>
+
+            <p:dialog header="Car Detail" widgetVar="wcarDialog" id="carDialog" resizable="false"  
+                      showEffect="explode" hideEffect="explode">  
+                <h:panelGrid id="display" columns="2" cellpadding="4">  
+                    <h:outputText value="Model:" />  
+                    <h:outputText value="#{busquedaTitularesControlador.selectedPersona.cedula}" style="font-weight:bold"/>  
+                </h:panelGrid>  
+            </p:dialog>  
+
+            <p:dialog header="Editar Información del Titular - Personas Naturales"  widgetVar="wdialogoEditarPersona"  id="dialogoEditarPersona" 
+                      resizable="true">
+                <p:panel id="pnlContenedorPersona">
+                    <h:form id="frmInsertarPersona">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <p:messages id="msgPersona" autoUpdate="true" />
+                        <h:outputText id="otxtTipoPersoneriaJuridica" value="TIPO DE PERSONERIA JURIDICA:"/>
+                        <h:outputText id="otxtTipoPersoneriaJuridicaValor" value="#{ingresoTitularesControlador.tipoTitular.descripcion}"/>
+
+                        <p:wizard widgetVar="wwizP" id="wizP" flowListener="#{wizardBean.onFlowProcess}"
+                                  nextLabel="Siguiente" backLabel="Atrás" showStepStatus="true">
+
+                            <p:tab id="informacionTributaria" title="Paso 1">  
+                                <p:panel header="Información Tributaria" id="pnInformacionTributaria">  
+                                    <p:focus context="pnInformacionTributaria"/> 
+                                    <h:panelGrid columns="3" columnClasses="label, value">  
+                                        <h:outputText id="otxtContribuyenteEspecial" value="Contribuyente Escpecial:"/>
+                                        <p:selectBooleanCheckbox id="ochkContribuyenteEspecial" 
+                                                                 value="#{busquedaTitularesControlador.personaActualizar.contrib_especial}"/>
+                                        <h:outputText value=""/>
+
+                                        <h:outputText id="otxtNombreComercial" value="Nombre Comercial:"/>
+                                        <h:inputText id="txtNombreComercial" value="#{busquedaTitularesControlador.personaActualizar.nombre_comercial}"/>
+                                        <h:outputText value=""/>
+
+                                        <h:outputText id="otxtCedula" value="Cédula:"/>
+                                        <h:inputText id="txtCedula" value="#{busquedaTitularesControlador.personaActualizar.cedula}" 
+                                                     required="true" requiredMessage="La cédula es un Campo Obligatorio">
+                                            <f:validateLength maximum="10" minimum="10"/>  
+                                        </h:inputText>
+                                        <p:message id="msgCedula" for="txtCedula"/>  
+
+
+                                        <h:outputText id="otxtPasaporte" value="Pasaporte:"/>
+                                        <h:inputText id="txtPasaporte" value="#{busquedaTitularesControlador.personaActualizar.pasaporte}"/>
+                                        <h:outputText value=""/>
+
+                                        <h:outputText id="otxtRuc" value="Ruc:"/>
+                                        <h:inputText id="txtRuc" value="#{busquedaTitularesControlador.rucPersonaActualizar.identificacion}"/>
+                                        <h:outputText value=""/>
+
+                                        <h:outputText id="otxtApellidoPaterno" value="Apellidos:"/>
+                                        <h:inputText id="txtApellidoPaterno" value="#{busquedaTitularesControlador.personaActualizar.apellido_paternno}" 
+                                                     required="true" requiredMessage="Los Apellidos es un Campo Obligatorio" />
+                                        <p:message id="msgApellidos" for="txtApellidoPaterno"/>  
+
+                                        <h:outputText id="otxtPrimerNombre"  value="Nombres:"/>
+                                        <h:inputText id="txtPrimerNombre" value="#{busquedaTitularesControlador.personaActualizar.primer_nombre}" 
+                                                     required="true" requiredMessage="Los nombres es un Campo Obligatorio" />
+                                        <p:message id="msgNombres" for="txtPrimerNombre"/>  
+
+                                    </h:panelGrid>  
+                                </p:panel>  
+                            </p:tab>  
+
+                            <p:tab id="ubicacion" title="Paso 2">  
+                                <p:panel header="Ubicación" id="pnUbicacion">  
+                                    <p:focus context="pnUbicacion"/>  
+                                    <h:panelGrid columns="2" columnClasses="label, value">  
+                                        <h:outputText id="otxtDireccion" value="Dirección:"/>
+                                        <p:inputTextarea id="txtaDireccion" value="#{busquedaTitularesControlador.personaGlobalActualizar.direccion.descripcion}"/>
+
+                                        <h:outputText id="otxtPaises" value="País:"/>
+                                        <p:selectOneMenu value="#{busquedaTitularesControlador.personaGlobalActualizar.direccion.ciudad.provincia.pais.codigo}">
+                                            <f:selectItem itemValue="#{null}" itemLabel="--Elija una opción--"/>
+                                            <f:selectItems value="#{ingresoTitularesControlador.dm.paises}" var="paises" 
+                                                           itemLabel="#{paises.nombre}" itemValue="#{paises.codigo}"/>
+                                            <p:ajax event="change" listener="#{busquedaTitularesControlador.obtenerProvinciasDadoPaisEditar}" update="cmbProvincias, cmbCiudades"/>
+                                        </p:selectOneMenu>
+
+                                        <h:outputText id="otxtProvincias" value="Provincia:"/>
+                                        <p:selectOneMenu id="cmbProvincias" value="#{busquedaTitularesControlador.personaGlobalActualizar.direccion.ciudad.provincia.codigo}">
+                                            <f:selectItem itemValue="0" itemLabel="--Elija una opción--"/>
+                                            <f:selectItems value="#{busquedaTitularesControlador.provincias}" var="provincias" 
+                                                           itemLabel="#{provincias.nombre}" itemValue="#{provincias.codigo}"/>
+                                            <p:ajax event="change" listener="#{busquedaTitularesControlador.obtenerCiudadesDadoProvinciaEditar()}" 
+                                                    update="cmbCiudades"/>
+                                        </p:selectOneMenu>
+                                        <h:outputText id="otxtCiudades" value="Ciudad:"/>
+                                        <p:selectOneMenu id="cmbCiudades" value="#{busquedaTitularesControlador.personaGlobalActualizar.direccion.ciudad.codigo}">
+                                            <f:selectItem itemValue="0" itemLabel="--Elija una opción--"/>
+                                            <f:selectItems value="#{busquedaTitularesControlador.ciudades}" var="ciudad" 
+                                                           itemLabel="#{ciudad.nombre}" itemValue="#{ciudad.codigo}"/>
+                                            <p:ajax event="change" listener="#{busquedaTitularesControlador.obtenerValorSeleccionadoCiudad}"/>
+                                        </p:selectOneMenu>
+
+                                    </h:panelGrid>  
+                                </p:panel>  
+                            </p:tab>  
+
+
+                            <p:tab id="contacto" title="Paso 3">  
+                                <p:panel header="Contacto" id="pnContacto">  
+                                    <p:focus context="pnContacto"/> 
+                                    <h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">  
+                                        <h:outputText id="otxtTelefonoConvencional" value="Teléfono Convencional:"/>
+                                        <p:inputText id="txtTelefonoConvencional" value="#{busquedaTitularesControlador.personaGlobalActualizar.telefonofijo}"/>
+
+                                        <h:outputText id="otxtTelefonoCelular" value="Teléfono Celular"/>
+                                        <p:inputText id="txtTelefonoCelular" value="#{busquedaTitularesControlador.personaGlobalActualizar.telefonoCelular}"/>
+
+                                        <h:outputText id="otxtTelefonoOficina" value="Teléfono Oficina:"/>
+                                        <p:inputText id="txtTelefonoOficina" value="#{busquedaTitularesControlador.personaGlobalActualizar.telefonoTrabajo}"/>
+
+                                        <h:outputText id="otxtMail" value="Mail:"/>
+                                        <p:inputText id="txtMail" value="#{busquedaTitularesControlador.personaActualizar.mail}" required="false">
+                                            <f:validator validatorId="recursos.utilBeans.ValidatorBean"/>
+                                        </p:inputText>
+                                    </h:panelGrid>  
+                                </p:panel>      
+                            </p:tab>  
+
+                            <p:tab id="confirmacion" title="Paso 4">  
+                                <p:panel header="Confirmacion">  
+                                    <h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">  
+                                        <h:outputText id="otxtDatosEmpresa" value="Datos Generales de la Empresa:"/>
+                                        <h:outputText value=""/>
+
+                                        <h:outputText id="otxtCedulaConf" value="Cédula:"/>
+                                        <h:outputText id="txtCedulaConf" value="#{busquedaTitularesControlador.personaActualizar.cedula}"/>
+
+
+                                        <h:outputText id="otxtPasaporteConf" value="Pasaporte:"/>
+                                        <h:outputText id="txtPasaporteConf" value="#{ingresoTitularesControlador.persona.pasaporte}"/>
+
+                                        <h:outputText id="otxtRucConf" value="Ruc:"/>
+                                        <h:outputText id="txtRucConf" value="#{busquedaTitularesControlador.rucPersonaActualizar.identificacion}"/>
+
+                                        <h:outputText id="otxtApellidoPaternoConf" value="Apellidos:"/>
+                                        <h:outputText id="txtApellidoPaternoConf" value="#{busquedaTitularesControlador.personaActualizar.apellido_paternno}"/>
+
+                                        <h:outputText id="otxtPrimerNombreConf" value="Nombres:"/>
+                                        <h:outputText id="txtPrimerNombreConf" value="#{busquedaTitularesControlador.personaActualizar.primer_nombre}"/>
+
+                                    </h:panelGrid>  
+                                    <p:commandButton value="Aceptar" action="#{busquedaTitularesControlador.procesoActualizarPersona}" 
+                                                     process="@this" update="msgPersona"/> 
+                                    <p:commandButton value="Cancelar" onsuccess="wdialogoEditarPersona.hide()" process="@this"/> 
+                                </p:panel>  
+                            </p:tab>  
+                        </p:wizard>  
+                    </h:form>
+                </p:panel>
+            </p:dialog>
+
+            <p:dialog header="Editar Información del Titular - Sociedades"  widgetVar="wdialogoEditarEmpresa"  
+                      id="dialogoEditarEmpresa" resizable="false">
+                <p:panel id="pnlContenedorEditarEmpresa">
+                    <h:form id="frmEditarEmpresa">
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <p:messages id="msgEmpresa" autoUpdate="true"/>
+                        <h:outputText id="otxtTipoPersoneriaJuridica" value="TIPO DE PERSONERIA JURIDICA:"/>
+                        <h:outputText id="otxtTipoPersoneriaJuridicaValor" value="#{ingresoTitularesControlador.tipoTitular.descripcion}"/>
+
+                        <p:wizard widgetVar="wwizE" id="wizE" flowListener="#{wizardBean.onFlowProcess}"
+                                  nextLabel="Siguiente" backLabel="Atrás" showStepStatus="true">
+
+                            <p:tab id="informacionTributaria" title="Paso 1">  
+                                <p:panel header="Información Tributaria" id="pnInformacionTributaria">  
+                                    <p:focus context="pnInformacionTributaria"/> 
+                                    <h:panelGrid columns="3" columnClasses="label, value">  
+                                        <h:outputText id="otxtContribuyenteEspecialE" value="Contribuyente Escpecial:"/>
+                                        <p:selectBooleanCheckbox id="ochkContribuyenteEspecialE" value="#{busquedaTitularesControlador.empresaActualizar.codigo_titular.contrib_especial}"/>
+                                        <h:outputText value=""/>
+                                        <h:outputText id="otxtRuc" value="Ruc:"/>
+                                        <h:inputText id="txtRuc" value="#{busquedaTitularesControlador.rucEmpresaActualizar.identificacion}" required="true" 
+                                                     requiredMessage="El Ruc es unCampo Obligatorio" validatorMessage="Ingrese mínimo 13 caracteres">
+                                            <f:validateLength maximum="13" minimum="13"/>  
+                                        </h:inputText>
+                                        <p:message id="msgRucE" for="txtRuc"/>
+
+                                        <h:outputText id="otxtRazonSocial" value="Razón Social:"/>
+                                        <h:inputText id="txtRazonSocial" value="#{busquedaTitularesControlador.empresaActualizar.razon_social}" 
+                                                     required="true" requiredMessage="La Razón Social es un Campo Obligatorio"/>
+                                        <p:message id="msgRSocialE" for="txtRazonSocial"/>
+
+                                        <h:outputText id="otxtNombreComercial" value="Nombre Comercial:"/>
+                                        <h:inputText id="txtNombreComercial" value="#{busquedaTitularesControlador.empresaActualizar.nombre_comercial}"/>
+                                        <h:outputText value=""/>
+
+                                    </h:panelGrid>  
+                                </p:panel>  
+                            </p:tab>  
+
+                            <p:tab id="representanteLegal" title="Paso 2">  
+                                <p:panel header="Representante Legal" id="pnrepresentanteLegal">  
+                                    <p:focus context="pnrepresentanteLegal"/> 
+                                    <h:panelGrid columns="3" columnClasses="label, value">  
+                                        <h:outputText value="Busque un Representante Legal:"/>
+                                        <p:commandButton value="Buscar" onclick="wdialogoBusquedaRL.show()" process="@this"/>
+                                        <h:outputText value=""/>
+                                        <h:outputText id="txtRepresentanteLegal" 
+                                                      value="Nombres: #{busquedaTitularesControlador.personaRepresentanteLegal.apellido_paternno} 
+                                                      #{busquedaTitularesControlador.personaRepresentanteLegal.primer_nombre}"></h:outputText>
+                                        <h:outputText value=""/>
+                                        <h:outputText value=""/>
+                                        <h:outputText id="txtCedulaRepresentanteLegal" 
+                                                      value="Cédula: #{busquedaTitularesControlador.personaRepresentanteLegal.cedula}"></h:outputText>
+
+                                    </h:panelGrid>  
+                                </p:panel>  
+                            </p:tab>  
+
+                            <p:tab id="ubicacion" title="Paso 3">  
+                                <p:panel header="Ubicación" id="pnUbicacion">  
+                                    <p:focus context="pnUbicacion"/>  
+                                    <h:panelGrid columns="2" columnClasses="label, value">  
+                                        <h:outputText id="otxtDireccion" value="Dirección:"/>
+                                        <p:inputTextarea id="txtaDireccion" value="#{busquedaTitularesControlador.empresaActualizar.direccion}"/>
+
+                                        <h:outputText id="otxtPaises" value="País:"/>
+                                        <p:selectOneMenu value="#{busquedaTitularesControlador.empresaActualizar.pais}">
+                                            <f:selectItem itemValue="0" itemLabel="Seleccione"/>
+                                            <f:selectItems value="#{ingresoTitularesControlador.dm.paises}" var="paises" 
+                                                           itemLabel="#{paises.nombre}" itemValue="#{paises.codigo}"/>
+                                            <p:ajax event="change" listener="#{busquedaTitularesControlador.obtenerProvinciasDadoPaisEditarEmpresa}" update="cmbProvincias, cmbCiudades"/>
+                                        </p:selectOneMenu>
+                                        <h:outputText id="otxtProvincias" value="Provincia:"/>
+                                        <p:selectOneMenu id="cmbProvincias" value="#{busquedaTitularesControlador.empresaActualizar.provincia}">
+                                            <f:selectItem itemValue="0" itemLabel="Seleccione"/>
+                                            <f:selectItems value="#{busquedaTitularesControlador.provincias}" var="provincias" 
+                                                           itemLabel="#{provincias.nombre}" itemValue="#{provincias.codigo}"/>
+                                            <p:ajax event="change" listener="#{busquedaTitularesControlador.obtenerCiudadesDadoProvinciaEditarEmpresa()}" 
+                                                    update="cmbCiudades"/>
+                                        </p:selectOneMenu>
+
+                                        <h:outputText id="otxtCiudades" value="Ciudad:"/>
+                                        <p:selectOneMenu id="cmbCiudades" value="#{busquedaTitularesControlador.empresaActualizar.ciudad}">
+                                            <f:selectItem itemValue="0" itemLabel="Seleccione"/>
+                                            <f:selectItems value="#{busquedaTitularesControlador.ciudades}" var="ciudad" 
+                                                           itemLabel="#{ciudad.nombre}" itemValue="#{ciudad.codigo}"/>
+                                            <p:ajax event="change" listener="#{busquedaTitularesControlador.obtenerValorSeleccionadoCiudadEmpresa}"/>
+                                        </p:selectOneMenu>
+
+                                    </h:panelGrid>  
+                                </p:panel>  
+                            </p:tab>  
+
+                            <p:tab id="contacto" title="Paso 4">  
+                                <p:panel header="Contacto" id="pnContacto">  
+                                    <p:focus context="pnContacto"/> 
+                                    <h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">  
+                                        <h:outputText id="otxtTelefonoCelular" value="Celular:"/>
+                                        <h:inputText id="txtTelefonoCelular" value="#{busquedaTitularesControlador.empresaActualizar.telefono_celular}"/>
+
+                                        <h:outputText id="otxtTelefonoOficina" value="teléfono Oficina:"/>
+                                        <h:inputText id="txtTelefonoOficina" value="#{busquedaTitularesControlador.empresaActualizar.telefono_oficina}"/>
+
+                                        <h:outputText id="otxtMail" value="Mail:"/>
+                                        <h:inputText id="txtMail" value="#{busquedaTitularesControlador.empresaActualizar.mail}" required="false" validatorMessage="Mail incorrecto" >
+                                            <f:validator validatorId="recursos.utilBeans.ValidatorBean" for="txtMail"/>
+                                        </h:inputText>
+
+                                    </h:panelGrid>  
+                                </p:panel>      
+                            </p:tab>  
+
+                            <p:tab id="confirmacion" title="Paso 5">  
+                                <p:panel header="Confirmacion">  
+                                    <h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">  
+                                        <h:outputText id="otxtDatosEmpresa" value="Datos Generales de la Empresa:"/>
+                                        <h:outputText value=""/>
+                                        <h:outputText id="otxtRucConf" value="Ruc:"/>
+                                        <h:outputText id="txtRucConf" value="#{busquedaTitularesControlador.rucEmpresaActualizar.identificacion}"/>
+                                        <h:outputText id="otxtRazonSocialConf" value="Razón Social:"/>
+                                        <h:outputText id="txtRazonSocialConf" value="#{busquedaTitularesControlador.empresaActualizar.razon_social}"/>
+                                        <h:outputText id="otxtRepresentanteLegalConf" value="Representante Legal:"/>
+                                        <h:outputText id="txtRepresentanteLegalConf" 
+                                                      value="#{busquedaTitularesControlador.personaRepresentanteLegal.apellido_paternno} 
+                                                      #{busquedaTitularesControlador.personaRepresentanteLegal.apellido_materno} 
+                                                      #{busquedaTitularesControlador.personaRepresentanteLegal.cedula}"/>
+
+                                    </h:panelGrid>  
+                                    <p:commandButton value="Aceptar"  action="#{busquedaTitularesControlador.procesoActualizarEmpresa}" 
+                                                     process="@this" update="msgEmpresa"/>
+                                    <p:commandButton value="Cancelar" 
+                                                     onclick="wdialogoEditarEmpresa.hide()" type="reset" process="@this" update=":dialogoBusquedaEmpresas"/> 
+                                </p:panel>  
+
+                            </p:tab>  
+                        </p:wizard>
+                    </h:form>
+                </p:panel>
+            </p:dialog>
+            <p:dialog header="Busqueda de Titulares - Empresas"  widgetVar="wdialogoBusquedaEmpresas" 
+                      id="dialogoBusquedaEmpresas" resizable="false" modal="true">
+                <p:panel id="pnlContenedorBusquedaEmpresas">
+                    <h:form id="formEmpresas">  
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <h:outputText id="otxtBuscar" value="Buscar por #{busquedaTitularesControlador.criterioBusquedaTitular} :"/>
+                        <p:inputText id="txtBuscar" value="#{busquedaTitularesControlador.datoBusqueda}"/>
+                        <p:commandButton value="Aceptar" update="pTabla" 
+                                         action="#{busquedaTitularesControlador.obtenerEmpresas}" process="@form" />
+                        <p:panel id="pTabla">
+                            <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                            <p:dataTable var="empresa" value="#{busquedaTitularesControlador.lazyModelE}" paginator="true" rows="5"  
+                                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"  
+                                         rowsPerPageTemplate="5,10" selectionMode="single" 
+                                         selection="#{busquedaTitularesControlador.selectedEmpresa}"
+                                         id="empresaTable" sortBy="#{empresa.razon_social}" 
+                                         rowKey="#{empresa.codigo}">  
+                                <p:column headerText="Código" sortBy="#{empresa.codigo}">  
+                                    <h:outputText value="#{empresa.codigo}" />  
+                                </p:column>  
+
+                                <p:column headerText="Ruc" sortBy="#{empresa.ruc}">  
+                                    <h:outputText value="#{empresa.ruc}" />  
+                                </p:column>  
+
+                                <p:column headerText="Razón Social" sortBy="#{empresa.razon_social}">  
+                                    <h:outputText value="#{empresa.razon_social}" />  
+                                </p:column>  
+
+                                <f:facet name="footer">  
+                                    <p:commandButton id="btnVerTitular" value="Ver" icon="ui-icon-circle-plus" 
+                                                     oncomplete="wcarDialog.show()" update=":carDialog" />  
+                                    <p:commandButton id="btnEditarUsuario" value="Editar" icon="ui-icon-pencil" 
+                                                     oncomplete="wdialogoEditarEmpresa.show(); wwizE.loadStep(wwizE.cfg.steps[0], true);" update=":dialogoEditarEmpresa"
+                                                     action="#{busquedaTitularesControlador.obtenerTitularEmpresaDadoCodigo}"/> 
+                                </f:facet>
+
+                            </p:dataTable>  
+                        </p:panel>
+                    </h:form>  
+                </p:panel>
+            </p:dialog>
+
+            <p:dialog header="Busqueda de Representante Legal"  widgetVar="wdialogoBusquedaRL"  
+                      id="dialogoBusquedaRL" resizable="false" modal="true">
+                <p:panel id="pnlContenedorBusquedaRL">
+                    <h:form id="formRL">  
+                        <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        <p:panelGrid id="pngBusqueda" columns="4">
+                            <h:outputText id="otxtBuscar" value="Buscar por:"/>
+                            <p:selectOneMenu id="cmbCriterioBusqueda" value="#{busquedaTitularesControlador.criterioBusquedaTitular}">
+                                <f:selectItem itemValue="#{null}" itemLabel="--Elija una opción--"/>
+                                <f:selectItem itemValue="cedula" itemLabel="CEDULA"/>
+                                <f:selectItem itemValue="ruc" itemLabel="RUC"/>
+                                <f:selectItem itemValue="pasaporte" itemLabel="PASAPORTE"/>
+                                <f:selectItem itemValue="apellido" itemLabel="APELLIDOS"/>
+                                <f:selectItem itemValue="nombre_comercial" itemLabel="NOMBRE COMERCIAL"/>
+                            </p:selectOneMenu>
+                            <p:inputText id="txtBuscar" value="#{busquedaTitularesControlador.datoBusqueda}"/>
+                            <p:commandButton value="Aceptar" update="pTabla" 
+                                             action="#{busquedaTitularesControlador.obtenerPersonasTitulares}" process="@form" />
+                        </p:panelGrid>
+
+                        <p:panel id="pTabla">
+                            <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                            <p:dataTable var="persona" value="#{busquedaTitularesControlador.lazyModel}" paginator="true" rows="5"  
+                                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} 
+                                         {CurrentPageReport} {NextPageLink} {LastPageLink}"  
+                                         rowsPerPageTemplate="5,10" selectionMode="single" 
+                                         selection="#{busquedaTitularesControlador.selectedPersona}"
+                                         id="personaTable" sortBy="#{persona.apellido_paternno}"
+                                         rowKey="#{persona.codigo}">  
+
+
+                                <p:column headerText="Código" sortBy="#{persona.codigo}">  
+                                    <h:outputText value="#{persona.codigo}" />  
+                                </p:column>  
+
+                                <p:column headerText="Cédula" sortBy="#{persona.cedula}">  
+                                    <h:outputText value="#{persona.cedula}" />  
+                                </p:column>  
+
+                                <p:column headerText="Pasaporte" sortBy="#{persona.pasaporte}">  
+                                    <h:outputText value="#{persona.pasaporte}" />  
+                                </p:column>  
+
+                                <p:column headerText="Ruc" sortBy="#{persona.ruc.identificacion}">  
+                                    <h:outputText value="#{persona.ruc.identificacion}" />  
+                                </p:column>  
+
+                                <p:column headerText="Apellidos" sortBy="#{persona.apellido_paternno}">  
+                                    <h:outputText value="#{persona.apellido_paternno}" />  
+                                </p:column>  
+
+                                <p:column headerText="Nombre" sortBy="#{persona.primer_nombre}">  
+                                    <h:outputText value="#{persona.primer_nombre}" />  
+                                </p:column>  
+
+                                <p:column headerText="Nombre Comercial" sortBy="#{persona.nombre_comercial}">  
+                                    <h:outputText value="#{persona.nombre_comercial}" />  
+                                </p:column>  
+                            </p:dataTable>  
+                            <p:commandButton value="Aceptar"  action="#{busquedaTitularesControlador.asignarSelectedRepresentanteLegal}"  
+                                             update=":frmEditarEmpresa:txtRepresentanteLegal :frmEditarEmpresa:txtCedulaRepresentanteLegal" />
+                        </p:panel>
+                    </h:form>  
+                </p:panel>
+            </p:dialog>
+
+
+        </ui:define>
+    </ui:composition>
+</html>

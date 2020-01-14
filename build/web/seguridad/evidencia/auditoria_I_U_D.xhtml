@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>
+            <ui:define name="Autor">Gestión de Auditorias</ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">Auditorias</ui:define>
+            <ui:define name="contenido">
+                <p:growl id="mensajes" autoUpdate="true" showDetail="true"/>
+                <h:form id="frmAuditoria">
+                    
+                    <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                   
+                    <p:panel id="pnlAuditoria">
+
+                        <p:dataTable  id="tblAuditoria" value="#{auditoria_I_U_DControlador.lstAuditoria_I_U_D}"
+                                      var="auditoria" paginator="true" rows="15" rowKey="#{auditoria.pk_audit}" selectionMode="single">
+
+                            <p:column filterBy="#{auditoria.tableName}" filterMatchMode="startsWith" 
+                                      sortBy="#{auditoria.tableName}" headerText="Nombre de la Tabla">
+                                <h:outputText value="#{auditoria.tableName}"/>
+                            </p:column>                       
+
+                            <p:column filterBy="#{auditoria.operation}" filterMatchMode="startsWith" 
+                                      sortBy="#{auditoria.operation}" headerText="Acción">
+                                <h:outputText value="#{auditoria.operation}"/>
+                            </p:column>
+
+                            <p:column filterBy="#{auditoria.oldValue}" filterMatchMode="startsWith" 
+                                      sortBy="#{auditoria.oldValue}" headerText="Valor Antiguo">
+                                <h:outputText value="#{auditoria.oldValue}"/>
+                            </p:column>
+                            
+                            <p:column filterBy="#{auditoria.newValue}" filterMatchMode="startsWith" 
+                                      sortBy="#{auditoria.newValue}" headerText="Valor Nuevo">
+                                <h:outputText value="#{auditoria.newValue}"/>
+                            </p:column>
+                            
+                            <p:column filterBy="#{auditoria.updateDate}" filterMatchMode="startsWith" 
+                                      sortBy="#{auditoria.updateDate}" headerText="Fecha de Acción">
+                                <h:outputText value="#{auditoria.updateDate}"/>
+                            </p:column>
+
+                            <p:column filterBy="#{auditoria.userName}" filterMatchMode="startsWith" 
+                                      sortBy="#{auditoria.userName}" headerText="Usuario de Base de Datos">
+                                <h:outputText value="#{auditoria.userName}"/>
+                            </p:column>
+                            
+                            <f:facet name="footer">                                                                 
+
+                                <h:commandLink>
+                                    <img src="../../resources/images/excel.png" alt=""/>
+                                    <p:dataExporter type="xls" target="tblAuditoria" fileName="auditoria" pageOnly="true" />
+                                </h:commandLink>
+
+                                <h:commandLink>
+                                    <img src="../../resources/images/pdf.png" alt=""/>
+                                    <p:dataExporter type="pdf" target="tblAuditoria" fileName="auditoria" pageOnly="true" />
+                                </h:commandLink>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+            <p:dialog modal="true" widgetVar="dlgStatus" header="Procesando" draggable="false" closable="false" 
+                      resizable="false"> 
+                <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />  
+            </p:dialog>
+        </ui:composition>
+    </h:body>
+</html>
+

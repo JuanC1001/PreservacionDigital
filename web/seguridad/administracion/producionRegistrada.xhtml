@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>
+            <ui:define name="Autor">Produccién Académica Registrada</ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">Producción Academica</ui:define>
+            <ui:define name="contenido">
+                <p:growl id="mensajes" autoUpdate="true" showDetail="true"/>
+                <h:form id="frmdocumento">
+                    <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                    <p:panel id="pnlDocumento">
+                        <p:growl showDetail="true" autoUpdate="true"/>
+                        <p:dataTable  id="tblDocumento" value="#{documento_AutorControlador.lstDocumentoAutor}"
+                                      var="documentoautor"  rows="5" rowKey="#{documentoautor.codigo}" selectionMode="single"
+                                      paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} 
+                                      {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                      rowsPerPageTemplate="5,10,15">
+                            <f:facet name="header">
+                                Archivos Registrados
+                                <h:commandLink>
+                                    <img src="../../resources/images/excel.png" alt=""/>
+                                    <p:dataExporter type="xls" target="tblDocumento" fileName="Documentos Registrados" pageOnly="true" />
+                                </h:commandLink>
+
+                                <h:commandLink>
+                                    <img src="../../resources/images/pdf.png" alt=""/>
+                                    <p:dataExporter type="pdf" target="tblDocumento" fileName="Documentos Registrados" pageOnly="true" />
+                                </h:commandLink>                                 
+                            </f:facet>
+
+                            <p:column filterBy="#{documentoautor.codigo_autor.nombres}" filterMatchMode="startsWith" 
+                                      sortBy="#{documentoautor.codigo_autor.nombres}" headerText="Autor">
+                                <h:outputText value="#{documentoautor.codigo_autor.nombres}"/>
+                            </p:column>
+
+                            <p:column filterBy="#{documentoautor.codigo_documento.titulo}" filterMatchMode="startsWith" 
+                                      sortBy="#{documentoautor.codigo_documento.titulo}" headerText="Tema">
+                                <h:outputText value="#{documentoautor.codigo_documento.titulo}"/>
+                            </p:column>
+
+                            <p:column filterBy="#{documentoautor.codigo_documento.tipo}" filterMatchMode="startsWith" 
+                                      sortBy="#{documentoautor.codigo_documento.tipo}" headerText="Tipo">
+                                <h:outputText value="#{documentoautor.codigo_documento.tipo}"/>
+                            </p:column>
+
+                            <p:column filterBy="#{documentoautor.codigo_documento.fecha_registro}" filterMatchMode="startsWith" 
+                                      sortBy="#{documentoautor.codigo_documento.fecha_registro}" headerText="Fecha">
+                                <h:outputText value="#{documentoautor.codigo_documento.fecha_registro}"/>
+                            </p:column>
+
+                            <p:column filterBy="#{documentoautor.codigo_documento.codigo_usuario_rol.codigo_usuario.nick}" filterMatchMode="startsWith" 
+                                      sortBy="#{documentoautor.codigo_documento.codigo_usuario_rol.codigo_usuario.nick}" headerText="Usuario Registro:">
+                                <h:outputText value="#{documentoautor.codigo_documento.codigo_usuario_rol.codigo_usuario.nick}"/>
+                            </p:column>
+                        </p:dataTable>                                  
+                    </p:panel>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="dialogos">
+
+                <p:dialog modal="true" widgetVar="dlgStatus" header="Procesando" draggable="false" closable="false" 
+                          resizable="false"> 
+                    <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />  
+                </p:dialog>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

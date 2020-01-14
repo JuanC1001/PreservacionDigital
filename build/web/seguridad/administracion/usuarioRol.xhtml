@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">Asignar roles a la Cuenta</ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">Asignar roles a la Cuenta</ui:define>
+            <ui:define name="contenido">
+                <p:growl id="mensajes" autoUpdate="true"/>
+                <h:form id="frmUsuarioRol">
+                    <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                    <p:panel id="pnlUsuarioRol">
+                        <p:dataTable id="tblAccion" value="#{usuariorolControlador.usuarioroles}" var="usuariorol" paginator="true" rows="15"
+                                     rowKey="#{usuariorol.codigo}" selectionMode="single" selection="#{usuariorolControlador.seleccionarUsuarioRol}">
+
+                            <p:column filterBy="#{usuariorol.codigo_rol.nombre}" filterMatchMode="startsWith" 
+                                      sortBy="#{usuariorol.codigo_rol.nombre}">
+                                <f:facet name="header">
+                                    <h:outputText value="MODULO"/>
+                                </f:facet>
+                                <h:outputText value="#{usuariorol.codigo_rol.codigo_modulo.nombre}"/>
+                            </p:column>
+
+                            <p:column filterBy="#{usuariorol.codigo_rol.nombre}" filterMatchMode="startsWith" 
+                                      sortBy="#{usuariorol.codigo_rol.nombre}">
+                                <f:facet name="header">
+                                    <h:outputText value="ROL"/>
+                                </f:facet>
+                                <h:outputText value="#{usuariorol.codigo_rol.nombre} "/>
+                            </p:column>
+
+                            <p:column filterBy="#{usuariorol.codigo_usuario.apellidos}" filterMatchMode="startsWith" 
+                                      sortBy="#{usuariorol.codigo_usuario.apellidos}">
+                                <f:facet name="header">
+                                    <h:outputText value="USUARIO"/>
+                                </f:facet>
+                                <h:outputText value="#{usuariorol.codigo_usuario.nombres} #{usuariorol.codigo_usuario.apellidos}"/>
+                            </p:column>
+
+                            <p:column sortBy="#{usuariorol.estado}">
+                                <f:facet name="header">
+                                    <h:outputText value="ESTADO"/>
+                                </f:facet>
+                                <h:outputText value="#{usuariorol.estado==1 ? 'ACTIVO':'INACTIVO'}"/>
+                            </p:column>
+
+                            <p:column filterBy="#{usuarioControlador.obtieneFecha(usuariorol.fecha_creacion/1000)}" 
+                                      filterMatchMode="startsWith" sortBy="#{usuariorolControlador.obtieneFecha(usuariorol.fecha_creacion/1000)}">
+                                <f:facet name="header">
+                                    <h:outputText value="FECHA DE CREACIÓN:"/>
+                                </f:facet>
+                                <h:outputText value="#{usuariorolControlador.obtieneFecha(usuariorol.fecha_creacion/1000)} "/>
+                            </p:column>
+
+                            <p:column filterBy="#{usuarioControlador.obtieneFecha(usuariorol.fecha_modificacion/1000)}" 
+                                      filterMatchMode="startsWith" sortBy="#{usuariorolControlador.obtieneFecha(usuariorol.fecha_modificacion/1000)}">
+                                <f:facet name="header">
+                                    <h:outputText value="FECHA DE MODIFICACIÓN:"/>
+                                </f:facet>
+                                <h:outputText value="#{usuariorolControlador.obtieneFecha(usuariorol.fecha_modificacion/1000)} "/>
+                            </p:column>
+
+                            <f:facet name="footer">  
+                                <h:commandLink>
+                                    <img src="../../resources/images/excel.png" alt=""/>
+                                    <p:dataExporter type="xls" target="tblAccion" fileName="Usuario-Rol" pageOnly="true" />
+                                </h:commandLink>
+
+                                <h:commandLink>
+                                    <img src="../../resources/images/pdf.png" alt=""/>
+                                    <p:dataExporter type="pdf" target="tblAccion" fileName="Usuario-Rol" pageOnly="true" />
+                                </h:commandLink>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+
+
+            <ui:define name="dialogos">               
+                <p:dialog modal="true" widgetVar="dlgStatus" header="Procesando" draggable="false" closable="false" 
+                          resizable="false"> 
+                    <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />  
+                </p:dialog>
+            </ui:define>
+
+        </ui:composition>
+    </h:body>
+</html>

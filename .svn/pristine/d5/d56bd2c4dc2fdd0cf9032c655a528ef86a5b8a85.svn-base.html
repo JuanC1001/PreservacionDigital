@@ -1,0 +1,28 @@
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:composition template="/templates/plantillaInternaCenter.xhtml">
+        
+        <ui:define name="contenido">
+            <p:panel id="pnlFileUpload">
+                <p:growl autoUpdate="true" showDetail="true"/>
+                <p:ajaxStatus onstart="dlgProcesando.show()" oncomplete="dlgProcesando.hide()">
+
+                </p:ajaxStatus>
+                <h:form id="frmFileUpload" enctype="multipart/form-data">
+                    <h:panelGrid id="pngFileUpload" columns="3">
+                        <p:fileUpload fileUploadListener="#{imagenControlador.cargarArchivoImagen}"/>
+                    </h:panelGrid>  
+                </h:form>
+            </p:panel>
+        </ui:define>
+        <ui:define name="dialogos">
+            <p:dialog widgetVar="dlgProcesando" modal="true" minimizable="false" closable="false" resizable="false" draggable="false" >
+                <h:graphicImage value="/resources/images/ajaxloadingbar.gif"/>
+            </p:dialog>
+        </ui:define>
+    </ui:composition>
+</html>
+

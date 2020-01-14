@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">
+                Lista de Articulos
+            </ui:define>
+        </title>
+    </h:head>
+
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">
+                LISTA DE ARTICULOS
+            </ui:define>
+            <ui:define name="contenido">
+                <p:growl autoUpdate="true" showDetail="true"/>
+                <h:form id="frmTablaArticulo">
+                    <p:dataTable id="tblTablaArticulo" value="#{listaArticulosControlador.lstArticulo}"
+                                 var="articulo" rowKey="#{articulo.codigo}" selectionMode="single" 
+                                 selection="#{listaArticulosControlador.articuloSel}">
+                        <p:column headerText="Título">
+                            <h:outputText value="#{articulo.titulo}"/>
+                        </p:column>
+                        <p:column headerText="Introducción">
+                            <h:outputText value="#{articulo.introduccion}"/>
+                        </p:column>
+                        <p:column headerText="Estado">                         
+                            <h:outputText value="#{articulo.estado==0 ? 'DESPUBLICADO':'PUBLICADO'}"/>
+                        </p:column>
+                        <p:column headerText="Fecha de Registro">                           
+                            <p:calendar value="#{articulo.fecha_registro}" readonly="true" readonlyInput="true"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton value="Eliminar" onclick="dlgEliminarArticulo.show();" 
+                                             update=":frmEliminarArticulo:displayEliminarArticulo"/>
+                        </f:facet>
+                    </p:dataTable>       
+                </h:form>
+            </ui:define>
+
+            <ui:define name="dialogos">
+                <h:form id="frmEliminarArticulo">
+                    <p:dialog widgetVar="dlgEliminarArticulo" header="Desea Eliminar el Articulo Seleccionado" modal="true">
+                        <p:panel id="displayEliminarArticulo" >
+                            <p:panelGrid columns="2">
+                                <p:outputLabel value="Título"/>
+                                <p:inputText value="#{listaArticulosControlador.articuloSel.titulo}" disabled="true"/>
+                                
+                                <p:outputLabel value="Introducción"/>
+                                <p:inputText value="#{listaArticulosControlador.articuloSel.introduccion}" disabled="true"/>
+                                <p:outputLabel value="Estado"/>                             
+                                <p:selectOneMenu value="#{listaArticulosControlador.articuloSel.estado}" disabled="true">
+                                    <f:selectItem itemLabel="Seleccione un Estado" itemValue="#{-1}"/>
+                                    <f:selectItem itemLabel="Publicado" itemValue="#{1}"/>
+                                    <f:selectItem itemLabel="Despublicado" itemValue="#{0}"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel value="Fecha de Registro"/>
+                                <p:calendar value="#{listaArticulosControlador.articuloSel.fecha_registro}" readonly="true" readonlyInput="true"/>                                                            
+                                <p:commandButton value="Aceptar" action="#{listaArticulosControlador.eliminarArticulo()}"
+                                                 update=":frmTablaArticulo:tblTablaArticulo"/>
+                                <p:commandButton value="Cancelar" onclick="dlgEliminarArticulo.hide();"/>
+                                
+                            </p:panelGrid>
+
+                        </p:panel>
+
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

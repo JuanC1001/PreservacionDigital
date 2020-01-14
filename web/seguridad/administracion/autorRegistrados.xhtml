@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>
+            <ui:define name="Autor">Gestión de Autores</ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">Gestión de Autores</ui:define>
+            <ui:define name="contenido">
+                <p:growl id="mensajes" autoUpdate="true" showDetail="true"/>
+                <h:form id="frmautor">
+                    <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                    <p:panel id="pnlAutor">
+
+                        <p:dataTable  id="tblAutor" value="#{autoresControlador.lstAutor}"
+                                      var="autor" paginator="true" rows="15" rowKey="#{autor.codigo}" selectionMode="single">
+
+                            <p:column filterBy="#{autor.cedula}" filterMatchMode="startsWith" 
+                                      sortBy="#{autor.cedula}" headerText="Cédula:">
+                                <h:outputText value="#{autor.cedula}"/>
+                            </p:column>                       
+
+                            <p:column filterBy="#{autor.apellidos}" filterMatchMode="startsWith" 
+                                      sortBy="#{autor.apellidos}" headerText="Apellidos:">
+                                <h:outputText value="#{autor.apellidos}"/>
+                            </p:column>
+
+                            <p:column filterBy="#{autor.nombres}" filterMatchMode="startsWith" 
+                                      sortBy="#{autor.nombres}" headerText="Nombres:">
+                                <h:outputText value="#{autor.nombres}"/>
+                            </p:column>
+
+                            <p:column filterBy="#{autor.mail}" filterMatchMode="startsWith" 
+                                      sortBy="#{autor.mail}" headerText="Correo Electrónico:">
+                                <h:outputText value="#{autor.mail}"/>
+                            </p:column>
+                            
+                            <p:column filterBy="#{autor.codigo_usuario_rol.codigo_usuario.nick}" filterMatchMode="startsWith" 
+                                      sortBy="#{autor.codigo_usuario_rol.codigo_usuario.nick}" headerText="Usuario:">
+                                <h:outputText value="#{autor.codigo_usuario_rol.codigo_usuario.nick}"/>
+                            </p:column>
+
+                            <p:column filterBy="#{autor.fecha_registro}" filterMatchMode="startsWith" 
+                                      sortBy="#{autor.fecha_registro}" headerText="Fecha de Registro:">
+                                <h:outputText value="#{autor.fecha_registro}"/>
+                            </p:column>
+
+                            <f:facet name="footer">                                                                                               
+                                <h:commandLink>
+                                    <img src="../../resources/images/excel.png" alt=""/>
+                                    <p:dataExporter type="xls" target="tblAutor" fileName="autor" pageOnly="true" />
+                                </h:commandLink>
+
+                                <h:commandLink>
+                                    <img src="../../resources/images/pdf.png" alt=""/>
+                                    <p:dataExporter type="pdf" target="tblAutor" fileName="autor" pageOnly="true" />
+                                </h:commandLink>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="dialogos">               
+                <p:dialog modal="true" widgetVar="dlgStatus" header="Procesando" draggable="false" closable="false" 
+                          resizable="false"> 
+                    <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />  
+                </p:dialog>
+            </ui:define>
+
+
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <h:outputScript name="/jwplayer/jwplayer.js"/>
+        <title>
+            Gestión del Conocimiento - UNACH - ICITS
+        </title>
+        <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+        <link rel="shortcut icon" href="/resources/images/favicon.gif" />
+        <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'/>
+        <h:outputStylesheet name="/css/default.css"/>
+        <h:outputStylesheet name = "/css/cssLayout.css" />
+        <h:outputStylesheet name="/css/syntaxhighlighter.css"/>
+        <style type="text/css">
+            .accordionMenu .ui-menu {
+                width:100% !important; 
+
+            }
+            .accordionMenu .ui-accordion-content {
+                padding:0 !important;
+                overflow:inherit !important;
+                border-color: transparent !important;
+            }
+            .accordionMenu .ui-helper-clearfix:after {
+                height:inherit !important;
+            }
+            .ui-accordion-header{
+                border-color: transparent !important;
+                width: 98% !important;
+            }
+        </style>
+    </h:head >
+    <h:body>
+        <p:layout fullPage="true">
+            <p:layoutUnit position="north" size="50" gutter="0" collapsible="true">
+                <ui:include src="datosUsuario.xhtml" />
+            </p:layoutUnit>
+            <p:layoutUnit position="south" size="35" gutter="1">
+                <h:form>
+                    <ui:include src="datosPie.xhtml" />
+                </h:form>
+            </p:layoutUnit>
+            <p:layoutUnit position="west" size="250" resizable="true" collapsible="true" header="Menu Principal" gutter="2">
+                <p:messages id="messages" showDetail="true"/>  
+                <h:form id="frmMenuUsuario">
+                    <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                    <p:accordionPanel style="font-size: 9px; text-align: left;" styleClass="accordionMenu">
+                        <c:forEach items="#{indexMasterControlador.dm.menu}" var="nodo">
+                            <p:tab title="#{nodo.nombre}"> <hr style="color: antiquewhite;"/>
+                                <c:forEach items="#{nodo.hijos}" var="subnodo">
+                                    <c:if test="#{subnodo.hijos.size()>0}">
+                                        <p:accordionPanel style="padding-left: 10px; width: 95%">
+                                            <p:tab title="#{subnodo.nombre}" >  <hr style="color: antiquewhite;"/>
+                                                <c:forEach items="#{subnodo.hijos}" var="nieto">
+                                                    <p:commandLink value="► #{nieto.nombre}" actionListener="#{indexMasterControlador.asignaCodigoFuncion}" styleClass="ui-helper-reset ui-corner-all ui-widget-content" process="@this" update=":paginas">
+                                                        <f:setPropertyActionListener value="#{nieto.codigo}" target="#{indexMasterControlador.dm.codigoFuncionActual}" />
+                                                        <f:setPropertyActionListener value="#{nieto.url}" target="#{indexMasterControlador.dm.paginaActual}"/>
+                                                    </p:commandLink> <hr style="color: antiquewhite;"/>
+                                                </c:forEach>
+                                            </p:tab>
+                                        </p:accordionPanel>
+                                    </c:if>
+                                    <c:if test="#{subnodo.hijos.size()== 0}">
+                                        <p:commandLink value="► #{subnodo.nombre}"  actionListener="#{indexMasterControlador.asignaCodigoFuncion}" update=":paginas" styleClass="ui-helper-reset ui-corner-all ui-widget-content" process="@this">
+                                            <f:setPropertyActionListener value="#{subnodo.codigo}" target="#{indexMasterControlador.dm.codigoFuncionActual}" />
+                                            <f:setPropertyActionListener value="#{subnodo.url}" target="#{indexMasterControlador.dm.paginaActual}" />
+                                        </p:commandLink> <hr style="color: antiquewhite;"/>
+                                    </c:if>
+                                </c:forEach>
+                            </p:tab>
+                        </c:forEach>
+                    </p:accordionPanel>
+                </h:form> 
+            </p:layoutUnit>
+            <p:layoutUnit position="center" gutter="1" >
+                <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                <h:panelGroup id="paginas">
+                    <iframe name="paginas" width="99.8%" height="99%" src="#{indexMasterControlador.dm.paginaActual}" style="border: 0"/>
+                </h:panelGroup>
+            </p:layoutUnit>
+        </p:layout>
+        <p:dialog modal="true" widgetVar="dlgStatus" header="Procesando" draggable="false" closable="false" resizable="false"> 
+            <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />  
+        </p:dialog>
+    </h:body>
+</html>
+

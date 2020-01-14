@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>
+            <ui:define name="Historia">Inicio</ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="/templates/plantillaBase.xhtml">
+            <ui:define name="tituloNavegador">Historia</ui:define>
+            <ui:define name="content">
+
+                <h:form>
+                    <p:growl id="msgs" showDetail="true" />
+                    <h:panelGrid style="text-align:center">
+                        <img src="../resources/images/SISTEMAS.png" 
+                             style=" height: 150px; width: 150px"/>
+
+                        <h:panelGrid columns="1"  width="850" style=" text-align : justify; color: #5459c9; font-size: 12px">
+                            <p:panel header="Historia de CISYC" style="text-align: justify">
+                                <p>  </p>
+                                <p>
+                                    La carrera de Ingeniería en Sistemas y computación fue creada por resolución del H. Consejo Universitario el 21 de Septiembre del 2004 y desde el 12 de Febrero del 2008, se aprueba su funcionamiento como Escuela. Empezó a funcionar a partir de octubre de 1997, al momento contamos con tres promociones de egresados, de los cuales se han titulado 24 Ingenieros. En los últimos 5 años se ha mejorado el currículo por competencias primero (años) y ahora por objetivos de carrera (semestres), acorde con las necesidades de la sociedad. Se han implementado los laboratorios de cómputo en las áreas de programación y redes de computadoras.
+                                    El Ingeniero en Sistemas y Computación es un profesional con conciencia social, responsabilidad, compromiso ético y respeto del Medio Ambiente, con capacidad de aprendizaje y adaptación a su entorno, orientado a generar y liderar soluciones informáticas con calidad.
+
+                                </p>
+                                <p>  </p>
+                            </p:panel>
+                            <p:panel  header="Ámbitos en los que se requiere esta Profesión:" style="text-align: justify; font-size: 12px">                                    
+                                <p>  </p>                  
+                                <p>    
+                                    <p>  </p> 
+                                    1. Industria de Software, Comunicaciones, Servicios Informáticos, Seguridad Informática
+                                    <p>  </p> 
+                                    2. Instituciones públicas o privadas, financieras, de Hardware, Seguridad Informática
+                                    <p>  </p> 
+                                    3. Empresas de consultoría
+                                    <p>  </p> 
+                                    4. Empresas micro, pequeñas, medianas y grandes del Sector Productivo.
+                                    <p>  </p> 
+                                </p> 
+                                <p>  </p>                               
+                            </p:panel>
+
+                        </h:panelGrid>
+
+                    </h:panelGrid>
+                </h:form>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+
+</html>

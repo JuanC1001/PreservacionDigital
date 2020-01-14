@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>
+            <ui:define name="Autor">Gestión de Condiciones</ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">Ingreso de Archivos</ui:define>
+            <ui:define name="contenido">
+                <p:growl id="mensajes" autoUpdate="true" showDetail="true"/>
+                <h:form id="frmcondiciones">
+                    <!--
+                    <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                    -->
+                    <p:panel id="pnlCondiciones">
+
+                        <p:dataTable  id="tblCondiciones" value="#{condicionesControlador.lstcondiciones}"
+                                      var="condiciones" paginator="true" rows="15" rowKey="#{condiciones.codigo}" selectionMode="single">
+
+                            <p:column filterBy="#{condiciones.condicion}" filterMatchMode="startsWith" 
+                                      sortBy="#{condiciones.condicion}" headerText="Condiciones">
+                                <h:outputText value="#{condiciones.condicion}"/>
+                            </p:column>                       
+
+                            <p:column filterBy="#{condiciones.detalle}" filterMatchMode="startsWith" 
+                                      sortBy="#{condiciones.detalle}" headerText="Detalles">
+                                <h:outputText value="#{condiciones.detalle}"/>
+                            </p:column>
+
+                            <p:column filterBy="#{condiciones.path}" filterMatchMode="startsWith" 
+                                      sortBy="#{condiciones.path}" headerText="Archivo Condición">
+                                <h:outputText value="#{condiciones.path}"/>
+                            </p:column>
+
+                            <f:facet name="footer">                                                                
+                                <p:commandButton id="btnNuevoCondicion" value="Nuevo" icon="ui-icon-newwin"                                              
+                                                 onclick="dlgInsertarCondiciones.show();"
+                                                 title="Nueva Condicion"/>  
+
+                                <h:commandLink>
+                                    <img src="../../resources/images/excel.png" alt=""/>
+                                    <p:dataExporter type="xls" target="tblAutor" fileName="autor" pageOnly="true" />
+                                </h:commandLink>
+
+                                <h:commandLink>
+                                    <img src="../../resources/images/pdf.png" alt=""/>
+                                    <p:dataExporter type="pdf" target="tblAutor" fileName="autor" pageOnly="true" />
+                                </h:commandLink>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="dialogos">
+                <p:dialog id="insertarNuevoCondiciones" widgetVar="dlgInsertarCondiciones" header="Condiciones"
+                          modal="true" height="340" width="520" showEffect="explode" hideEffect="fold"
+                          closable="true" resizable="false" >
+                    <h:form id="frmInsertarCondiciones">
+                        <!--
+                       <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                        -->
+                        <p:panelGrid columns="2" >
+                            <h:outputText id="display"/>
+                            <p:inputTextarea id="txttitulo" counter="display" counterTemplate="Condiciones" rows="5" cols="60" 
+                                             value="#{condicionesControlador.objCondiciones.condicion}" queryDelay="700" minQueryLength="4"  
+                                             title="ej: Análisis de ejemplos en Unach" required="true" requiredMessage="Ingrese la Condición"/>
+
+                            <p:outputLabel value="Detalles"/>                                                           
+                            <p:inputTextarea id="txtResumen" rows="5" cols="60" 
+                                             value="#{condicionesControlador.objCondiciones.detalle}" queryDelay="700" minQueryLength="4"
+                                             title="ej: Los análisis de ejemplos " required="true" requiredMessage="Ingrese el detalle"/>  
+
+                            <p:outputLabel value="Ruta"/>
+                            <p:inputText id ="txtRutacondicion" value="#{condicionesControlador.objCondiciones.path}" disabled="true"/>
+
+                            <p:outputLabel value="Subir Archivo"/>                                                                   
+                            <p:fileUpload fileUploadListener="#{condicionesControlador.cargarCondiciones}"
+                                          allowTypes="/(\.|\/)(pdf|doc?x|odt|xlsx|pptx|rar|gif|jpe?g|png|zip|exe|mp3|wma|wav|mp4|avi|mov|3gp)$/" 
+                                          label="Abrir" mode="advanced"  
+                                          update="txtRutacondicion" uploadLabel="Subir" cancelLabel="Cancelar"                                  
+                                          value="#{condicionesControlador.archivoCondiciones}"
+                                          required="true" requiredMessage="Cargar Archivo!!" />
+                        </p:panelGrid> 
+                        <p:commandButton value="Aceptar" action="#{condicionesControlador.insertarIncrementoArchivos()}"
+                                         update=":frmInsertarCondiciones"
+                                         process="@this, txttitulo,txtRutacondicion,txtResumen"
+                                         />
+                        <p:commandButton value="Cancelar" onclick="dlgInsertarCondiciones.hide();"/>
+                    </h:form> 
+                </p:dialog> 
+
+            </ui:define>
+            <p:dialog modal="true" widgetVar="dlgStatus" header="Procesando" draggable="false" closable="false" 
+                      resizable="false"> 
+                <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />  
+            </p:dialog>
+        </ui:composition>
+    </h:body>
+</html>
+

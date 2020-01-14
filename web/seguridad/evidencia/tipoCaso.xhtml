@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">
+                Tipos de Casos
+            </ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">
+                ADMINISTRACIÓN DE TIPO DE CASOS
+            </ui:define>
+            <ui:define name="contenido">
+                <p:growl autoUpdate="true" showDetail="true"/>
+                <h:form id="frmTablaTipoCaso">
+                    <p:dataTable id="tblTablaTipoCaso" value="#{tipoCasoControlador.lsttipoCaso}" var="tipoCaso"
+                                 paginator="true" rows="10" draggableColumns="false"
+                                 selectionMode="single" rowKey="#{tipoCaso.codigo}"  
+                                 selection="#{tipoCasoControlador.tipoCasosel}">
+
+                        <p:column headerText="Tipo de Caso">
+                            <h:outputText value="#{tipoCaso.nombre_tipoCaso}"/>
+                        </p:column>
+                        <p:column headerText="Detalle">
+                            <h:outputText value="#{tipoCaso.detalle}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton value="Insertar" onclick="dlgInsertarTipoCaso.show();" 
+                                             update=":frmInsertarTipoCaso:pngInsertarTipoCaso"/>
+                            <p:commandButton value="Editar" onclick="dlgEditarTipoCaso.show();" 
+                                             update=":frmEditarTipoCaso:pngEditarTipoCaso"/>
+                            <p:commandButton value="Eliminar" onclick="dlgEliminarTipoCaso.show();" 
+                                             update=":frmEliminarTipoCaso:pngEliminarTipoCaso"/>
+                        </f:facet>
+                    </p:dataTable>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="dialogos">
+                <h:form id="frmInsertarTipoCaso" enctype="multipart/form-data" >
+                    <p:dialog widgetVar="dlgInsertarTipoCaso" header="Insertar Tipos de Casos" modal="true" height="250" width="670">
+                        <p:panel id="displayInsertarTipoCaso" >
+                            <p:panelGrid id="pngInsertarTipoCaso" columns="2" >
+                                <p:outputLabel value="Nombre Tipo de Caso"/>
+                                <p:inputText id="txtpolitica" value="#{tipoCasoControlador.objtipoCaso.nombre_tipoCaso}" style="width:350px" 
+                                             title="ej:Los análisis de ejemplos" required="true" requiredMessage="Ingrese el Nombre de la Politica"/>
+                                <p:outputLabel value="Resumen de Politica"/>                                                           
+                                <p:inputTextarea id="txtdetalle" rows="5" cols="60" 
+                                                 value="#{tipoCasoControlador.objtipoCaso.detalle}" queryDelay="700" minQueryLength="4"
+                                                 title="ej: Los análisis de ejemplos" required="true" requiredMessage="Ingrese el Detalle de la Política"/> 
+
+                                <p:panelGrid columns="2" style="text-align: center;">
+                                    <p:commandButton value="Aceptar" action="#{tipoCasoControlador.insertarTipoCaso()}"
+                                                     update=":frmTablaTipoCaso:tblTablaTipoCaso" process="@this txtpolitica
+                                                     txtdetalle"/>
+                                    <p:commandButton value="Cancelar" onclick="dlgInsertarTipoCaso.hide();"
+                                                     update=":frmTablaTipoCaso:tblTablaTipoCaso"/>
+                                </p:panelGrid>
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:dialog>
+                </h:form>
+
+                <p:dialog widgetVar="dlgEditarTipoCaso" header="Editar Tipos de Casos" modal="true"
+                          closable="false" resizable="false" showEffect="clip" hideEffect="fold">     
+                    <h:form id="frmEditarTipoCaso">
+                        <p:messages id="messages" autoUpdate="true"/>                   
+                        <p:panelGrid  id="pngEditarTipoCaso" columns="2">
+                            <p:outputLabel value="Nombre de Tipo de Caso"/>
+                            <p:inputText  value="#{tipoCasoControlador.tipoCasosel.nombre_tipoCaso}" style="width:350px" 
+                                         title="ej:Los análisis de ejemplos" required="true" requiredMessage="Ingrese el Nombre de la Politica"/>
+                            <p:outputLabel value="Resumen de Politica"/>                                                           
+                            <p:inputTextarea rows="5" cols="60" 
+                                             value="#{tipoCasoControlador.tipoCasosel.detalle}" queryDelay="700" minQueryLength="4"
+                                             title="ej: Los análisis de ejemplos" required="true" requiredMessage="Ingrese el Detalle de la Política"/> 
+
+                            <p:commandButton value="Aceptar" action="#{tipoCasoControlador.actualizarTipoCaso()}"
+                                             update=":frmTablaTipoCaso:tblTablaTipoCaso"/>
+                            <p:commandButton value="Cancelar" onclick="dlgEditarTipoCaso.hide();"/>
+                        </p:panelGrid>                      
+                    </h:form>
+                </p:dialog>
+
+                <h:form id="frmEliminarTipoCaso" enctype="multipart/form-data">
+                    <p:dialog widgetVar="dlgEliminarTipoCaso" header="Desea Eliminar Tipo de Caso Seleccionado" modal="true">
+                        <p:panel id="displayEliminarTipoCaso" >
+                            <p:panelGrid id="pngEliminarTipoCaso" columns="2">
+
+
+                                <p:outputLabel value="Tipo de Caso"/>
+                                <p:inputText value="#{tipoCasoControlador.tipoCasosel.nombre_tipoCaso}" disabled="true"/>
+
+                                <p:outputLabel value="Detalle del Caso"/>
+                                <p:inputText value="#{tipoCasoControlador.tipoCasosel.detalle}" disabled="true"/>
+
+                                <p:outputLabel value="Fecha"/>
+                                <p:inputText value="#{tipoCasoControlador.tipoCasosel.fecha_registro}" disabled="true"/>
+
+
+
+                                <p:commandButton value="Aceptar" action="#{tipoCasoControlador.eliminarTipoCaso()}"
+                                                 update=":frmTablaTipoCaso:tblTablaTipoCaso"/>
+                                <p:commandButton value="Cancelar" onclick="dlgEliminarTipoCaso.hide();"/>
+
+                            </p:panelGrid>
+
+                        </p:panel>
+
+                    </p:dialog>
+                </h:form>
+
+            </ui:define>
+        </ui:composition>       
+    </h:body>
+</html>

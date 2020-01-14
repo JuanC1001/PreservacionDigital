@@ -1,0 +1,101 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package master.logica.funciones;
+
+
+import java.io.Serializable;
+import java.util.ArrayList;  
+import java.util.Collections;  
+import java.util.Iterator;  
+import java.util.List;  
+import java.util.Map;  
+import master.logica.clases.Persona;
+import org.primefaces.model.LazyDataModel;  
+import org.primefaces.model.SortOrder;  
+import recursos.LazySorter;
+
+
+  
+/** 
+ * Dummy implementation of LazyDataModel that uses a list to mimic a real datasource like a database. 
+ */  
+public class FLazyPersonasDataModel extends LazyDataModel<Persona> implements Serializable{  
+      
+    private List<Persona> datasource;  
+      
+    public FLazyPersonasDataModel(List<Persona> datasource) {  
+        this.datasource = datasource;  
+    }  
+      
+    @Override  
+    public Persona getRowData(String rowKey) {  
+        System.out.print("ROW KEY ES: " + rowKey);
+        for(Persona persona : datasource) {  
+            System.out.print("datos de persona seleccionada: " + persona.getCodigo_persona());
+            if(Long.toString(persona.getCodigo_persona()).equals(rowKey))
+                return persona;
+        }  
+        return null;  
+    }  
+  
+    @Override  
+    public Object getRowKey(Persona persona) {  
+        return persona.getCodigo_persona();  
+    }  
+  
+    @Override  
+    public List<Persona> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {  
+        List<Persona> data = new ArrayList<Persona>();  
+  
+        //filter  
+        for(Persona persona : datasource) {  
+            boolean match = true;  
+  
+            for(Iterator<String> it = filters.keySet().iterator(); it.hasNext();) {  
+                try {  
+                    String filterProperty = it.next();  
+                    String filterValue = filters.get(filterProperty);  
+                    String fieldValue = String.valueOf(persona.getClass().getField(filterProperty).get(persona));  
+  
+                    if(filterValue == null || fieldValue.startsWith(filterValue)) {  
+                        match = true;  
+                    }  
+                    else {  
+                        match = false;  
+                        break;  
+                    }  
+                } catch(Exception e) {  
+                    match = false;  
+                }   
+            }  
+  
+            if(match) {  
+                data.add(persona);  
+            }  
+        }  
+  
+        //sort  
+        if(sortField != null) {  
+            Collections.sort(data, new  LazySorter(sortField, sortOrder));  
+        }  
+  
+        //rowCount  
+        int dataSize = data.size();  
+        this.setRowCount(dataSize);  
+  
+        //paginate  
+        if(dataSize > pageSize) {  
+            try {  
+                return data.subList(first, first + pageSize);  
+            }  
+            catch(IndexOutOfBoundsException e) {  
+                return data.subList(first, first + (dataSize % pageSize));  
+            }  
+        }  
+        else {  
+            return data;  
+        }  
+    }
+}  

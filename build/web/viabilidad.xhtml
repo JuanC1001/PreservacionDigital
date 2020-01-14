@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="/templates/plantillaBase.xhtml">
+        <ui:define name="tituloNavegador">Prececi</ui:define>
+        <ui:define name="content">
+            <h:form id="frmIndex">
+                <h:panelGrid id="pnlIndexPrincipal" columns="1" class="center_content">
+                    <h:panelGrid columns="2">
+                        
+                        <p:carousel id="tabsCarouselVia" headerText="Viabilidad" numVisible="1" itemStyle="width: 420px; height: 180px;"
+                                    effect="easeInStrong" value="#{indexControlador.lstDocumentoVi}" var="blog" circular="true" 
+                                    autoPlayInterval="4000" >
+                            <p:panelGrid columns="2">
+                                <p:lightBox >  
+                                    <h:outputLink value="#" title="#{blog.titulo}" >  
+                                        <p:graphicImage  value="resources/images/pdfico.png" height="120px" width="90px"/> 
+                                        <br/>
+                                        <h:outputText value="#{blog.titulo}"/>
+                                    </h:outputLink> 
+                                    <f:facet name="inline">
+                                        <p:media value="#{blog.path}" height="600" width="800" />
+                                    </f:facet>
+                                </p:lightBox>                                  
+
+                                <p:panel>
+                                    <h:outputText value="#{blog.titulo_ducumento}" styleClass="titulo_news" /><br/>
+                                    <br/>
+                                    <h:outputText value="#{blog.detalles}" /><br/>
+                                    <br/>
+                                    <h:outputText value="#{blog.fecha_registro}" styleClass="titulo_readmore"/><br/>
+                                </p:panel>
+
+                            </p:panelGrid>
+
+                        </p:carousel>
+
+                        
+                         <p:carousel id="tabsCarouselTu" headerText="Tutotiales" numVisible="1" itemStyle="width: 420px; height: 180px;"
+                                    effect="easeInStrong" value="#{indexControlador.lstDocumentoPi}" var="blog" circular="true" 
+                                    autoPlayInterval="4000" >
+                            <p:panelGrid columns="2">
+                                <p:lightBox >  
+                                    <h:outputLink value="#" title="#{blog.titulo}" >  
+                                        <p:graphicImage  value="resources/images/pdfico.png" height="120px" width="90px"/> 
+                                        <br/>
+                                        <h:outputText value="#{blog.titulo}"/>
+                                    </h:outputLink> 
+                                    <f:facet name="inline">
+                                        <p:media value="#{blog.path}" height="600" width="800" />
+                                    </f:facet>
+                                </p:lightBox>                                  
+
+                                <p:panel>
+                                    <h:outputText value="#{blog.titulo_ducumento}" styleClass="titulo_news" /><br/>
+                                    <br/>
+                                    <h:outputText value="#{blog.detalles}" /><br/>
+                                    <br/>
+                                    <h:outputText value="#{blog.fecha_registro}" styleClass="titulo_readmore"/><br/>
+                                </p:panel>
+
+                            </p:panelGrid>
+
+                        </p:carousel>
+                        
+
+                        
+                         <p:carousel id="tabsCarouselDi" headerText="Disponibilidad" numVisible="1" itemStyle="width: 420px; height: 180px;"
+                                    effect="easeInStrong" value="#{indexControlador.lstDocumentoDi}" var="blog" circular="true" 
+                                    autoPlayInterval="4000" >
+                            <p:panelGrid columns="2">
+                                <p:lightBox >  
+                                    <h:outputLink value="#" title="#{blog.titulo}" >  
+                                        <p:graphicImage  value="resources/images/pdfico.png" height="120px" width="90px"/> 
+                                        <br/>
+                                        <h:outputText value="#{blog.titulo}"/>
+                                    </h:outputLink> 
+                                    <f:facet name="inline">
+                                        <p:media value="#{blog.path}" height="600" width="800" />
+                                    </f:facet>
+                                </p:lightBox>                                  
+
+                                <p:panel>
+                                    <h:outputText value="#{blog.titulo_ducumento}" styleClass="titulo_news" /><br/>
+                                    <br/>
+                                    <h:outputText value="#{blog.detalles}" /><br/>
+                                    <br/>
+                                    <h:outputText value="#{blog.fecha_registro}" styleClass="titulo_readmore"/><br/>
+                                </p:panel>
+
+                            </p:panelGrid>
+
+                        </p:carousel>
+          
+                         <p:carousel id="tabsCarouselPi" headerText="Planificación Informática" numVisible="1" itemStyle="width: 420px; height: 180px;"
+                                    effect="easeInStrong" value="#{indexControlador.lstDocumentoPi}" var="blog" circular="true" 
+                                    autoPlayInterval="4000" >
+                            <p:panelGrid columns="2">
+                                <p:lightBox >  
+                                    <h:outputLink value="#" title="#{blog.titulo}" >  
+                                        <p:graphicImage  value="resources/images/pdfico.png" height="120px" width="90px"/> 
+                                        <br/>
+                                        <h:outputText value="#{blog.titulo}"/>
+                                    </h:outputLink> 
+                                    <f:facet name="inline">
+                                        <p:media value="#{blog.path}" height="600" width="800" />
+                                    </f:facet>
+                                </p:lightBox>                                  
+
+                                <p:panel>
+                                    <h:outputText value="#{blog.titulo_ducumento}" styleClass="titulo_news" /><br/>
+                                    <br/>
+                                    <h:outputText value="#{blog.detalles}" /><br/>
+                                    <br/>
+                                    <h:outputText value="#{blog.fecha_registro}" styleClass="titulo_readmore"/><br/>
+                                </p:panel>
+
+                            </p:panelGrid>
+
+                        </p:carousel>
+                        
+                        
+                        <!--
+                        <h:panelGrid columns="2">
+                            <p:panel header="Viabilidad" style="height:200px;width:417px;"> 
+                                <p:dataList value="#{indexControlador.lstDocumentoVi}" var="documentos" type="definition" >  
+                                    <p:lightBox >  
+                                        <h:outputLink value="#" title="#{documentos.titulo}" >  
+                                            <p:graphicImage  value="resources/images/pdf.png" /> 
+                                            <h:outputText value="#{documentos.titulo}"/>
+                                        </h:outputLink> 
+                                        <f:facet name="inline">
+                                            <p:media value="#{documentos.path}" height="600" width="800" />
+                                        </f:facet>
+                                    </p:lightBox>
+                                </p:dataList>  
+                            </p:panel>
+                        </h:panelGrid>
+                        -->
+                    </h:panelGrid>
+                </h:panelGrid>                           
+            </h:form>           
+        </ui:define>
+    </ui:composition>
+</html>
+

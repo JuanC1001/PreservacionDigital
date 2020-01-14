@@ -1,0 +1,10 @@
+body
+{
+    /*color: #5b5138;*/
+    color: #767779;
+    font-family: 'Lato', Verdana, Arial, sans-serif;
+    font-size: 11px;
+    text-align: justify;
+    /*text-shadow: 0.0001px 0.0001px 0.1px #5b5138;*/
+    text-shadow: 0.0001px 0.0001px 0.1px #767779;
+}

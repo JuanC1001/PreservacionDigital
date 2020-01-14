@@ -1,0 +1,112 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="../../../templates/plantillaInternaCenter.xhtml">
+    <h:head>
+        <title>
+            <ui:define name="Autor">Reportes de Casos</ui:define>
+        </title>
+    </h:head>
+    <ui:define name="top">Reportes de Casos</ui:define>
+
+    <ui:define name="contenido">
+        <p:growl id="mensajes" autoUpdate="true" showDetail="true"/>
+        <center>
+            <h:form>
+                <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-6">
+                        <p:calendar value="#{reportesControlador.fechaInicio}" id="txtFechaInicios" 
+                                    placeholder="Fecha de Inicio" pattern="yyyy-MM-dd"
+                                    required="true" requiredMessage="La Fecha de Inicio es requerida!"/>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <p:calendar value="#{reportesControlador.fechaFin}" id="txtFechaFin" 
+                                    placeholder="Fecha de Fin" pattern="yyyy-MM-dd"
+                                    required="true" requiredMessage="La Fecha Fin es requerida!"/>
+                    </div>                                                
+                    <div class="ui-g-12 ui-md-6">
+                        <p:commandButton id="btnRecargar" value="CONSULTAR" styleClass="secondary" 
+                                         process="txtFechaInicios txtFechaFin @this" 
+                                         action="#{reportesControlador.ListarCasoRegistradosFechas()}"  
+                                         update=":frmcasoUsuario:tblCasoUsuario">
+                        </p:commandButton>
+                    </div>
+                </div>
+            </h:form>
+        </center> 
+        <p:separator> </p:separator>
+        <p:growl id="mensajes1" autoUpdate="true"/>
+        <h:form id="frmcasoUsuario">
+            <p:ajaxStatus onstart="dlgStatus.show();" oncomplete="dlgStatus.hide();"/>
+            <p:panel id="pnlCaso">
+                <p:dataTable  id="tblCasoUsuario" value="#{reportesControlador.lstCPS}"
+                              var="caso" paginator="true" rows="8" draggableColumns="true" 
+                              rowKey="#{caso.codigo}" selectionMode="single"
+                              filteredValue="#{reportesControlador.filterlstCPS}">
+
+                    <p:column filterBy="#{caso.codigo}" filterMatchMode="startsWith" 
+                              sortBy="#{caso.codigo}" headerText="Código">
+                        <h:outputText value="#{caso.codigo}"/>
+                    </p:column> 
+
+                    <p:column filterBy="#{caso.codigo_caso.codigo_usuario_rol.codigo_usuario.nick}" filterMatchMode="startsWith" 
+                              sortBy="#{caso.codigo_caso.codigo_usuario_rol.codigo_usuario.nick}" headerText="Registrado por">
+                        <h:outputText value="#{caso.codigo_caso.codigo_usuario_rol.codigo_usuario.nick}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{caso.codigo_caso.codigo_institucional}" filterMatchMode="startsWith" 
+                              sortBy="#{caso.codigo_caso.codigo_institucional}" headerText="Código Institucional">
+                        <h:outputText value="#{caso.codigo_caso.codigo_institucional}"/>
+                    </p:column> 
+
+
+                    <p:column filterBy="#{caso.codigo_caso.codigo_tipo_caso.nombre_tipoCaso}" filterMatchMode="startsWith" 
+                              sortBy="#{caso.codigo_caso.codigo_tipo_caso.nombre_tipoCaso}" headerText="Tipo Caso">
+                        <h:outputText value="#{caso.codigo_caso.codigo_tipo_caso.nombre_tipoCaso}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{caso.codigo_caso.provincia}" filterMatchMode="startsWith" 
+                              sortBy="#{caso.codigo_caso.provincia}" headerText="Provincia">
+                        <h:outputText value="#{caso.codigo_caso.provincia}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{caso.codigo_persona.nombres} #{caso.codigo_persona.apellidos}" filterMatchMode="startsWith" 
+                              sortBy="#{caso.codigo_persona.nombres} #{caso.codigo_persona.apellidos}" headerText="Usario:">
+                        <h:outputText value="#{caso.codigo_persona.nombres} #{caso.codigo_persona.apellidos}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{caso.codigo_tipo_usuario.nombre_usuario}" filterMatchMode="startsWith" 
+                              sortBy="#{caso.codigo_tipo_usuario.nombre_usuario}" headerText="Cargo:">
+                        <h:outputText value="#{caso.codigo_tipo_usuario.nombre_usuario}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{caso.fecha_registro}" filterMatchMode="startsWith" 
+                              sortBy="#{caso.fecha_registro}" headerText="Registro:">
+                        <h:outputText value="#{caso.fecha_registro}"/>
+                    </p:column>
+
+                    <f:facet name="footer"> 
+                        Descargar en:
+                        <h:commandLink>
+                            <img src="../../../resources/images/excel.png" alt=""/>
+                            <p:dataExporter type="xls" target="tblCaso" fileName="caso" pageOnly="true" />
+                        </h:commandLink>
+
+                        <h:commandLink>
+                            <img src="../../../resources/images/pdf.png" alt=""/>
+                            <p:dataExporter type="pdf" target="tblCasoUsuario" fileName="caso" pageOnly="true" />
+                        </h:commandLink>
+                    </f:facet>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <p:dialog modal="true" widgetVar="dlgStatus" header="Procesando" draggable="false" closable="false" 
+                  resizable="false" appendTo="@(body)" > 
+            <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />  
+        </p:dialog>
+    </ui:define>
+
+</ui:composition>      
