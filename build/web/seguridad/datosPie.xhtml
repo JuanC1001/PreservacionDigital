@@ -10,19 +10,15 @@
          <h:outputText value="Seleccione Tema: "/>
         <h:form>
             <p:themeSwitcher style="width:150px" id="defaultSwitcher" value="#{indexMasterControlador.dm.temaSitio}">  
-                <f:selectItem itemLabel="Choose Theme" itemValue="" />  
-                <f:selectItem itemLabel="glass-x" itemValue="glass-x"/>
-                <f:selectItem itemLabel="temaDefault" itemValue="temaDefault"/>
-                <f:selectItem itemLabel="black-tie" itemValue="black-tie"/>
-                <f:selectItem itemLabel="blitzer" itemValue="blitzer"/>
+                
+                <f:selectItem itemLabel="black-tie" itemValue="black-tie"/>                             
                 <f:selectItem itemLabel="cupertino" itemValue="cupertino"/>
-                <f:selectItem itemLabel="humanity" itemValue="humanity"/>
+                <f:selectItem itemLabel="afterwork" itemValue="afterwork"/>                
+                <f:selectItem itemLabel="twitter bootstrap" itemValue="bootstrap"/>  
+                
+                <f:selectItem itemLabel="glass-x" itemValue="glass-x"/>
                 <f:selectItem itemLabel="afterwork" itemValue="afterwork"/>
                 <f:selectItem itemLabel="aristo" itemValue="aristo"/>
-                <f:selectItem itemLabel="flick" itemValue="flick"/>
-                <f:selectItem itemLabel="twitter bootstrap" itemValue="bootstrap"/>
-                <f:selectItem itemLabel="sunny" itemValue="sunny"/>
-                <f:selectItem itemLabel="omega" itemValue="omega"/>
                 <p:ajax event="change" process="defaultSwitcher" update=":paginas"/>
             </p:themeSwitcher>
         </h:form>
