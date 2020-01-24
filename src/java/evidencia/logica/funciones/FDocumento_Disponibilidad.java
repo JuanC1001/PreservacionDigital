@@ -15,7 +15,7 @@ import master.logica.funciones.FUsuarioRol;
 
 /**
  *
- * @author ruben
+ * @author 
  */
 public class FDocumento_Disponibilidad {
 
@@ -23,7 +23,7 @@ public class FDocumento_Disponibilidad {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_insert_documentodisponibilidad(?,?,?,?,?,?,?)";
+            String sql = "select * from archivo_municipio.f_insert_documentodisponibilidad(?,?,?,?,?,?,?)";
             lstP.add(new Parametro(1, documento.getCodigo_usuario_rol().getCodigo()));
             lstP.add(new Parametro(2, documento.getTitulo_ducumento()));
             lstP.add(new Parametro(3, documento.getDetalles()));
@@ -46,7 +46,7 @@ public class FDocumento_Disponibilidad {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_update_documentodisponibilidad(?,?,?,?,?,?,?,?,?)";
+            String sql = "select * from archivo_municipio.f_update_documentodisponibilidad(?,?,?,?,?,?,?,?,?)";
             lstP.add(new Parametro(1, documento.getCodigo_usuario_rol().getCodigo()));
             lstP.add(new Parametro(2, documento.getTitulo_ducumento()));
             lstP.add(new Parametro(3, documento.getDetalles()));
@@ -72,7 +72,7 @@ public class FDocumento_Disponibilidad {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_delete_documentodisponibilidad(?)";
+            String sql = "select * from archivo_municipio.f_delete_documentodisponibilidad(?)";
             lstP.add(new Parametro(1, documento.getCodigo()));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             while (rs.next()) {
@@ -112,7 +112,7 @@ public class FDocumento_Disponibilidad {
     public static ArrayList<DocumentoDisponibilidad> obtenerTodos() throws Exception {
         ArrayList<DocumentoDisponibilidad> lst = new ArrayList<DocumentoDisponibilidad>();
         try {
-            String sql = "select * from evidencia_juridicos.f_select_documentodisponibilidad()";
+            String sql = "select * from archivo_municipio.f_select_documentodisponibilidad()";
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql);
             lst = llenarDocumento(rs);
             rs = null;

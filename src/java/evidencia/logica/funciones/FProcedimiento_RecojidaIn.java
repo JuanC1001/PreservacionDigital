@@ -15,7 +15,7 @@ import master.logica.funciones.FUsuarioRol;
 
 /**
  *
- * @author ruben
+ * @author 
  */
 public class FProcedimiento_RecojidaIn {
     public static ArrayList<Procedimineto_RecojidaIn> llenarProcedimineto_Recojida(ConjuntoResultado rs)
@@ -44,10 +44,8 @@ public class FProcedimiento_RecojidaIn {
     public static ArrayList<Procedimineto_RecojidaIn> obtenerProcedimineto_RecojidaIn() throws Exception {
         ArrayList<Procedimineto_RecojidaIn> lst = new ArrayList<Procedimineto_RecojidaIn>();
         try {
-            //ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_procedimiento_recogidain()";
+            String sql = "select * from archivo_municipio.f_select_procedimiento_recogidain()";
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql);
-            // lst = new Persona();
             lst = llenarProcedimineto_Recojida(rs);
             rs = null;
         } catch (SQLException exConec) {
@@ -60,7 +58,7 @@ public class FProcedimiento_RecojidaIn {
         Procedimineto_RecojidaIn lst;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from  evidencia_juridicos.f_select_procedimiento_recogida_dado_codigoin(?)";
+            String sql = "select * from  archivo_municipio.f_select_procedimiento_recogida_dado_codigoin(?)";
             lstP.add(new Parametro(1, codigo));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             lst = llenarProcedimineto_Recojida(rs).get(0);

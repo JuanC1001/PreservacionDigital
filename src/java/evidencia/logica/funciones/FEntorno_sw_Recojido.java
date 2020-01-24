@@ -15,7 +15,7 @@ import master.logica.funciones.FUsuarioRol;
 
 /**
  *
- * @author RUBEN
+ * @author 
  */
 public class FEntorno_sw_Recojido {
 
@@ -45,10 +45,8 @@ public class FEntorno_sw_Recojido {
     public static ArrayList<Entorno_sw_Recojido> obtenerEntorno_sw_Recojido() throws Exception {
         ArrayList<Entorno_sw_Recojido> lst = new ArrayList<Entorno_sw_Recojido>();
         try {
-            //ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_entorno_sw_recogido()";
+            String sql = "select * from archivo_municipio.f_select_entorno_sw_recogido()";
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql);
-            // lst = new Persona();
             lst = llenarEntorno_sw_Recojido(rs);
             rs = null;
         } catch (SQLException exConec) {
@@ -61,7 +59,7 @@ public class FEntorno_sw_Recojido {
         Entorno_sw_Recojido lst;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from  evidencia_juridicos.f_select_entorno_sw_recogido_dado_codigo(?)";
+            String sql = "select * from  archivo_municipio.f_select_entorno_sw_recogido_dado_codigo(?)";
             lstP.add(new Parametro(1, codigo));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             lst = llenarEntorno_sw_Recojido(rs).get(0);

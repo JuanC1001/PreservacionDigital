@@ -16,7 +16,7 @@ import master.logica.funciones.FUsuarioRol;
 
 /**
  *
- * @author RUBEN
+ * @author 
  */
 public class FAutorizacion {
 
@@ -44,7 +44,7 @@ public class FAutorizacion {
             throws Exception {
         ArrayList<AutorizacionJuez> lst = new ArrayList();
         try {
-            String sql = "select * from evidencia_juridicos.f_select_autorizacionjuez()";
+            String sql = "select * from archivo_municipio.f_select_autorizacionjuez()";
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql);
             lst = llenarAutorizacionJues(rs);
             rs = null;
@@ -58,7 +58,7 @@ public class FAutorizacion {
         AutorizacionJuez lst;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_autorizacionjuez_dado_codigo(?)";
+            String sql = "select * from archivo_municipio.f_select_autorizacionjuez_dado_codigo(?)";
             lstP.add(new Parametro(1, codigo));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             lst = llenarAutorizacionJues(rs).get(0);

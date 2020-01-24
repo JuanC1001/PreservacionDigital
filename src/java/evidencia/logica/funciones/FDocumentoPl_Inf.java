@@ -15,14 +15,14 @@ import master.logica.funciones.FUsuarioRol;
 
 /**
  *
- * @author ruben
+ * @author 
  */
 public class FDocumentoPl_Inf {
     public static boolean insertar(DocumentoPlInf documento) throws Exception {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_insert_documentoplaniinf(?,?,?,?,?,?,?)";
+            String sql = "select * from archivo_municipio.f_insert_documentoplaniinf(?,?,?,?,?,?,?)";
             lstP.add(new Parametro(1, documento.getCodigo_usuario_rol().getCodigo()));
             lstP.add(new Parametro(2, documento.getTitulo_ducumento()));
             lstP.add(new Parametro(3, documento.getDetalles()));
@@ -45,7 +45,7 @@ public class FDocumentoPl_Inf {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_update_documentoplaniinf(?,?,?,?,?,?,?,?,?)";
+            String sql = "select * from archivo_municipio.f_update_documentoplaniinf(?,?,?,?,?,?,?,?,?)";
             lstP.add(new Parametro(1, documento.getCodigo_usuario_rol().getCodigo()));
             lstP.add(new Parametro(2, documento.getTitulo_ducumento()));
             lstP.add(new Parametro(3, documento.getDetalles()));
@@ -71,7 +71,7 @@ public class FDocumentoPl_Inf {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_delete_documentoplaniinf(?)";
+            String sql = "select * from archivo_municipio.f_delete_documentoplaniinf(?)";
             lstP.add(new Parametro(1, documento.getCodigo()));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             while (rs.next()) {
@@ -111,7 +111,7 @@ public class FDocumentoPl_Inf {
     public static ArrayList<DocumentoPlInf> obtenerTodos() throws Exception {
         ArrayList<DocumentoPlInf> lst = new ArrayList<DocumentoPlInf>();
         try {
-            String sql = "select * from evidencia_juridicos.f_select_documentoplaniinf()";
+            String sql = "select * from archivo_municipio.f_select_documentoplaniinf()";
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql);
             lst = llenarDocumento(rs);
             rs = null;

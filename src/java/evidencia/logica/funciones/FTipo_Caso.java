@@ -15,7 +15,7 @@ import master.logica.funciones.FUsuarioRol;
 
 /**
  *
- * @author RUBEN
+ * @author 
  */
 public class FTipo_Caso {
 
@@ -23,7 +23,7 @@ public class FTipo_Caso {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_insert_tipo_caso(?,?,?,?)";
+            String sql = "select * from archivo_municipio.f_insert_tipo_caso(?,?,?,?)";
             lstP.add(new Parametro(1, tipoCaso.getCodigo_usuario_rol().getCodigo()));
             lstP.add(new Parametro(2, tipoCaso.getNombre_tipoCaso()));
             lstP.add(new Parametro(3, tipoCaso.getDetalle()));
@@ -43,7 +43,7 @@ public class FTipo_Caso {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_update_tipo_caso(?,?,?,?,?)";
+            String sql = "select * from archivo_municipio.f_update_tipo_caso(?,?,?,?,?)";
             lstP.add(new Parametro(1, tipoCaso.getCodigo_usuario_rol().getCodigo()));
             lstP.add(new Parametro(2, tipoCaso.getNombre_tipoCaso()));
             lstP.add(new Parametro(3, tipoCaso.getDetalle()));
@@ -64,7 +64,7 @@ public class FTipo_Caso {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_delete_tipo_caso(?)";
+            String sql = "select * from archivo_municipio.f_delete_tipo_caso(?)";
             lstP.add(new Parametro(1, tipoCaso.getCodigo()));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             while (rs.next()) {
@@ -100,10 +100,8 @@ public class FTipo_Caso {
     public static ArrayList<Tipo_Caso> obtenerTipoCasos() throws Exception {
         ArrayList<Tipo_Caso> lst = new ArrayList<Tipo_Caso>();
         try {
-            //ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_tipo_caso()";
+            String sql = "select * from archivo_municipio.f_select_tipo_caso()";
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql);
-            // lst = new Persona();
             lst = llenartipoCasos(rs);
             rs = null;
         } catch (SQLException exConec) {
@@ -116,7 +114,7 @@ public class FTipo_Caso {
         Tipo_Caso lst;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from  evidencia_juridicos.f_select_tipo_caso_dado_codigo(?)";
+            String sql = "select * from  archivo_municipio.f_select_tipo_caso_dado_codigo(?)";
             lstP.add(new Parametro(1, codigo));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             lst = llenartipoCasos(rs).get(0);

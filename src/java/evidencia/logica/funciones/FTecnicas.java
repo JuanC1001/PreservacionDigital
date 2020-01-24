@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author RUBEN
+ * @author 
  */
 public class FTecnicas {
 
@@ -39,10 +39,8 @@ public class FTecnicas {
     public static ArrayList<Tecnicas> obtenerTecnicas() throws Exception {
         ArrayList<Tecnicas> lst = new ArrayList<Tecnicas>();
         try {
-            //ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_tipo_caso()";
+            String sql = "select * from archivo_municipio.f_select_tipo_caso()";
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql);
-            // lst = new Persona();
             lst = llenarTecnicas(rs);
             rs = null;
         } catch (SQLException exConec) {
@@ -55,7 +53,7 @@ public class FTecnicas {
         Tecnicas lst;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_tecnicas_dado_codigo(?)";
+            String sql = "select * from archivo_municipio.f_select_tecnicas_dado_codigo(?)";
             lstP.add(new Parametro(1, codigo));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             lst = llenarTecnicas(rs).get(0);

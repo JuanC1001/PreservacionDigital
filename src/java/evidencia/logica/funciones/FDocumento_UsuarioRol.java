@@ -1,18 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package evidencia.logica.funciones;
 
-import accesodatos.ConjuntoResultado;
-import evidencia.logica.clases.Documento_Usuario_Rol;
-import master.logica.funciones.FUsuarioRol;
-import java.util.ArrayList;
+package evidencia.logica.funciones;
 
 /**
  *
- * @author RUBEN
+ * @author 
  */
 public class FDocumento_UsuarioRol {
     
@@ -40,4 +31,9 @@ public class FDocumento_UsuarioRol {
 //  }
     
     
+    
+    
+    
+    
+    //REVISAR BORRAR porque al parecer NO SE USA 
 }

@@ -24,7 +24,7 @@ public class FCasoPersonaUsuario {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_insert_casopersonausuario(?,?,?)";
+            String sql = "select * from archivo_municipio.f_insert_casopersonausuario(?,?,?)";
             lstP.add(new Parametro(1, CPU.getCodigo_caso().getCodigo()));
             lstP.add(new Parametro(2, CPU.getCodigo_persona().getCodigo()));
             lstP.add(new Parametro(3, CPU.getCodigo_tipo_usuario().getCodigo()));
@@ -62,7 +62,7 @@ public class FCasoPersonaUsuario {
         ArrayList<CasoPersonaUsuario> lst = new ArrayList<CasoPersonaUsuario>();
         try {
             //ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_casopersonausuario()";
+            String sql = "select * from archivo_municipio.f_select_casopersonausuario()";
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql);
             // lst = new Persona();
             lst = llenarCPU(rs);
@@ -78,7 +78,7 @@ public class FCasoPersonaUsuario {
         ArrayList<CasoPersonaUsuario> lst = new ArrayList();
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_casopersonausuario_dado_codinst(?)";
+            String sql = "select * from archivo_municipio.f_select_casopersonausuario_dado_codinst(?)";
             lstP.add(new Parametro(1, cdInst));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             lst = llenarCPU(rs);
@@ -94,7 +94,7 @@ public class FCasoPersonaUsuario {
         ArrayList<CasoPersonaUsuario> lst = new ArrayList();
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_casopersonausuario_dado_codinst_cedula(?)";
+            String sql = "select * from archivo_municipio.f_select_casopersonausuario_dado_codinst_cedula(?)";
             lstP.add(new Parametro(1, cdInstCedula));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             lst = llenarCPU(rs);
@@ -110,7 +110,7 @@ public class FCasoPersonaUsuario {
         ArrayList<CasoPersonaUsuario> lst = new ArrayList();
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_casopersonausuario_dado_fechas1(?,?)";
+            String sql = "select * from archivo_municipio.f_select_casopersonausuario_dado_fechas1(?,?)";
             lstP.add(new Parametro(1, fechaInicio));
             lstP.add(new Parametro(2, fechaFin));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
@@ -127,7 +127,7 @@ public class FCasoPersonaUsuario {
         CasoPersonaUsuario cpu;
         
 //        ArrayList<CasoPersonaUsuario> listado = new ArrayList<>();
-        String sql = "select * from evidencia_juridicos.f_select_casopersonausuario_dado_fechas(?,?)";
+        String sql = "select * from archivo_municipio.f_select_casopersonausuario_dado_fechas(?,?)";
         try {
           //  ArrayList<Parametro> parametros = new ArrayList<>();
             parametros.add(new Parametro(1, Util.FechaConvertir(dateFechaInicio)));

@@ -9,6 +9,7 @@ import accesodatos.AccesoDatos;
 import accesodatos.ConjuntoResultado;
 import accesodatos.Parametro;
 import evidencia.logica.clases.Entorno_hw_Recojido;
+import evidencia.logica.clases.Persona;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import master.logica.funciones.FUsuarioRol;
@@ -46,9 +47,8 @@ public class FEntorno_hw_Recojido {
         ArrayList<Entorno_hw_Recojido> lst = new ArrayList<Entorno_hw_Recojido>();
         try {
             //ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_entorno_hw_recogido()";
+            String sql = "select * from archivo_municipio.f_select_entorno_hw_recogido()";
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql);
-            // lst = new Persona();
             lst = llenarEntorno_hw_Recojido(rs);
             rs = null;
         } catch (SQLException exConec) {
@@ -61,7 +61,7 @@ public class FEntorno_hw_Recojido {
         Entorno_hw_Recojido lst;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from  evidencia_juridicos.f_select_entorno_hw_recogido_dado_codigo(?)";
+            String sql = "select * from  archivo_municipio.f_select_entorno_hw_recogido_dado_codigo(?)";
             lstP.add(new Parametro(1, codigo));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             lst = llenarEntorno_hw_Recojido(rs).get(0);

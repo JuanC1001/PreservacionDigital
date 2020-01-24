@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author RUBEN
+ * @author 
  */
 public class FAuditoria_I_U_D {
 
@@ -42,10 +42,8 @@ return lst;
     public static ArrayList<Auditoria_I_U_D> obtenerAuditoriaIUD() throws Exception {
         ArrayList<Auditoria_I_U_D> lst = new ArrayList();
         try {
-            //ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_auditoria_iud()";
+            String sql = "select * from archivo_municipio.f_select_auditoria_iud()";
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql);
-            // lst = new Persona();
             lst = llenarAuditoriaIUD(rs);
             rs = null;
         } catch (SQLException exConec) {

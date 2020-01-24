@@ -45,10 +45,8 @@ public class FEntorno_hw_RecojidoIn {
     public static ArrayList<Entorno_hw_RecojidoIn> obtenerEntorno_hw_RecojidoIn() throws Exception {
         ArrayList<Entorno_hw_RecojidoIn> lst = new ArrayList<Entorno_hw_RecojidoIn>();
         try {
-            //ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_entorno_hw_recogidoin()";
+            String sql = "select * from archivo_municipio.f_select_entorno_hw_recogidoin()";
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql);
-            // lst = new Persona();
             lst = llenarEntorno_hw_RecojidoIn(rs);
             rs = null;
         } catch (SQLException exConec) {
@@ -61,7 +59,7 @@ public class FEntorno_hw_RecojidoIn {
         Entorno_hw_RecojidoIn lst;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from  evidencia_juridicos.f_select_entorno_hw_recogido_dado_codigoin(?)";
+            String sql = "select * from  archivo_municipio.f_select_entorno_hw_recogido_dado_codigoin(?)";
             lstP.add(new Parametro(1, codigo));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             lst = llenarEntorno_hw_RecojidoIn(rs).get(0);

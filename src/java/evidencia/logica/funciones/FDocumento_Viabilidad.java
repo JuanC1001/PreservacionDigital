@@ -15,7 +15,7 @@ import master.logica.funciones.FUsuarioRol;
 
 /**
  *
- * @author Ing. Ruben Pilco
+ * @author 
  */
 public class FDocumento_Viabilidad {
 
@@ -23,7 +23,7 @@ public class FDocumento_Viabilidad {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_insert_documentoviabilidad(?,?,?,?,?,?,?)";
+            String sql = "select * from archivo_municipio.f_insert_documentoviabilidad(?,?,?,?,?,?,?)";
             lstP.add(new Parametro(1, documento.getCodigo_usuario_rol().getCodigo()));
             lstP.add(new Parametro(2, documento.getTitulo_ducumento()));
             lstP.add(new Parametro(3, documento.getDetalles()));
@@ -46,7 +46,7 @@ public class FDocumento_Viabilidad {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_update_documentoviabilidad(?,?,?,?,?,?,?,?,?)";
+            String sql = "select * from archivo_municipio.f_update_documentoviabilidad(?,?,?,?,?,?,?,?,?)";
             lstP.add(new Parametro(1, documento.getCodigo_usuario_rol().getCodigo()));
             lstP.add(new Parametro(2, documento.getTitulo_ducumento()));
             lstP.add(new Parametro(3, documento.getDetalles()));
@@ -72,7 +72,7 @@ public class FDocumento_Viabilidad {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_delete_documentoviabilidad(?)";
+            String sql = "select * from archivo_municipio.f_delete_documentoviabilidad(?)";
             lstP.add(new Parametro(1, documento.getCodigo()));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             while (rs.next()) {
@@ -112,7 +112,7 @@ public class FDocumento_Viabilidad {
     public static ArrayList<DocumentoViabilidad> obtenerTodos() throws Exception {
         ArrayList<DocumentoViabilidad> lst = new ArrayList<DocumentoViabilidad>();
         try {
-            String sql = "select * from evidencia_juridicos.f_select_documentoviabilidad()";
+            String sql = "select * from archivo_municipio.f_select_documentoviabilidad()";
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql);
             lst = llenarDocumento(rs);
             rs = null;

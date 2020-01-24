@@ -15,7 +15,9 @@ import master.logica.funciones.FUsuarioRol;
 
 /**
  *
- * @author RUBEN
+ * @author 
+ *         // REVISAR AL PASERCER NO ESTA UTILIZANDO LOS ESQUEMAS evidencia EXISTENTES 
+
  */
 public class FCondiciones {
 
@@ -75,20 +77,20 @@ public class FCondiciones {
         return lst;
     }
     
-    
-        public static Condiciones ObtenerCondicionesDadoCodigo(int codigo) throws Exception {
-        Condiciones lst;
-        try {
-            ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia.f_select_condiciones_dado_codigo(?)";
-            lstP.add(new Parametro(1, codigo));
-            ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
-            lst = llenarCondiciones(rs).get(0);
-            rs = null;
-        } catch (SQLException exConec) {
-            throw new Exception(exConec.getMessage());
-        }
-        return lst;
-    }
+//    
+//        public static Condiciones ObtenerCondicionesDadoCodigo(int codigo) throws Exception {
+//        Condiciones lst;
+//        try {
+//            ArrayList<Parametro> lstP = new ArrayList<Parametro>();
+//            String sql = "select * from evidencia.f_select_condiciones_dado_codigo(?)";
+//            lstP.add(new Parametro(1, codigo));
+//            ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
+//            lst = llenarCondiciones(rs).get(0);
+//            rs = null;
+//        } catch (SQLException exConec) {
+//            throw new Exception(exConec.getMessage());
+//        }
+//        return lst;
+//    }
 
 }

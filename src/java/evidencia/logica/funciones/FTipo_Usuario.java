@@ -15,7 +15,7 @@ import master.logica.funciones.FUsuarioRol;
 
 /**
  *
- * @author RUBEN
+ * @author 
  */
 public class FTipo_Usuario {
 
@@ -23,7 +23,7 @@ public class FTipo_Usuario {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_insert_tipo_usuario(?,?,?,?)";
+            String sql = "select * from archivo_municipio.f_insert_tipo_usuario(?,?,?,?)";
             lstP.add(new Parametro(1, tipousuario.getCodigo_usuario_rol().getCodigo()));
             lstP.add(new Parametro(2, tipousuario.getNombre_usuario()));
             lstP.add(new Parametro(3, tipousuario.getDetalle()));
@@ -43,7 +43,7 @@ public class FTipo_Usuario {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_update_tipo_usuario(?,?,?,?,?)";
+            String sql = "select * from archivo_municipio.f_update_tipo_usuario(?,?,?,?,?)";
             lstP.add(new Parametro(1, tipousuario.getCodigo_usuario_rol().getCodigo()));
             lstP.add(new Parametro(2, tipousuario.getNombre_usuario()));
             lstP.add(new Parametro(3, tipousuario.getDetalle()));
@@ -64,7 +64,7 @@ public class FTipo_Usuario {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_delete_tipo_usuario(?)";
+            String sql = "select * from archivo_municipio.f_delete_tipo_usuario(?)";
             lstP.add(new Parametro(1, tipousuario.getCodigo()));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             while (rs.next()) {
@@ -101,7 +101,7 @@ public class FTipo_Usuario {
         ArrayList<Tipo_Usuario> lst = new ArrayList<Tipo_Usuario>();
         try {
             //ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_tipo_usuario()";
+            String sql = "select * from archivo_municipio.f_select_tipo_usuario()";
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql);
             // lst = new Persona();
             lst = llenarTipoUsuario(rs);
@@ -116,7 +116,7 @@ public class FTipo_Usuario {
         Tipo_Usuario lst;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from  evidencia_juridicos.f_select_tipo_usuario_dado_codigo(?)";
+            String sql = "select * from  archivo_municipio.f_select_tipo_usuario_dado_codigo(?)";
             lstP.add(new Parametro(1, codigo));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             lst = llenarTipoUsuario(rs).get(0);

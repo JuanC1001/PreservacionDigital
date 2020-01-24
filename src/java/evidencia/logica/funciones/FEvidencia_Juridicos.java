@@ -23,7 +23,7 @@ import java.util.Date;
 
 /**
  *
- * @author RUBEN
+ * @author 
  */
 public class FEvidencia_Juridicos {
 
@@ -58,7 +58,7 @@ public class FEvidencia_Juridicos {
             throws Exception {
         ArrayList<Evidencia_Juridicos> lst = new ArrayList();
         try {
-            String sql = "select * from evidencia_juridicos.f_select_evidencias_juridicos()";
+            String sql = "select * from archivo_municipio.f_select_evidencias_juridicos()";
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql);
             lst = llenarEvidencia_Juridicos(rs);
             rs = null;
@@ -73,7 +73,7 @@ public class FEvidencia_Juridicos {
         Evidencia_Juridicos lst;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_evidencias_juridicos_dado_codigo(?)";
+            String sql = "select * from archivo_municipio.f_select_evidencias_juridicos_dado_codigo(?)";
             lstP.add(new Parametro(1, codigo));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             lst = llenarEvidencia_Juridicos(rs).get(0);
@@ -89,7 +89,7 @@ public class FEvidencia_Juridicos {
         Evidencia_Juridicos lst;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_evidencias_juridicos_dado_codigo_caso(?)";
+            String sql = "select * from archivo_municipio.f_select_evidencias_juridicos_dado_codigo_caso(?)";
             lstP.add(new Parametro(1, codigoCaso));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             lst = llenarEvidencia_Juridicos(rs).get(0);
@@ -105,7 +105,7 @@ public class FEvidencia_Juridicos {
         ArrayList<Evidencia_Juridicos> lst = new ArrayList();
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_evidencias_juridicos_dado_fechas(?,?)";
+            String sql = "select * from archivo_municipio.f_select_evidencias_juridicos_dado_fechas(?,?)";
             lstP.add(new Parametro(1, fechaInicio));
             lstP.add(new Parametro(2, fechaFin));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);

@@ -15,7 +15,7 @@ import master.logica.funciones.FUsuarioRol;
 
 /**
  *
- * @author RUBEN
+ * @author 
  */
 public class FProcedimiento_Recojida {
 
@@ -46,7 +46,7 @@ public class FProcedimiento_Recojida {
         ArrayList<Procedimineto_Recojida> lst = new ArrayList<Procedimineto_Recojida>();
         try {
             //ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_procedimiento_recogida()";
+            String sql = "select * from archivo_municipio.f_select_procedimiento_recogida()";
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql);
             // lst = new Persona();
             lst = llenarProcedimineto_Recojida(rs);
@@ -61,7 +61,7 @@ public class FProcedimiento_Recojida {
         Procedimineto_Recojida lst;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from  evidencia_juridicos.f_select_procedimiento_recogida_dado_codigo(?)";
+            String sql = "select * from  archivo_municipio.f_select_procedimiento_recogida_dado_codigo(?)";
             lstP.add(new Parametro(1, codigo));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             lst = llenarProcedimineto_Recojida(rs).get(0);

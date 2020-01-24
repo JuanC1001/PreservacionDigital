@@ -161,7 +161,6 @@ public class CondicionesControlador {
         try {
             System.out.println("PATH: " + f.getAbsolutePath());
             this.objCondiciones.setPath(Functions.substring(f.getAbsolutePath(), longitudRelativa, f.getAbsolutePath().length()));
-
             System.out.println("cargar objeto fos ");
             FileOutputStream fos = new FileOutputStream(f);
             System.out.println("escribir fos ");

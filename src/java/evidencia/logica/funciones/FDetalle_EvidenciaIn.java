@@ -15,7 +15,7 @@ import master.logica.funciones.FUsuarioRol;
 
 /**
  *
- * @author ruben
+ * @author 
  */
 public class FDetalle_EvidenciaIn {
     public static ArrayList<Detalle_EvidenciaIn> llenarDetalle_EvidenciaIn(ConjuntoResultado rs)
@@ -47,10 +47,8 @@ public class FDetalle_EvidenciaIn {
     public static ArrayList<Detalle_EvidenciaIn> obtenerDetalle_EvidenciaIn() throws Exception {
         ArrayList<Detalle_EvidenciaIn> lst = new ArrayList<Detalle_EvidenciaIn>();
         try {
-            //ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_detalle_evidenciain()";
+            String sql = "select * from archivo_municipio.f_select_detalle_evidenciain()";
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql);
-            // lst = new Persona();
             lst = llenarDetalle_EvidenciaIn(rs);
             rs = null;
         } catch (SQLException exConec) {
@@ -63,7 +61,7 @@ public class FDetalle_EvidenciaIn {
         Detalle_EvidenciaIn lst;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from  evidencia_juridicos.f_select_detalle_evidencia_dado_codigoin(?)";
+            String sql = "select * from  archivo_municipio.f_select_detalle_evidencia_dado_codigoin(?)";
             lstP.add(new Parametro(1, codigo));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             lst = llenarDetalle_EvidenciaIn(rs).get(0);

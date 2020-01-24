@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author ruben
+ * @author 
  */
 public class FMetadatosIn {
      public static ArrayList<MetadatosIn> llenarMetadatosIn(ConjuntoResultado rs) throws Exception {
@@ -39,7 +39,7 @@ public class FMetadatosIn {
         ArrayList<MetadatosIn> lst = new ArrayList<MetadatosIn>();
         try {
             //ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_metadatosin()";
+            String sql = "select * from archivo_municipio.f_select_metadatosin()";
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql);
             // lst = new Persona();
             lst = llenarMetadatosIn(rs);
@@ -54,7 +54,7 @@ public class FMetadatosIn {
         MetadatosIn lst;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from  evidencia_juridicos.f_select_metadatos_dado_codigoin(?)";
+            String sql = "select * from  archivo_municipio.f_select_metadatos_dado_codigoin(?)";
             lstP.add(new Parametro(1, codigo));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             lst = llenarMetadatosIn(rs).get(0);

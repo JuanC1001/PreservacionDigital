@@ -10,22 +10,19 @@ import accesodatos.Conexion;
 import accesodatos.ConjuntoResultado;
 import accesodatos.Parametro;
 import evidencia.logica.clases.AutorizacionJuez;
-//import evidencia.logica.clases.Evidencia;
 import evidencia.logica.clases.Detalle_Evidencia;
 import evidencia.logica.clases.Metadatos;
 import evidencia.logica.clases.Tecnicas;
-//import evidencia.logica.clases.Documento_Autor;
 import evidencia.logica.clases.Entorno_sw_Recojido;
 import evidencia.logica.clases.Entorno_hw_Recojido;
 import evidencia.logica.clases.Evidencia_Juridicos;
 import evidencia.logica.clases.Procedimineto_Recojida;
 import java.sql.SQLException;
 import java.util.ArrayList;
-//import master.logica.funciones.FUsuarioRol;
 
 /**
  *
- * @author RUBENCHO
+ * @author 
  */
 public class FEvidenciaJuridicos {
 
@@ -49,7 +46,7 @@ public class FEvidenciaJuridicos {
         try {
             //            Isertar metadatos
             ArrayList<Parametro> lstMd = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_insert_metadatos(?,?,?)";
+            String sql = "select * from archivo_municipio.f_insert_metadatos(?,?,?)";
             lstMd.add(new Parametro(1, metadatos.getNombre()));
             lstMd.add(new Parametro(2, metadatos.getTipo()));
             lstMd.add(new Parametro(3, metadatos.getTamanio()));
@@ -61,7 +58,7 @@ public class FEvidenciaJuridicos {
             }
             //            Isertar tecnicas
             ArrayList<Parametro> lstTec = new ArrayList<Parametro>();
-            String sql1 = "select * from evidencia_juridicos.f_insert_tecnicas(?,?,?)";
+            String sql1 = "select * from archivo_municipio.f_insert_tecnicas(?,?,?)";
             lstTec.add(new Parametro(1, tecnicas.getPath()));
             lstTec.add(new Parametro(2, tecnicas.getTecnica()));
             lstTec.add(new Parametro(3, tecnicas.getDetalle()));
@@ -72,7 +69,7 @@ public class FEvidenciaJuridicos {
             }
             //Insertar Documento-Evidencia
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql2 = "select * from evidencia_juridicos.f_insert_detalle_evidencia(?,?,?,?,?,?,?,?,?)";
+            String sql2 = "select * from archivo_municipio.f_insert_detalle_evidencia(?,?,?,?,?,?,?,?,?)";
             lstP.add(new Parametro(1, detalleevidencia.getCodigo_usuario_rol().getCodigo()));
             lstP.add(new Parametro(2, detalleevidencia.getTipo_evidencia()));
             lstP.add(new Parametro(3, detalleevidencia.getTitulo()));
@@ -89,7 +86,7 @@ public class FEvidenciaJuridicos {
             }
             //Insertar Autorizacion
             ArrayList<Parametro> lstAutJuez = new ArrayList<Parametro>();
-            String sql3 = "select * from evidencia_juridicos.f_insert_fautorizacion_juez(?,?,?,?)";
+            String sql3 = "select * from archivo_municipio.f_insert_fautorizacion_juez(?,?,?,?)";
             lstAutJuez.add(new Parametro(1, autorizacionjuez.getCodigo_usuario_rol().getCodigo()));
             lstAutJuez.add(new Parametro(2, autorizacionjuez.getCodigo_persona().getCodigo()));
             lstAutJuez.add(new Parametro(3, autorizacionjuez.getAutorizacion_path()));
@@ -99,9 +96,9 @@ public class FEvidenciaJuridicos {
                 if (rs3.getInt(0) > 0);
                 eje3 = rs3.getInt(0);
             }
-            //Insertar sw recojida
+            //Insertar SOFTWARE recojido
             ArrayList<Parametro> lstEntSWReco = new ArrayList<Parametro>();
-            String sql4 = "select * from evidencia_juridicos.f_insert_entorno_sw_recogido(?,?,?,?,?,?,?)";
+            String sql4 = "select * from archivo_municipio.f_insert_entorno_sw_recogido(?,?,?,?,?,?,?)";
             lstEntSWReco.add(new Parametro(1, entornoswrecojido.getCodigo_usuario_rol().getCodigo()));
             lstEntSWReco.add(new Parametro(2, entornoswrecojido.getNombre()));
             lstEntSWReco.add(new Parametro(3, entornoswrecojido.getVer_sion()));
@@ -114,9 +111,9 @@ public class FEvidenciaJuridicos {
                 if (rs4.getInt(0) > 0);
                 eje4 = rs4.getInt(0);
             }
-            //Insertar hw recojida
+            //Insertar hardware recojido
             ArrayList<Parametro> lstEntHWReco = new ArrayList<Parametro>();
-            String sql5 = "select * from evidencia_juridicos.f_insert_entorno_hw_recogido(?,?,?,?,?,?,?)";
+            String sql5 = "select * from archivo_municipio.f_insert_entorno_hw_recogido(?,?,?,?,?,?,?)";
             lstEntHWReco.add(new Parametro(1, entornohwrecojido.getCodigo_usuario_rol().getCodigo()));
             lstEntHWReco.add(new Parametro(2, entornohwrecojido.getTipo()));
             lstEntHWReco.add(new Parametro(3, entornohwrecojido.getMarca()));
@@ -131,7 +128,7 @@ public class FEvidenciaJuridicos {
             }
             //Insertar Procedimiento recojida
             ArrayList<Parametro> lstEntPReco = new ArrayList<Parametro>();
-            String sql6 = "select * from evidencia_juridicos.f_insert_procedimiento_recojida(?,?,?,?,?,?)";
+            String sql6 = "select * from archivo_municipio.f_insert_procedimiento_recojida(?,?,?,?,?,?)";
             lstEntPReco.add(new Parametro(1, procediminetorecojida.getCodigo_usuario_rol().getCodigo()));
             lstEntPReco.add(new Parametro(2, procediminetorecojida.getHoja_ruta()));
             lstEntPReco.add(new Parametro(3, procediminetorecojida.getCadena_custudia()));
@@ -146,7 +143,7 @@ public class FEvidenciaJuridicos {
             //Insertar Evidencia_Juridicos
 
             ArrayList<Parametro> lstEviJUR = new ArrayList<Parametro>();
-            String sql7 = "select * from evidencia_juridicos.f_insert_evidencia_juridicos(?,?,?,?,?,?,?,?)";
+            String sql7 = "select * from archivo_municipio.f_insert_archivo_municipio(?,?,?,?,?,?,?,?)";
             lstEviJUR.add(new Parametro(1, evidenciajuridicos.getCodigo_caso().getCodigo()));
             lstEviJUR.add(new Parametro(2, eje3));
             lstEviJUR.add(new Parametro(3, eje4));

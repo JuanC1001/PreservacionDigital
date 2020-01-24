@@ -15,14 +15,14 @@ import master.logica.funciones.FUsuarioRol;
 
 /**
  *
- * @author RUBEN
+ * @author 
  */
 public class FDependencia {
         public static boolean insertar(Dependencia dependencia) throws Exception {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_insert_dependencia(?,?,?,?)";
+            String sql = "select * from archivo_municipio.f_insert_dependencia(?,?,?,?)";
             lstP.add(new Parametro(1, dependencia.getCodigo_usuario_rol().getCodigo()));
             lstP.add(new Parametro(2, dependencia.getNombre_dependencia()));
             lstP.add(new Parametro(3, dependencia.getDetalle()));
@@ -42,7 +42,7 @@ public class FDependencia {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_update_dependencia(?,?,?,?,?)";
+            String sql = "select * from archivo_municipio.f_update_dependencia(?,?,?,?,?)";
             lstP.add(new Parametro(1, dependencia.getCodigo_usuario_rol().getCodigo()));
             lstP.add(new Parametro(2, dependencia.getNombre_dependencia()));
             lstP.add(new Parametro(3, dependencia.getDetalle()));
@@ -63,7 +63,7 @@ public class FDependencia {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_delete_dependencia(?)";
+            String sql = "select * from archivo_municipio.f_delete_dependencia(?)";
             lstP.add(new Parametro(1, dependencia.getCodigo()));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             while (rs.next()) {
@@ -99,7 +99,7 @@ public class FDependencia {
         ArrayList<Dependencia> lst = new ArrayList<Dependencia>();
         try {
             //ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_dependencia()";
+            String sql = "select * from archivo_municipio.f_select_dependencia()";
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql);
             // lst = new Persona();
             lst = llenarDependencia(rs);
@@ -114,7 +114,7 @@ public class FDependencia {
         Dependencia lst;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from  evidencia_juridicos.f_select_dependencia_dado_codigo(?)";
+            String sql = "select * from  archivo_municipio.f_select_dependencia_dado_codigo(?)";
             lstP.add(new Parametro(1, codigo));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             lst = llenarDependencia(rs).get(0);

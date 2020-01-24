@@ -15,7 +15,7 @@ import master.logica.funciones.FUsuarioRol;
 
 /**
  *
- * @author RUBENCHO
+ * @author 
  */
 public class FPersona {
 
@@ -23,7 +23,7 @@ public class FPersona {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_insert_personal(?,?,?,?,?,?)";
+            String sql = "select * from archivo_municipio.f_insert_personal(?,?,?,?,?,?)";
             lstP.add(new Parametro(1, persona.getCodigo_usuario_rol().getCodigo()));
             lstP.add(new Parametro(2, persona.getApellidos()));
             lstP.add(new Parametro(3, persona.getNombres()));
@@ -45,7 +45,7 @@ public class FPersona {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_update_personas(?,?,?,?,?,?,?)";
+            String sql = "select * from archivo_municipio.f_update_personas(?,?,?,?,?,?,?)";
             lstP.add(new Parametro(1, persona.getCodigo_usuario_rol().getCodigo()));
             lstP.add(new Parametro(2, persona.getApellidos()));
             lstP.add(new Parametro(3, persona.getNombres()));
@@ -68,7 +68,7 @@ public class FPersona {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_delete_personas(?)";
+            String sql = "select * from archivo_municipio.f_delete_personas(?)";
             lstP.add(new Parametro(1, personas.getCodigo()));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             while (rs.next()) {
@@ -107,7 +107,7 @@ public class FPersona {
         ArrayList<Persona> lst = new ArrayList<Persona>();
         try {
             //ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_personal()";
+            String sql = "select * from archivo_municipio.f_select_personal()";
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql);
             // lst = new Persona();
             lst = llenarPersonas(rs);
@@ -122,7 +122,7 @@ public class FPersona {
         Persona lst;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_personas_dado_codigo(?)";
+            String sql = "select * from archivo_municipio.f_select_personas_dado_codigo(?)";
             lstP.add(new Parametro(1, codigo));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             //lst = new Autor();
@@ -138,7 +138,7 @@ public class FPersona {
         Persona lst;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_personas_dado_cedula(?)";
+            String sql = "select * from archivo_municipio.f_select_personas_dado_cedula(?)";
             lstP.add(new Parametro(1, cedula));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             lst = new Persona();
@@ -154,7 +154,7 @@ public class FPersona {
         Persona lst;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_personas_dado_nombre_apellido(?)";
+            String sql = "select * from archivo_municipio.f_select_personas_dado_nombre_apellido(?)";
             lstP.add(new Parametro(1, apellidos));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             lst = new Persona();

@@ -15,7 +15,7 @@ import master.logica.funciones.FUsuarioRol;
 
 /**
  *
- * @author RUBEN
+ * @author 
  */
 public class FPoliticas {
 
@@ -23,7 +23,7 @@ public class FPoliticas {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_insert_politicas(?,?,?,?)";
+            String sql = "select * from archivo_municipio.f_insert_politicas(?,?,?,?)";
             lstP.add(new Parametro(1, politicas.getCodigo_usuario_rol().getCodigo()));
             lstP.add(new Parametro(2, politicas.getNombre_politica()));
             lstP.add(new Parametro(3, politicas.getDetalle()));
@@ -43,7 +43,7 @@ public class FPoliticas {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_update_politicas(?,?,?,?,?)";
+            String sql = "select * from archivo_municipio.f_update_politicas(?,?,?,?,?)";
             lstP.add(new Parametro(1, politicas.getCodigo_usuario_rol().getCodigo()));
             lstP.add(new Parametro(2, politicas.getNombre_politica()));
             lstP.add(new Parametro(3, politicas.getDetalle()));
@@ -64,7 +64,7 @@ public class FPoliticas {
         boolean eje = false;
         try {
             ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_delete_politicas(?)";
+            String sql = "select * from archivo_municipio.f_delete_politicas(?)";
             lstP.add(new Parametro(1, politicas.getCodigo()));
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql, lstP);
             while (rs.next()) {
@@ -100,10 +100,8 @@ public class FPoliticas {
     public static ArrayList<Politicas> obtenerPoliticas() throws Exception {
         ArrayList<Politicas> lst = new ArrayList<Politicas>();
         try {
-            //ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia_juridicos.f_select_politicas()";
+            String sql = "select * from archivo_municipio.f_select_politicas()";
             ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql);
-            // lst = new Persona();
             lst = llenarPoliticas(rs);
             rs = null;
         } catch (SQLException exConec) {
@@ -111,20 +109,4 @@ public class FPoliticas {
         }
         return lst;
     }
-    
-    
-        /*public static ArrayList<Caso> obtenerCasos() throws Exception {
-        ArrayList<Caso> lst = new ArrayList<Caso>();
-        try {
-            //ArrayList<Parametro> lstP = new ArrayList<Parametro>();
-            String sql = "select * from evidencia.f_select_casos()";
-            ConjuntoResultado rs = AccesoDatos.ejecutaQuery(sql);
-            // lst = new Persona();
-            lst = llenarCaso(rs);
-            rs = null;
-        } catch (SQLException exConec) {
-            throw new Exception(exConec.getMessage());
-        }
-        return lst;
-    }*/
 }
