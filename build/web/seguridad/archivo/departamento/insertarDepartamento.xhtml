@@ -1,0 +1,133 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                >
+
+    <p:dialog id="dlgNuevoCaso" header="Ingreso de  Departamento" widgetVar="wdlgNuevoCaso" 
+              modal="true" closable="true" resizable="false"
+              showEffect="explode" hideEffect="fold" appendTo="@(body)"> 
+
+        <h:form id="frmNuevoCaso" enctype="multipart/form-data">
+            <p:panelGrid id="pngevidencia" columns="3" style=" width:800px;"> 
+                <p:panel id="Políticas" header="Políticas" style=" ">
+                    <p:dataTable id="tblTablaPoliticas" value="#{departamentoControlador.lstPoliticas}" var="politicas"
+                                 draggableColumns="false"
+                                 selectionMode="single" rowKey="#{politicas.codigo}" style="width:200px;">
+                        <p:column headerText="Política ">
+                            <h:outputText value="#{politicas.nombre_politica}"/>
+                        </p:column>                            
+                    </p:dataTable>   
+
+                    <h:panelGrid columns="3" style="margin-bottom:10px" cellpadding="5">
+                        <p:outputLabel for="console" value="Politicas:" />
+                        <p:selectOneRadio id="console" value="#{departamentoControlador.objdepartamento.politicas}">
+                            <f:selectItem itemLabel="Aceptar" itemValue="Aceptar" />
+                        </p:selectOneRadio>
+                    </h:panelGrid>
+
+                </p:panel> 
+
+                <p:panel id="Caso" header="Detalles del Departamento" style=" "> 
+                    <p:panelGrid id="pngNuevoCaso" columns="2">
+
+                        <h:outputText value="Codigo Institucional:" style="font-weight:bold"/>
+                        <p:inputText id="txtcodigocaso"  value="#{departamentoControlador.objdepartamento.codigo_institucional}" title="ej: 004CH"
+                                     required="true" requiredMessage="Ingrese Codigo de Departamento" style="width: 100% !important;"/>
+
+                        <p:outputLabel value="Tipo Departamento:"/>
+                        <p:selectOneMenu id="cmbCaso" value="#{departamentoControlador.valortipoDepartamento}" required="true" requiredMessage="Seleccione Tipo de Producción">
+                            <f:selectItem itemLabel="Seleccione un Departamento" itemValue="#{null}"/>
+                            <f:selectItems value="#{departamentoControlador.lstTipoDepartamento}" var="tipocaso" 
+                                           itemLabel="#{tipodepartamento.nombre_tipoDepartamento}" itemValue="#{tipodepartamento.codigo}"/>
+                        </p:selectOneMenu> 
+
+                        <h:outputText value="Materia:" style="font-weight:bold"/>
+                        <p:inputText id="txtmateria" value="#{departamentoControlador.objdepartamento.materia}" title="ej: Chimborazo"
+                                     required="true" requiredMessage="Ingrese Materia" style="width: 100% !important;"/>
+
+                        <h:outputText value="Provincia:" style="font-weight:bold"/>
+                        <p:inputText id="txtprovincia" value="#{departamentoControlador.objdepartamento.provincia}" title="ej: Chimborazo"
+                                     required="true" requiredMessage="Ingrese Provincia" style="width: 100% !important;"/>
+
+                        <h:outputText value="Cantón:" style="font-weight:bold"/>
+                        <p:inputText id="txtcanton" value="#{departamentoControlador.objdepartamento.canton}" title="ej: Riobamba"
+                                     required="true" requiredMessage="Ingrese Cantón" style="width: 100% !important;"/>
+
+                        <h:outputText value="Judicatura:" style="font-weight:bold"/>
+                        <p:inputText id="txtjudicatura" value="#{departamentoControlador.objdepartamento.judicatura}" title="ej: Rubén"
+                                     required="true" requiredMessage="Ingrese Judicatura" style="width: 100% !important;"/>
+
+                        <p:outputLabel value="Dependencia:"/>
+                        <p:selectOneMenu id="cmbdependencia" value="#{departamentoControlador.valordependencia}" required="true" requiredMessage="Seleccione Tipo de Dependencia">
+                            <f:selectItem itemLabel="Seleccione una Dependencia" itemValue="#{null}"/>
+                            <f:selectItems value="#{departamentoControlador.lstdependencia}" var="dependencia" 
+                                           itemLabel="#{dependencia.nombre_dependencia}" itemValue="#{dependencia.codigo}"/>
+                        </p:selectOneMenu> 
+
+                        <h:outputText value="Infracción:" style="font-weight:bold"/>
+                        <p:inputText id="txtinfraccion" value="#{departamentoControlador.objdepartamento.accion_infraccion}" title="ej: Rubén"
+                                     required="true" requiredMessage="Ingrese Dependencia" style="width: 100% !important;"/>
+                    </p:panelGrid>
+
+                    <p:commandButton  icon="ui-icon-plus" value="Registrar" action="#{departamentoControlador.insertarUsuarioDepartamento()}"
+                                      update=":frmcaso:pnlCaso" 
+                                      process="@this, @form, txtcodigocaso, cmbCaso,cmbdependencia, txtprovincia, txtcanton, txtjudicatura, 
+                                      txtmateria,txtinfraccion" title="Registrar"/>    
+                </p:panel>
+
+                <p:panel id="buscarUsuario" header="Ingreso de Usuarios" style=" width:350px;">
+                    <p:panelGrid columns="3" >
+                        <h:outputText value="Ingrese Cédula:" style="width:300px "/>
+                        <p:inputText id="txtcedula" value="#{departamentoControlador.cedula}" style="width:100px"
+                                     requiredMessage="Ingrese la cédula"/>
+                        <p:commandButton id="btnBuscar"  icon="ui-icon-search" title="Buscar Usuario"                                                                   
+                                         action="#{departamentoControlador.buscarPersona()}" 
+                                         process="@this, txtcedula" update=":frmNuevoCaso:Usuario">
+                        </p:commandButton>       
+                    </p:panelGrid> 
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="Nombres y Apellidos"/>
+                        <p:outputLabel id="Usuario" value="#{departamentoControlador.personaSel.apellidos} #{departamentoControlador.personaSel.nombres}"/>
+                    </p:panelGrid>
+
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="Seleccione Cargo"/>
+                        <p:selectOneMenu id="cmbtipoUsuario" value="#{departamentoControlador.valorTipoUsuario}">
+                            <f:selectItem itemLabel="Seleccione un Cargo" itemValue="#{null}"/>
+                            <f:selectItems value="#{departamentoControlador.lstTipoUsuario}" var="tipousuario" 
+                                           itemLabel="#{tipousuario.nombre_usuario}" itemValue="#{tipousuario.codigo}"/>
+                        </p:selectOneMenu> 
+                    </p:panelGrid> 
+                    <p:commandButton icon="ui-icon-plus" value="Registrar" action="#{departamentoControlador.insertarUsuarioPersonaDepartamento()}"                                     
+                                     update=":frmNuevoCaso:tblAutorE" process="@this,cmbtipoUsuario" 
+                                     title="Registrar"/>
+
+
+                    <p:panelGrid  columns="2" style="width:300px;" >
+                        <p:dataTable id="tblAutorE" var="cup" value="#{departamentoControlador.lstCUP}"   
+                                     selectionMode="single" rowKey="#{cup.codigo}" style="width:300px; height:160px " 
+                                     emptyMessage="No se a Realizado Ingreso"> 
+                            <p:column headerText="Persona">  
+                                <h:outputText value="#{cup.codigo_persona.nombres} #{cup.codigo_persona.apellidos}" />  
+                            </p:column>  
+                            <p:column headerText="Cargo" >  
+                                <h:outputText value="#{cup.codigo_tipo_usuario.nombre_usuario}" />  
+                            </p:column>
+                        </p:dataTable> 
+                    </p:panelGrid>
+                </p:panel>
+            </p:panelGrid>
+        </h:form> 
+        <center> 
+            <p:commandButton value="Nuevo Departamento" icon="ui-icon-plus" action="#{departamentoControlador.liempiar()}"
+                             type="reset" update=":frmNuevoCaso"/>
+
+            <p:commandButton value="Cancelar" icon="ui-icon-closethick" onclick="wdlgNuevoCaso.hide()" type="reset"
+                             update=":frmcaso:pnlCaso"/>
+        </center>
+    </p:dialog>
+
+
+</ui:composition>

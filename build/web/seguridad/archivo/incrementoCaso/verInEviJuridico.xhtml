@@ -1,0 +1,58 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                >
+
+    <p:dialog id="dlgvIE" header="Incremento de Evidencia Registrados" widgetVar="wdlgincrementoER" 
+              modal="true" closable="true" resizable="false"
+              showEffect="explode" hideEffect="fold" appendTo="@(body)"> 
+        <h:form id="frmVerInEvidencia" enctype="multipart/form-data" >
+            <p:growl showDetail="true" autoUpdate="true"/>
+            <p:dataTable  id="tblInEvidencia" value="#{incrmentoEvidencias_JuridicosControladores.lstInEvJu}"
+                          var="evidenciaIn"  rows="6" rowKey="#{evidenciaIn.codigo}" selectionMode="single"
+                          paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} 
+                          {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                          rowsPerPageTemplate="5,10,15" emptyMessage="Datos no encontrados"
+                          filteredValue="#{incrmentoEvidencias_JuridicosControladores.filtereInvidencia}">
+                
+                <p:column filterBy="#{evidenciaIn.codigo}" filterMatchMode="startsWith" 
+                          sortBy="#{evidenciaIn.codigo}" headerText="Codigo">
+                    <h:outputText value="#{evidenciaIn.codigo}"/>
+                </p:column>
+
+                <p:column filterBy="#{evidenciaIn.codigo_evidencias.codigo_detalle_evidencia.titulo}" filterMatchMode="startsWith" 
+                          sortBy="#{evidenciaIn.codigo_evidencias.codigo_detalle_evidencia.titulo}" headerText="Evidecnia">
+                    <h:outputText value="#{evidenciaIn.codigo_evidencias.codigo_detalle_evidencia.titulo}"/>
+                </p:column>
+
+                <p:column filterBy="#{evidenciaIn.codigo_evidencias.codigo_departamento.codigo_institucional}" filterMatchMode="startsWith" 
+                          sortBy="#{evidenciaIn.codigo_evidencias.codigo_departamento.codigo_institucional}" headerText="Tema de Incremento">
+                    <h:outputText value="#{evidenciaIn.codigo_evidencias.codigo_departamento.codigo_institucional}"/>
+                </p:column>
+
+                <p:column filterBy="#{evidenciaIn.numero_incremento}" filterMatchMode="startsWith" 
+                          sortBy="#{evidenciaIn.numero_incremento}" headerText="Número de Incremento">
+                    <h:outputText value="#{evidenciaIn.numero_incremento}"/>
+                </p:column>
+
+                <p:column filterBy="#{evidenciaIn.fecha_registro}" filterMatchMode="startsWith" 
+                          sortBy="#{evidenciaIn.fecha_registro}" headerText="Fecha de Ingreso">
+                    <h:outputText value="#{evidenciaIn.fecha_registro}"/>
+                </p:column>
+                <f:facet name="footer">                   
+                    <h:commandLink>
+                        <img src="../../resources/images/excel.png" alt=""/>
+                        <p:dataExporter type="xls" target="tblInEvidencia" fileName="Documentos Registrados" pageOnly="true" />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <img src="../../resources/images/pdf.png" alt=""/>
+                        <p:dataExporter type="pdf" target="tblInEvidencia" fileName="Evidencias  Registrados" pageOnly="true" />
+                    </h:commandLink>                                 
+                </f:facet>
+            </p:dataTable> 
+        </h:form>
+    </p:dialog>
+</ui:composition>

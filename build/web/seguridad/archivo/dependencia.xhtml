@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>
+            <ui:define name="tituloNavegador">
+                Dependencia
+            </ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">
+                ADMINISTRACIÓN DE DEPENDENCIAS
+            </ui:define>
+            <ui:define name="contenido">
+                <p:growl autoUpdate="true" showDetail="true"/>
+                <h:form id="frmTablaDependencia">
+                    <p:dataTable id="tblTablaDependencia" value="#{dependenciaControlador.lstdependencia}" var="dependencia"
+                                 paginator="true" rows="10" draggableColumns="false"
+                                 selectionMode="single" rowKey="#{dependencia.codigo}"  
+                                 selection="#{dependenciaControlador.dependenciasel}">
+
+                        <p:column headerText="Dependencia:">
+                            <h:outputText value="#{dependencia.nombre_dependencia}"/>
+                        </p:column>
+                        <p:column headerText="Detalle:">
+                            <h:outputText value="#{dependencia.detalle}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton value="Insertar" onclick="dlgInsertarDependencia.show();" 
+                                             update=":frmInsertarDependencia:pngInsertarDependencia"/>
+                            <p:commandButton value="Editar" onclick="dlgEditarDependencia.show();" 
+                                             update=":frmEditarDependencia:pngEditarDependencia"/>
+                            <p:commandButton value="Eliminar" onclick="dlgEliminarDependencia.show();" 
+                                             update=":frmEliminarDependencia:pngEliminarDependencia"/>
+                        </f:facet>
+                    </p:dataTable>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="dialogos">
+                <h:form id="frmInsertarDependencia" enctype="multipart/form-data" >
+                    <p:dialog widgetVar="dlgInsertarDependencia" header="Insertar Dependencia" modal="true" height="250" width="670">
+                        <p:panel id="displayInsertarDependencia" >
+                            <p:panelGrid id="pngInsertarDependencia" columns="2" >
+                                <p:outputLabel value="Nombre de la Dependeccia:"/>
+                                <p:inputText id="txtpolitica" value="#{dependenciaControlador.objdependencia.nombre_dependencia}" style="width:350px" 
+                                             title="ej:Los análisis de ejemplos" required="true" requiredMessage="Ingrese el Nombre de la Politica"/>
+                                <p:outputLabel value="Resumen de Politica"/>                                                           
+                                <p:inputTextarea id="txtdetalle" rows="5" cols="60" 
+                                                 value="#{dependenciaControlador.objdependencia.detalle}" queryDelay="700" minQueryLength="4"
+                                                 title="ej: Los análisis de ejemplos" required="true" requiredMessage="Ingrese el Detalle de la Política"/> 
+
+                                <p:panelGrid columns="2" style="text-align: center;">
+                                    <p:commandButton value="Aceptar" action="#{dependenciaControlador.insertarDependencia()}"
+                                                     update=":frmTablaDependencia:tblTablaDependencia" process="@this txtpolitica
+                                                     txtdetalle"/>
+                                    <p:commandButton value="Cancelar" onclick="dlgInsertarDependencia.hide();"
+                                                     update=":frmTablaDependencia:tblTablaDependencia"/>
+                                </p:panelGrid>
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:dialog>
+                </h:form>
+
+                <p:dialog widgetVar="dlgEditarDependencia" header="Editar Dependencia" modal="true"
+                          closable="false" resizable="false" showEffect="clip" hideEffect="fold">     
+                    <h:form id="frmEditarDependencia">
+                        <p:messages id="messages" autoUpdate="true"/>                   
+                        <p:panelGrid  id="pngEditarDependencia" columns="2">
+                            <p:outputLabel value="Nombre de Dependencia"/>
+                            <p:inputText  value="#{dependenciaControlador.dependenciasel.nombre_dependencia}" style="width:350px" 
+                                          title="ej:Los análisis de ejemplos" required="true" requiredMessage="Ingrese el Nombre de la Dependencia"/>
+                            <p:outputLabel value="Resumen de Dependencia"/>                                                           
+                            <p:inputTextarea rows="5" cols="60" 
+                                             value="#{dependenciaControlador.dependenciasel.detalle}" queryDelay="700" minQueryLength="4"
+                                             title="ej: Los análisis de ejemplos" required="true" requiredMessage="Ingrese el Detalle de la Dependencia"/> 
+
+                            <p:commandButton value="Aceptar" action="#{dependenciaControlador.actualizarDependencia()}"
+                                             update=":frmTablaDependencia:tblTablaDependencia"/>
+                            <p:commandButton value="Cancelar" onclick="dlgEditarDependencia.hide();"/>
+                        </p:panelGrid>                      
+                    </h:form>
+                </p:dialog>
+
+                <h:form id="frmEliminarDependencia" enctype="multipart/form-data">
+                    <p:dialog widgetVar="dlgEliminarDependencia" header="Desea Eliminar Dependencia Seleccionado" modal="true">
+                        <p:panel id="displayEliminarDependencia" >
+                            <p:panelGrid id="pngEliminarDependencia" columns="2">
+
+
+                                <p:outputLabel value="Dependencia:"/>
+                                <p:inputText value="#{dependenciaControlador.dependenciasel.nombre_dependencia}" disabled="true"/>
+
+                                <p:outputLabel value="Detalle:"/>
+                                <p:inputText value="#{dependenciaControlador.dependenciasel.detalle}" disabled="true"/>
+
+                                <p:outputLabel value="Fecha:"/>
+                                <p:inputText value="#{dependenciaControlador.dependenciasel.fecha_registro}" disabled="true"/>
+
+                                <p:commandButton value="Aceptar" action="#{dependenciaControlador.eliminarDependencia()}"
+                                                 update=":frmTablaDependencia:tblTablaDependencia"/>
+                                <p:commandButton value="Cancelar" onclick="dlgEliminarDependencia.hide();"/>
+
+                            </p:panelGrid>
+
+                        </p:panel>
+
+                    </p:dialog>
+                </h:form>
+
+            </ui:define>
+        </ui:composition>       
+    </h:body>
+</html>
+

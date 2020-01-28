@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>
+            <ui:define name="Autor">Gestión de Personas</ui:define>
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../../templates/plantillaInternaCenter.xhtml">
+            <ui:define name="top">Gestión de Personas</ui:define>
+            <ui:define name="contenido">
+
+                <h:form id="frmTablaPersonas">
+                    <p:growl id="mensajes" autoUpdate="true" showDetail="true"/>
+
+                    <p:panel id="pnlAutor">
+
+                        <p:dataTable  id="tblTablaPersonas" value="#{personaControlador.lstpersona}"
+                                      var="persona" paginator="true" rows="15" rowKey="#{persona.codigo}" 
+                                      selectionMode="single" selection="#{personaControlador.personasel}"
+                                      filteredValue="#{personaControlador.lstfilterPersona}">
+
+                            <p:column filterBy="#{persona.cedula}" filterMatchMode="startsWith" 
+                                      sortBy="#{persona.cedula}" headerText="Cédula">
+                                <h:outputText value="#{persona.cedula}"/>
+                            </p:column>                       
+
+                            <p:column filterBy="#{persona.apellidos}" filterMatchMode="startsWith" 
+                                      sortBy="#{persona.apellidos}" headerText="Apellidos">
+                                <h:outputText value="#{persona.apellidos}"/>
+                            </p:column>
+
+                            <p:column filterBy="#{persona.nombres}" filterMatchMode="startsWith" 
+                                      sortBy="#{persona.nombres}" headerText="Nombres">
+                                <h:outputText value="#{persona.nombres}"/>
+                            </p:column>
+
+                            <p:column filterBy="#{persona.mail}" filterMatchMode="startsWith" 
+                                      sortBy="#{persona.mail}" headerText="Correo Electrónico">
+                                <h:outputText value="#{persona.mail}"/>
+                            </p:column>
+
+                            <p:column filterBy="#{persona.fecha_registro}" filterMatchMode="startsWith" 
+                                      sortBy="#{persona.fecha_registro}" headerText="Fecha de Registro">
+                                <h:outputText value="#{persona.fecha_registro}"/>
+                            </p:column>
+
+                            <f:facet name="footer">                                                                
+
+                                <p:commandButton value="Insertar" icon="ui-icon-plus" onclick="dlgInsertarPersonas.show();" 
+                                                 update=":frmInsertarPersonas:pngInsertarPersonas"/>
+                                <p:commandButton value="Editar" icon="ui-icon-pencil" onclick="dlgEditarPersonas.show();" 
+                                                 update=":frmEditarPersonas:pngEditarPersonas"/>
+                                <p:commandButton value="Eliminar" icon="ui-icon-power-settings-new" onclick="dlgEliminarPersonas.show();" 
+                                                 update=":frmEliminarPersonas:pngEliminarPersonas"/>
+
+                                <h:commandLink>
+                                    <img src="../../resources/images/excel.png" alt=""/>
+                                    <p:dataExporter type="xls" target="tblTablaPersonas" fileName="personal" pageOnly="true" />
+                                </h:commandLink>
+
+                                <h:commandLink>
+                                    <img src="../../resources/images/pdf.png" alt=""/>
+                                    <p:dataExporter type="pdf" target="tblTablaPersonas" fileName="personal" pageOnly="true" />
+                                </h:commandLink>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="dialogos">
+                <p:dialog id="dlgInsertarPersonas" header="Nuevo Autor" widgetVar="dlgInsertarPersonas" 
+                          modal="true" closable="true" resizable="false"
+                          showEffect="explode" hideEffect="fold" > 
+                    <h:form id="frmInsertarPersonas">
+
+                        <p:panelGrid id="pngInsertarPersonas" columns="2">
+
+                            <h:outputText value="Apellidos:" style="font-weight:bold"/>
+                            <p:inputText id="txtApellido" value="#{personaControlador.objpersona.apellidos}" title="ej: Peréz" 
+                                         required="true" requiredMessage="Ingrese los Apellidos" style="width: 100% !important;" />
+
+                            <h:outputText id="txtNombres" value="Nombres:" style="font-weight:bold"/>
+                            <p:inputText value="#{personaControlador.objpersona.nombres}" title="ej: Rubén"
+                                         required="true" requiredMessage="Ingrese Nombres" style="width: 100% !important;"/>
+
+                            <h:outputLabel for="cedula" value="Cédula:" style="font-weight:bold"/>                    
+                            <p:inputText id="txtCedula" value="#{personaControlador.cedula}" label="cedula"
+                                         required="true" requiredMessage="Ingrese la Cédula" style="width: 100% !important;">
+                            </p:inputText>
+
+                            <h:outputText value="Mail:"/>
+                            <p:inputText id="txtMail" value="#{personaControlador.objpersona.mail}" title="ej: ejemplo@hotmail.com"
+                                         required="true" requiredMessage="Ingrese Mail"
+                                         style="width: 100% !important;">
+                                <f:validator validatorId="recursos.utilBeans.ValidatorBean" for="txtMail"/>
+                            </p:inputText> 
+
+                        </p:panelGrid>
+
+                        <p:commandButton value="Aceptar" icon="ui-icon-check" action="#{personaControlador.insertarPersonas()}"                                        
+                                         update=":frmTablaPersonas:tblTablaPersonas" 
+                                         process="@this, @form txtApellido, txtNombres,txtCedula, txtMail "/>
+                        <p:commandButton value="Cancelar" icon="ui-icon-closethick" onclick="dlgInsertarPersonas.hide()" type="reset"/>
+                    </h:form> 
+                </p:dialog>
+
+                <p:dialog widgetVar="dlgEditarPersonas" header="Editar Personas" modal="true"
+                          closable="false" resizable="false" showEffect="clip" hideEffect="fold">     
+                    <h:form id="frmEditarPersonas">
+
+                        <p:messages id="messages" autoUpdate="true"/>                   
+                        <p:panelGrid  id="pngEditarPersonas" columns="2">
+
+                            <h:outputText value="Apellidos:" style="font-weight:bold"/>
+                            <p:inputText value="#{personaControlador.personasel.apellidos}" title="ej: Peréz" 
+                                         required="true" requiredMessage="Ingrese los Apellidos" style="width: 100% !important;" />
+
+                            <h:outputText value="Nombres:" style="font-weight:bold"/>
+                            <p:inputText value="#{personaControlador.personasel.nombres}" title="ej: Rubén"
+                                         required="true" requiredMessage="Ingrese Nombres" style="width: 100% !important;"/>
+
+                            <h:outputLabel for="cedula" value="Cédula:" style="font-weight:bold"/>                    
+                            <p:inputText id="cedula" value="#{personaControlador.personasel.cedula}" label="cedula"
+                                         required="true" requiredMessage="Ingrese la Cédula" style="width: 100% !important;">
+
+                            </p:inputText>
+
+                            <h:outputText value="Mail:"/>
+                            <p:inputText id="txtMail" value="#{personaControlador.personasel.mail}" title="ej: ejemplo@hotmail.com"
+                                         required="true" requiredMessage="Ingrese Mail"
+                                         style="width: 100% !important;">
+                                <f:validator validatorId="recursos.utilBeans.ValidatorBean" for="txtMail"/>
+                            </p:inputText> 
+
+                            <p:commandButton value="Aceptar" icon="ui-icon-check" action="#{personaControlador.actualizarPersonas()}"
+                                             update=":frmTablaPersonas:tblTablaPersonas"/>
+                            <p:commandButton value="Cancelar" icon="ui-icon-closethick" onclick="dlgEditarPersonas.hide();"/>
+                        </p:panelGrid>                      
+                    </h:form>
+                </p:dialog>
+
+                <h:form id="frmEliminarPersonas" enctype="multipart/form-data">
+
+                    <p:dialog widgetVar="dlgEliminarPersonas" header="Desea Eliminar Persona Seleccionado" modal="true">
+                        <p:panel id="displayEliminarPersonas" >
+                            <p:panelGrid id="pngEliminarPersonas" columns="2">
+
+                                <p:outputLabel value="Apellidos"/>
+                                <p:inputText value="#{personaControlador.personasel.apellidos}" disabled="true"/>
+
+                                <p:outputLabel value="Nombres"/>
+                                <p:inputText value="#{personaControlador.personasel.nombres}" disabled="true"/>
+
+                                <p:outputLabel value="Cedula"/>
+                                <p:inputText value="#{personaControlador.personasel.cedula}" disabled="true"/>
+
+                                <p:outputLabel value="Correo Electrónico"/>
+                                <p:inputText value="#{personaControlador.personasel.mail}" disabled="true"/>
+
+                                <p:outputLabel value="Fecha de registro"/>
+                                <p:inputText value="#{personaControlador.personasel.fecha_registro}" disabled="true"/>
+
+                                <p:commandButton value="Aceptar" icon="ui-icon-check" action="#{personaControlador.eliminarPersonas()}"
+                                                 update=":frmTablaPersonas:tblTablaPersonas"/>
+                                <p:commandButton value="Cancelar" icon="ui-icon-closethick" onclick="dlgEliminarPersonas.hide();"/>
+
+                            </p:panelGrid>
+
+                        </p:panel>
+
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
