@@ -23,23 +23,23 @@
                           filteredValue="#{incrmentoEvidencias_JuridicosControladores.filterevidencia}">
 
                 <p:column filterBy="#{evidenciajuridicos.codigo}" filterMatchMode="startsWith" 
-                          sortBy="#{evidenciajuridicos.codigo}" headerText="Tipo de Caso">
+                          sortBy="#{evidenciajuridicos.codigo}" headerText="Tipo de Departamento">
                     <h:outputText value="#{evidenciajuridicos.codigo}"/>
                 </p:column>
 
-                <p:column filterBy="#{evidenciajuridicos.codigo_caso.codigo_tipo_caso.nombre_tipoCaso}" filterMatchMode="startsWith" 
-                          sortBy="#{evidenciajuridicos.codigo_caso.codigo_tipo_caso.nombre_tipoCaso}" headerText="Tipo de Caso">
-                    <h:outputText value="#{evidenciajuridicos.codigo_caso.codigo_tipo_caso.nombre_tipoCaso}"/>
+                <p:column filterBy="#{evidenciajuridicos.codigo_departamento.codigo_tipo_departamento.nombre_tipoDepartamento}" filterMatchMode="startsWith" 
+                          sortBy="#{evidenciajuridicos.codigo_departamento.codigo_tipo_departamento.nombre_tipoDepartamento}" headerText="Tipo de Departamento">
+                    <h:outputText value="#{evidenciajuridicos.codigo_departamento.codigo_tipo_departamento.nombre_tipoDepartamento}"/>
                 </p:column>
 
-                <p:column filterBy="#{evidenciajuridicos.codigo_caso.codigo_institucional}" filterMatchMode="startsWith" 
-                          sortBy="#{evidenciajuridicos.codigo_caso.codigo_institucional}" headerText="Codigo Institucional">
-                    <h:outputText value="#{evidenciajuridicos.codigo_caso.codigo_institucional}"/>
+                <p:column filterBy="#{evidenciajuridicos.codigo_departamento.codigo_institucional}" filterMatchMode="startsWith" 
+                          sortBy="#{evidenciajuridicos.codigo_departamento.codigo_institucional}" headerText="Codigo Institucional">
+                    <h:outputText value="#{evidenciajuridicos.codigo_departamento.codigo_institucional}"/>
                 </p:column>
 
-                <p:column filterBy="#{evidenciajuridicos.codigo_caso.codigo_dependencia.nombre_dependencia}" filterMatchMode="startsWith" 
-                          sortBy="#{evidenciajuridicos.codigo_caso.codigo_dependencia.nombre_dependencia}" headerText="Dependecia">
-                    <h:outputText value="#{evidenciajuridicos.codigo_caso.codigo_dependencia.nombre_dependencia}"/>
+                <p:column filterBy="#{evidenciajuridicos.codigo_departamento.codigo_dependencia.nombre_dependencia}" filterMatchMode="startsWith" 
+                          sortBy="#{evidenciajuridicos.codigo_departamento.codigo_dependencia.nombre_dependencia}" headerText="Dependecia">
+                    <h:outputText value="#{evidenciajuridicos.codigo_departamento.codigo_dependencia.nombre_dependencia}"/>
                 </p:column>
 
 

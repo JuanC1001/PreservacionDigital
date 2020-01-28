@@ -13,8 +13,8 @@
             <h:form id="frmInEvidencia" enctype="multipart/form-data">
                 <p:panel id="caso" header="Evidencia" style=" width:600px;">
                     <p:panelGrid id="pngcaso" columns="4" >
-                        <h:outputText value="Codigo de Caso:" style="width:400px "/>
-                        <p:inputText id="codIns" value="#{incrmentoEvidencias_JuridicosControladores.evidenciaSel.codigo_caso.codigo_institucional}" style="width:150px"/>
+                        <h:outputText value="Codigo de Departamento:" style="width:400px "/>
+                        <p:inputText id="codIns" value="#{incrmentoEvidencias_JuridicosControladores.evidenciaSel.codigo_departamento.codigo_institucional}" style="width:150px"/>
                         <h:outputText value="Titulo de Evidecencia:" style="width:400px "/>
                         <p:inputText id="tipoCaso" value="#{incrmentoEvidencias_JuridicosControladores.evidenciaSel.codigo_detalle_evidencia.titulo}" style="width:150px"/>
                         <h:outputText value="Responsable de Recojida:" style="width:400px "/>
@@ -199,7 +199,7 @@
                     </p:panel>
                 </p:panelGrid>
                 <p:panelGrid columns="2" style="text-align: center;">
-                    <p:commandButton value="Guardar" action="#{incrmentoEvidencias_JuridicosControladores.insertarIncrementoEvidenciaCaso()}" 
+                    <p:commandButton value="Guardar" action="#{incrmentoEvidencias_JuridicosControladores.insertarIncrementoEvidenciaDepartamento()}" 
                                      update=":frmInEvidencia, :frmEvidencia1"
                                      process="@this,  txtnuIn, cmbtipo, txttitulo, txtobservaciones, txtfuente, txtrcontx, txtojo
                                      txtRutaArchivosOriginales,

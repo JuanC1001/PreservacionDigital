@@ -46,25 +46,25 @@ and open the template in the editor.
 
                                 <p:panel id="buscarCasoAutor" header="Buscar Caso" style=" width:500px; height:220px;">
                                     <p:panelGrid columns="3" >
-                                        <h:outputText value="Ingrese código de caso:" style="width:300px "/>
+                                        <h:outputText value="Ingrese código de departamento:" style="width:300px "/>
                                         <p:inputText id="txtcaso" value="#{documentoInControlador.codigo_institucional}" style="width:100px"
-                                                     requiredMessage="Ingrese código de caso institucional"/>
+                                                     requiredMessage="Ingrese código de departamento institucional"/>
 
                                         <p:commandButton id="btnBuscar"  icon="ui-icon-search" title="Buscar Caso"                                                                   
                                                          action="#{documentoInControlador.buscarCaso_Codigo_Institucional()}" 
                                                          process="@this, txtcaso" update=":frmInsertarDocumento:tblAutorE">
                                         </p:commandButton>
                                     </p:panelGrid>  
-                                    <p:dataTable id="tblAutorE" var="usuario_caso" value="#{documentoInControlador.lstusuario_caso}"   
-                                                 selectionMode="single" rowKey="#{usuario_caso.codigo}" style="width:450px; height:160px " 
+                                    <p:dataTable id="tblAutorE" var="usuario_caso" value="#{documentoInControlador.lstusuario_departamento}"   
+                                                 selectionMode="single" rowKey="#{usuario_departamento.codigo}" style="width:450px; height:160px " 
                                                  emptyMessage="No se a Realizado Busqueda"> 
 
                                         <p:column headerText="Codigo de Caso:" >  
-                                            <h:outputText value="#{usuario_caso.codigo_caso.codigo_institucional}" />  
+                                            <h:outputText value="#{usuario_departamento.codigo_departamento.codigo_institucional}" />  
                                         </p:column> 
 
                                         <p:column headerText="Caso" >  
-                                            <h:outputText value="#{usuario_caso.codigo_caso.codigo_tipo_caso.nombre_tipoCaso}" />  
+                                            <h:outputText value="#{usuario_departamento.codigo_departamento.codigo_tipo_departamento.nombre_tipoCaso}" />  
                                         </p:column> 
                                     </p:dataTable> 
 

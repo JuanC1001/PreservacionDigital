@@ -51,7 +51,7 @@ public class SesionUsuarioDataManager implements Serializable{
         this.sesionUsuarioRolActual = new UsuarioRol();
         this.intSesionUsuarioRolActual = 0;
         this.sesionUsuarioRoles = new ArrayList<UsuarioRol>();
-        this.temaSitio = "bootstrap";
+        this.temaSitio = "glass-x";
         System.out.println("Creando la sesion");
     }
     //destructor

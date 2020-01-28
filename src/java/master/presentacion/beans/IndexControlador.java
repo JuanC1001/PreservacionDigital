@@ -4,14 +4,14 @@
  */
 package master.presentacion.beans;
 
-import evidencia.logica.clases.DocumentoDisponibilidad;
-import evidencia.logica.clases.DocumentoPlInf;
-import evidencia.logica.clases.DocumentoTutoriales;
-import evidencia.logica.clases.DocumentoViabilidad;
-import evidencia.logica.funciones.FDocumentoPl_Inf;
-import evidencia.logica.funciones.FDocumento_Disponibilidad;
-import evidencia.logica.funciones.FDocumento_Tutoriales;
-import evidencia.logica.funciones.FDocumento_Viabilidad;
+import archivo.logica.clases.DocumentoDisponibilidad;
+import archivo.logica.clases.DocumentoPlInf;
+import archivo.logica.clases.DocumentoTutoriales;
+import archivo.logica.clases.DocumentoViabilidad;
+import archivo.logica.funciones.FDocumentoPl_Inf;
+import archivo.logica.funciones.FDocumento_Disponibilidad;
+import archivo.logica.funciones.FDocumento_Tutoriales;
+import archivo.logica.funciones.FDocumento_Viabilidad;
 import java.io.Serializable;
 import java.util.ArrayList;
 import javax.faces.bean.ManagedBean;
